@@ -5,7 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
-.env
+# .env
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -17,3 +17,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+
+# git add tenfile1, file 2 ,  file 3
+# git add .
+# git commit -m "update giao dien"
+# git push
