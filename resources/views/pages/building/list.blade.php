@@ -1,7 +1,8 @@
 @extends('layouts.master')
 
-@section('title', 'Danh sách khách hàng')
+@section('title', 'Danh sách toà nhà')
 @section('content')
+
     <div class="page-content">
         <div class="container-fluid">
 
@@ -9,12 +10,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-item-center justify-content-between">
-                        <h4 class="mb-sm-0">Danh sách khách hàng</h4>
+                        <h4 class="mb-sm-0">Danh sách toà nhà</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Quản lý khách hàng</a></li>
-                                <li class="breadcrumb-item active">Khách hàng</li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Quản lý khởi tạo</a></li>
+                                <li class="breadcrumb-item active">Toà nhà</li>
                             </ol>
                         </div>
 
@@ -27,18 +28,27 @@
                 <div class="col-lg-12">
                     <div class="card" id="invoiceList">
                         <div class="card-header border-0">
-                            <div class="d-flex align-customers-center">
-                                <h5 class="card-title mb-0 flex-grow-1">Khách hàng</h5>
+                            <div class="d-flex align-buildings-center">
+                                <h5 class="card-title mb-0 flex-grow-1">toà nhà</h5>
                                 <div class="flex-shrink-0">
                                     <div class="d-flex gap-2 flex-wrap">
-                                        <button class="btn btn-primary" id="remove-actions" onClick="deleteMultiple()"><i
-                                                class="ri-delete-bin-2-line"></i></button>
-                                        <a href="/admin/customer/create" class="btn btn-secondary"><i
-                                                class="ri-add-line align-bottom me-1"></i>Thêm khách hàng</a>
+                                        <a href="create" type="button" class="btn btn-secondary btn-create"><i
+                                                class="ri-add-line align-bottom me-1"></i>Thêm toà nhà</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0 ">
                             <form>
                                 <div class="row">
@@ -64,37 +74,42 @@
                                 <!--end row-->
                             </form>
                         </div>
+
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive table-card">
-                                    <table class="table align-middle table-nowrap" id="invoiceTable">
+                                    <table class="table " id="invoiceTable">
                                         <thead class="text-muted">
                                             <tr>
-                                                <th class="text-uppercase">ID</th>
-                                                <th class="text-uppercase">Tên</th>
-                                                <th class="text-uppercase">Số điện thoại</th>
-                                                <th class="text-uppercase">Giới tính</th>
-                                                <th class="text-uppercase">Email</th>
-                                                <th class="text-uppercase">Trạng thái</th>
-                                                <th class="text-uppercase">Hành động</th>
+                                                <th width="10%" class="text-uppercase">Id</th>
+                                                <th width="20%"class="text-uppercase">Tên</th>
+                                                <th width="20%"class="text-uppercase">Mô tả</th>
+                                                <th width="20%"class="text-uppercase">Địa chỉ</th>
+                                                <th width="20%"class="text-uppercase">Trạng thái</th>
+                                                <th width="20%"class="text-uppercase">Hành động</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="list" id="invoice-list-data">
-                                            @if (isset($customers) and count($customers) > 0)
-                                                @foreach ($customers as $customer)
+                                        <tbody class="list align-middle" id="invoice-list-data">
+                                            @if (isset($buildings) and count($buildings) > 0)
+                                                @foreach ($buildings as $building)
                                                     <tr>
-                                                        <td>{{ $customer->id }}</td>
-                                                        <td>{{ $customer->name }}</td>
-                                                        <td>{{ $customer->phone }}</td>
-                                                        <td>{{ $customer->gender }}</td>
-                                                        <td>{{ $customer->email }}</td>
-                                                        <td id="item{{ $customer->id }}">
-                                                            @if ($customer->status == '1')
-                                                                <span
-                                                                    class="badge rounded-pill text-bg-success px-3 fs-13">Active</span>
+                                                        <td>{{ $building->id }}</td>
+                                                        <td id="data_name{{ $building->id }}"
+                                                            data-name="{{ $building->name }}">
+                                                            {{ $building->name }}
+                                                        </td>
+                                                        <td id="data_description{{ $building->id }}">
+                                                            {{ $building->description }}
+                                                        </td>
+                                                        <td id="data_description{{ $building->id }}">
+                                                            {{ $building->address }}
+                                                        </td>
+                                                        
+                                                        <td id="item{{ $building->id }}">
+                                                            @if ($building->status == '1')
+                                                                <span class="badge rounded-pill text-bg-success px-3 fs-13">Active</span>
                                                             @else
-                                                                <span
-                                                                    class="badge rounded-pill text-bg-warning fs-13">Disabled</span>
+                                                                <span class="badge rounded-pill text-bg-warning fs-13">Disabled</span>
                                                             @endif
                                                         </td>
                                                         <td>
@@ -107,7 +122,7 @@
                                                                 <ul class="dropdown-menu dropdown-menu-end" style="">
                                                                     <li>
                                                                         <a class="dropdown-item"
-                                                                            href="{{ 'show/' . $customer->id }}">
+                                                                            href="{{ 'show/' . $building->id }}">
                                                                             <i
                                                                                 class="ri-eye-fill align-bottom me-2 text-muted">
                                                                             </i>
@@ -116,7 +131,7 @@
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item"
-                                                                            href="{{ 'edit/' . $customer->id }}">
+                                                                            href="{{ 'edit/' . $building->id }}">
                                                                             <i
                                                                                 class="ri-pencil-fill align-bottom me-2 text-muted">
                                                                             </i>
@@ -128,7 +143,7 @@
 
                                                                         <button href=""
                                                                             class="dropdown-item change-status"
-                                                                            data-id="{{ $customer->id }}">
+                                                                            data-id="{{ $building->id }}">
                                                                             <i
                                                                                 class="ri-exchange-line align-bottom me-2 text-muted"></i>
                                                                             Đổi trạng thái
@@ -144,7 +159,7 @@
                                         </tbody>
 
                                     </table>
-                                    @if (!isset($customers) or count($customers) == 0)
+                                    @if (!isset($buildings) or count($buildings) == 0)
                                         <div class="noresult">
                                             <div class="text-center">
                                                 <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
@@ -158,12 +173,11 @@
                                 </div>
                                 <div class="d-flex justify-content-end mt-3">
                                     <ul class="pagination listjs-pagination mb-0">
-                                        @if (isset($customers) and count($customers) > 0)
-                                            {{ $customers->links() }}
+                                        @if (isset($buildings) and count($buildings) > 0)
+                                            {{ $buildings->links() }}
                                         @endif
                                     </ul>
                                 </div>
-
                             </div>
 
                             {{-- component --}}
@@ -177,7 +191,6 @@
                 <!--end col-->
             </div>
             <!--end row-->
-
         </div><!-- container-fluid -->
     </div>
     <!-- End Page-content -->
@@ -187,57 +200,57 @@
 @endsection
 
 @section('script')
-    <script>
-        $(document).ready(function() {
-            function renderStatus(customer_status) {
-                data = '';
-                if (customer_status == '1') {
-                    data += '<span class="badge rounded-pill text-bg-success px-3 fs-13"> Active </span>';
-                } else {
-                    data += '<span class="badge rounded-pill text-bg-warning fs-13" > Disabled </span>';
-                }
-
-                return data;
+<script>
+    $(document).ready(function() {
+        function renderStatus(building_status) {
+            data = '';
+            if (building_status == '1') {
+                data += '<span class="badge rounded-pill text-bg-success px-3 fs-13"> Active </span>';
+            } else {
+                data += '<span class="badge rounded-pill text-bg-warning fs-13" > Disabled </span>';
             }
 
-           
-            $('html').on('click', '.change-status', function() {
-                var customer_id = $(this).attr('data-id');
-                
-                // Sử dụng Promise để xử lý kết quả
-                var url = '/admin/customer/change-status/' + customer_id;
-                var requestData = {
-                };
+            return data;
+        }
 
-                ajaxCustom(url, requestData)
-                    .then(function(data) {
-                        if (data) {
-                            var dataRender = renderStatus(data);
-                            toast('success', "Thông báo | Cập nhật thành công");
-                            $('#item' + customer_id).html(dataRender);
-                        }
-                    })
-                    .catch(function(error) {
-                        console.error("Lỗi cập nhật", error);
-                    });
-            });
-
-
-            $('.search').click(function() {
-                var key = $('#key').val();
-
-                var url = '/admin/search';
-                var requestData = {
-                    key:key,
-                };
+       
+        $('html').on('click', '.change-status', function() {
+            var building_id = $(this).attr('data-id');
             
-                ajaxCustom(url, requestData)
-                    .then(function(data) {
-                    })
-                    .catch(function(error) {
-                        window.location.reload();
-                    });
-            });
+            // Sử dụng Promise để xử lý kết quả
+            var url = '/admin/building/change-status/' + building_id;
+            var requestData = {
+            };
+
+            ajaxCustom(url, requestData)
+                .then(function(data) {
+                    if (data) {
+                        var dataRender = renderStatus(data);
+                        toast('success', "Thông báo | Cập nhật thành công");
+                        $('#item' + building_id).html(dataRender);
+                    }
+                })
+                .catch(function(error) {
+                    console.error("Lỗi cập nhật", error);
+                });
         });
-    </script>
+
+
+        $('.search').click(function() {
+            var key = $('#key').val();
+
+            var url = '/admin/search';
+            var requestData = {
+                key:key,
+            };
+        
+            ajaxCustom(url, requestData)
+                .then(function(data) {
+                })
+                .catch(function(error) {
+                    window.location.reload();
+                });
+        });
+    });
+</script>
 @endsection

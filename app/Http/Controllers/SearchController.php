@@ -14,11 +14,12 @@ class SearchController extends Controller
         //khai báo mảng data
         $data = array();
 
-        //chuẩn bị giá trị dể truyền vào sisson
-        // Profile
+        //chuẩn bị giá trị dể truyền vào session
         if ($req->key != 'key') {
             $data['key'] = $req->key;
         }
+
+        
 
         //đẩy vào putSearch
         $this->putSearch($data);

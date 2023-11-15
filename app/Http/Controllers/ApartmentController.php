@@ -13,11 +13,12 @@ class ApartmentController extends Controller
 {
     public function getList()
     {
+        $this->isSearch();
+
         $data['apartments'] = Apartment::where(function ($query) {
             if (isset(Session::get('search')['key'])) {
                 $key = Session::get('search')['key'];
                 $query->where('name', 'like', '%' . $key . '%')
-                    ->orWhere('address', 'like', '%' . $key . '%')
                     ->orWhere('description', 'like', '%' . $key . '%');
             }
         })->orderBy('id', 'desc')->paginate(20);
@@ -76,7 +77,7 @@ class ApartmentController extends Controller
     {
         $apartment = Apartment::find($id);
         $apartment->status = '0';
-        $apartment->updated_at = date('Y-m-d H:m:s');
+        // $apartment->updated_at = date('Y-m-d H:m:s');
         $apartment->save();
 
         $block_apartment = new ZblockHistory;

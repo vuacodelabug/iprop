@@ -11,6 +11,7 @@ class ServiceController extends Controller
 {
     public function getList()
     {
+        $this->isSearch();
         $data['services'] = Service::where(function ($query) {
             if (isset(Session::get('search')['key'])) {
                 $key = Session::get('search')['key'];

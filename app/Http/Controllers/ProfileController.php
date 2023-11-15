@@ -17,6 +17,8 @@ class ProfileController extends Controller
 {
     public function getList()
     {
+        $this->isSearch();
+        
         $data['profiles'] = Profile::where(function ($query) {
             if (isset(Session::get('search')['key'])) {
                 $key = Session::get('search')['key'];
@@ -154,7 +156,7 @@ class ProfileController extends Controller
     public function getShow($id)
     {
         $data['profile'] = Profile::find($id);
-        return view('profile.view', $data);
+        return view('pages.profile.view', $data);
     }
 
 
@@ -162,7 +164,7 @@ class ProfileController extends Controller
     public function getEdit($id)
     {
         $data['profile'] = Profile::find($id);
-        return view('profile.edit', $data);
+        return view('pages.profile.edit', $data);
     }
     public function postEdit(Request $req)
     {

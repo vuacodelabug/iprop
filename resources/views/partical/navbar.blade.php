@@ -33,13 +33,16 @@
             </div>
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"></i> <span>CHỨC NĂNG</span></li>
-                <li class="nav-item">
+                <li class="nav-item ">
                     <a class="nav-link menu-link" href="#quanLyToChuc" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="quanLyToChuc">
                         <i class="las la-sitemap"></i> <span>Quản lý khởi tạo</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="quanLyToChuc">
+                    <div class="collapse menu-dropdown {{ request()->routeIs('khoitao') ? 'show' : '' }} " id="quanLyToChuc">
                         <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="/admin/building/list" class="nav-link">Toà nhà</a>
+                            </li>
                             <li class="nav-item">
                                 <a href="/admin/apartment/list" class="nav-link">Phòng</a>
                             </li>
@@ -65,7 +68,7 @@
                         aria-expanded="false" aria-controls="quanLyToChuc">
                         <i class=" las la-address-book"></i> <span>Quản lý nhân sự</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="quanLyNhanSu">
+                    <div class="collapse menu-dropdown {{ request()->routeIs('nhansu') ? 'show' : '' }} "  id="quanLyNhanSu">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="/admin/profile/list" class="nav-link">Nhân viên</a>
@@ -79,7 +82,7 @@
                         aria-expanded="false" aria-controls="quanLyToChuc">
                         <i class="las la-address-card"></i> <span>Quản lý khách hàng</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="quanLyKhachHang">
+                    <div class="collapse menu-dropdown {{ request()->routeIs('khachhang') ? 'show' : '' }}" id="quanLyKhachHang">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="/admin/customer/list" class="nav-link">Khách hàng</a>

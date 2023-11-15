@@ -11,6 +11,7 @@ class UnitController extends Controller
 {
     public function getList()
     {
+        $this->isSearch();
         $data['units'] = Unit::where(function ($query) {
             if (isset(Session::get('search')['key'])) {
                 $key = Session::get('search')['key'];

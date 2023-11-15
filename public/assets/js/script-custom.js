@@ -51,3 +51,50 @@ $(document).ready(function(){
         $(this).addClass('was-validated'); // Thêm class was-validated vào form để kích hoạt hiển thị thông báo lỗi của Bootstrap.
     });
 });
+
+
+function ajaxCustom(url, requestData) {
+    var deferred = $.Deferred();
+
+    $.ajax({
+        url: url,
+        method: 'post',
+        data: requestData,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            var data = response;
+
+            if (data) {
+                // Giải quyết Deferred với dữ liệu
+                deferred.resolve(data);
+            } else {
+                // Nếu có lỗi, từ chối Deferred với thông báo lỗi
+                deferred.reject("Không có dữ liệu trả về");
+            }
+        },
+        error: function() {
+            // Nếu có lỗi, từ chối Deferred với thông báo lỗi
+            deferred.reject("Có lỗi xảy ra khi gửi yêu cầu");
+        }
+    });
+    return deferred.promise();
+/*
+    @cách dùng
+    // Sử dụng Promise để xử lý kết quả
+    var url = '/admin/customer/change-status/' + customer_id;
+    var requestData = {
+        customer_id: customer_id,
+    };
+
+    ajaxCustom(url, requestData)
+        .then(function(data) {
+            //khi data có du lieu chay lệnh o day
+            // console.log("Dữ liệu thành công:", data);
+        })
+        .catch(function(error) {
+            // console.error("Lỗi:", error);
+        });
+*/
+}

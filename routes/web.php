@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TypeapartmentController;
+use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\UtilitiesController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\ApartmentController;
@@ -40,14 +41,14 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
         Route::post('/clear-search', 'postClearSearch');
     });
 
-    Route::prefix('/profile')->group(function () {
+    Route::prefix('/profile')->name('nhansu')->group(function () {
         Route::controller(ProfileController::class)->group(function () {
 
             Route::get('/', 'getProfile');
             Route::post('/', 'postProfile');
             Route::post('/recovery', 'postRecoveryPassword');
 
-            Route::get('/list', 'getList');
+            Route::get('/list', 'getList'); 
 
             Route::get('/create', 'getCreate');
             Route::post('/create', 'postCreate');
@@ -60,12 +61,8 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
             Route::get('/delete/{id}', 'getDelete');
         });
     });
-    Route::prefix('/customer')->group(function () {
+    Route::prefix('/customer')->name('khachhang')->group(function () {
         Route::controller(CustomerController::class)->group(function () {
-
-            Route::get('/', 'getCustomer');
-            Route::post('/', 'postCustomer');
-            Route::post('/recovery', 'postRecoveryPassword');
 
             Route::get('/list', 'getList');
 
@@ -80,7 +77,23 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
             Route::post('/change-status/{id}', 'postChangeStatus');
         });
     });
-    Route::prefix('/typeapartment')->group(function () {
+    Route::prefix('/building')->name('khoitao')->group(function () {
+        Route::controller(BuildingController::class)->group(function () {
+            
+            Route::get('/list', 'getList');
+
+            Route::get('/create', 'getCreate');
+            Route::post('/create', 'postCreate');
+
+            Route::get('/show/{id}', 'getShow');
+
+            Route::get('/edit/{id}', 'getEdit');
+            Route::post('/edit', 'postEdit');
+
+            Route::post('/change-status/{id}', 'postChangeStatus');
+        });
+    });
+    Route::prefix('/typeapartment')->name('khoitao')->group(function () {
         Route::controller(TypeapartmentController::class)->group(function () {
 
             Route::get('/list', 'getList');
@@ -96,7 +109,7 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('/utilities')->group(function () {
+    Route::prefix('/utilities')->name('khoitao')->group(function () {
         Route::controller(UtilitiesController::class)->group(function () {
 
             Route::get('/list', 'getList');
@@ -111,7 +124,7 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
 
         });
     });
-    Route::prefix('/unit')->group(function () {
+    Route::prefix('/unit')->name('khoitao')->group(function () {
         Route::controller(UnitController::class)->group(function () {
 
             Route::get('/list', 'getList');
@@ -126,7 +139,7 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
 
         });
     });
-    Route::prefix('/service')->group(function () {
+    Route::prefix('/service')->name('khoitao')->group(function () {
         Route::controller(ServiceController::class)->group(function () {
 
             Route::get('/list', 'getList');
@@ -141,7 +154,7 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
 
         });
     });
-    Route::prefix('/apartment')->group(function () {
+    Route::prefix('/apartment')->name('khoitao')->group(function () {
         Route::controller(ApartmentController::class)->group(function () {
 
             Route::get('/list', 'getList');
