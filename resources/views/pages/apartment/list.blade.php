@@ -89,10 +89,10 @@
                                             </tr>
                                         </thead>
                                         <tbody class="list align-middle" id="invoice-list-data">
-                                          
+
                                             @if (isset($apartments) and count($apartments) > 0)
                                                 @foreach ($apartments as $apartment)
-                                                    <tr id="item{{$apartment->id}}">
+                                                    <tr id="item{{ $apartment->id }}">
                                                         <td>{{ $apartment->id }}</td>
                                                         <td id="data_name{{ $apartment->id }}"
                                                             data-name="{{ $apartment->name }}">
@@ -101,12 +101,14 @@
                                                         <td id="data_description{{ $apartment->id }}">
                                                             {{ $apartment->description }}
                                                         </td>
-                                                        
+
                                                         <td class="text-center">
                                                             @if ($apartment->status == '1')
-                                                                <span class="badge rounded-pill text-bg-success px-3 fs-13">Active</span>
+                                                                <span
+                                                                    class="badge rounded-pill text-bg-success px-3 fs-13">Active</span>
                                                             @else
-                                                                <span class="badge rounded-pill text-bg-warning fs-13">Disabled</span>
+                                                                <span
+                                                                    class="badge rounded-pill text-bg-warning fs-13">Disabled</span>
                                                             @endif
 
                                                         </td>
@@ -174,112 +176,106 @@
 
 @section('script')
     <script src="{{ URL::asset('assets/js/edit-custom.js') }}"></script>
-    
+
     <script>
-          $('html').on('click', '.btn-create', function() {
-                $('#create-record').attr('href', 'create');
-                $('#createModal').modal('show');
+        $('html').on('click', '.btn-create', function() {
+            $('#create-record').attr('href', 'create');
+            $('#createModal').modal('show');
 
-            });
-        $('#invoiceTable').on('click', '.btn-edit', function(){
-            var id = $(this).attr('data-id');
-            $.ajax({
-                url: '/admin/apartment/find',
-                method: 'post',
-                data: {
-                    id: id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                   if(response != 0){
-                        var dataRender = renderEdit(id,response)
-                        $('#item'+id).html(dataRender);
-                    }
-                    else{
-                        alert ('không tìm thấy id');
-                    }
-                }
-            }); 
         });
 
-        $('#invoiceTable').on('click', '.btn-save', function(){
+
+        $('#invoiceTable').on('click', '.btn-edit', function() {
             var id = $(this).attr('data-id');
-            var name = $('#name'+id).val();
-            var description = $('#description'+id).val();
-            var status = $('#status'+id).val();
+            var url = '/admin/apartment/find';
+            var requestData = {
+                id: id,
+            };
+
+            ajaxCustom(url, requestData)
+                .then(function(data) {
+                    if (data != 0) {
+                        var dataRender = renderEdit(id, data)
+                        $('#item' + id).html(dataRender);
+                    } else {
+                        alert('không tìm thấy id');
+                    }
+                })
+                .catch(function(error) {});
+        });
+
+        $('#invoiceTable').on('click', '.btn-save', function() {
+            var id = $(this).attr('data-id');
+            var name = $('#name' + id).val();
+            var description = $('#description' + id).val();
+            var status = $('#status' + id).val();
             var error = 0;
-            if(name == ''){
-                $('#name'+id).addClass('is-invalid').next('.invalid-tooltip').html('Tên không được để trống');
-                error=1;
+            if (name == '') {
+                $('#name' + id).addClass('is-invalid').next('.invalid-tooltip').html('Tên không được để trống');
+                error = 1;
             }
-            if(error == 0){
-                $.ajax({
-                    url: '/admin/apartment/edit',
-                    method: 'post',
-                    data: {
-                        id: id, name: name, description:description, status:status
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                    if(response != 0){
-                            var dataRender = renderView(id,response)
+            if (error == 0) {
+
+                var url = '/admin/apartment/edit';
+                var requestData = {
+                    id: id,
+                    name: name,
+                    description: description,
+                    status: status
+                };
+
+                ajaxCustom(url, requestData)
+                    .then(function(data) {
+                        if (data != 0) {
+                            var dataRender = renderView(id, data)
                             toast('success', "Thông báo | Lưu thành công");
-                            $('#item'+id).html(dataRender);
+                            $('#item' + id).html(dataRender);
+                        } else {
+                            alert('không tìm thấy id');
                         }
-                        else{
-                            alert ('không tìm thấy id');
-                        }
-                    }
-                }); 
+                    })
+                    .catch(function(error) {});
+
             }
-          
-          
+
+
         });
 
-        $('#invoiceTable').on('click', '.btn-cancel', function(){
+        $('#invoiceTable').on('click', '.btn-cancel', function() {
             var id = $(this).attr('data-id');
-            $.ajax({
-                url: '/admin/apartment/find',
-                method: 'post',
-                data: {
-                    id: id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                   if(response != 0){
-                        var dataRender = renderView(id,response)
-                        $('#item'+id).html(dataRender);
+
+            var url = '/admin/apartment/find';
+            var requestData = {
+                id: id,
+            };
+
+            ajaxCustom(url, requestData)
+                .then(function(data) {
+                    if (data != 0) {
+                        var dataRender = renderView(id, data)
+                        $('#item' + id).html(dataRender);
+                    } else {
+                        alert('không tìm thấy id');
                     }
-                    else{
-                        alert ('không tìm thấy id');
-                    }
-                }
-            }); 
-            
+                })
+                .catch(function(error) {});
+
         });
 
         $('.search').click(function() {
             var key = $('#key').val();
-            $.ajax({
-                url: '/admin/search',
-                method: 'post',
-                data: {
-                    key: key,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    window.location.reload();
-                }
-            });
-        });
 
+            var url = '/admin/search';
+            var requestData = {
+                key: key,
+            };
+
+            ajaxCustom(url, requestData)
+                .then(function(data) {
+                })
+                .catch(function(error) {
+                    window.location.reload();
+                });
+        });
     </script>
 @endsection

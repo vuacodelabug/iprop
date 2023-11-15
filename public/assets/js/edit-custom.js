@@ -1,4 +1,5 @@
 function renderEdit(id, data){
+    console.log('is renderEdit');
     var dataRender = '';
     dataRender += '<td>'+id+'</td>';
     dataRender += '<td class="position-relative"><input type="text" value="'+data.name+'" id="name'+id+'" class="form-control" required><div class="invalid-tooltip"></div></td>';
@@ -30,6 +31,8 @@ function renderEdit(id, data){
 }
 
 function renderView(id,data){
+    console.log('is renderView');
+
     var dataRender = '';
     dataRender += '<td>'+id+'</td>';
     dataRender += '<td>'+data.name+'</td>';
