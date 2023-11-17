@@ -15,6 +15,7 @@
 
             
         </div>
+        <img src="" alt="">
     </div>
 @endsection
 @section('css')
