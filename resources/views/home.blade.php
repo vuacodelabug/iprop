@@ -5,14 +5,21 @@
     <div class="page-content">
         <div>
             <h1 class="text-container blinking-text animate__animated animate__pulse">Hello World</h1>
-            <table>
-                <tr>
-                    <td class="editable-td">Giá trị 1</td>
-                    <td class="editable-td">Giá trị 2</td>
-                    <td class="editable-td">Giá trị 3</td>
-                </tr>
-            </table>
-
+            <select name="province" id="province">
+                <option value="">Chọn tỉnh</option>
+                @foreach($provinces as $province)
+                    <option value="{{ $province->id }}">{{ $province->name }}</option>
+                @endforeach
+            </select>
+            
+            <select name="district" id="district" disabled>
+                <option value="">Chọn huyện</option>
+            </select>
+            
+            <select name="ward" id="ward" disabled>
+                <option value="">Chọn xã</option>
+            </select>
+            
             
         </div>
         <img src="" alt="">
@@ -21,28 +28,5 @@
 @section('css')
 @endsection
 @section('script')
-<script>
-    $(document).ready(function() {
-        $('.editable-td').dblclick(function() {
-            var originalValue = $(this).text();
-            var inputField = $('<input type="text" class="editable-input" value="' + originalValue + '">');
-            $(this).html(inputField);
-            inputField.focus();
-
-            inputField.blur(function() {
-                var newValue = inputField.val();
-                $(this).parent().html(newValue);
-            });
-
-            inputField.keyup(function(event) {
-                if (event.keyCode === 13) { // Bấm Enter
-                    var newValue = inputField.val();
-                    $(this).parent().html(newValue);
-                }
-            });
-        });
-    });
-</script>
-
 
 @endsection

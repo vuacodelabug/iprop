@@ -38,7 +38,7 @@
                                 <div class="row mb-3">
                                     <div class="col-md-2">
                                         <div class="row mb-3">
-                                            <div class="col-12">
+                                            
                                                 <div class="form-group">
                                                     <h5><b>Ảnh đại diện</b></h5>
                                                     <div class="controls">
@@ -71,7 +71,6 @@
 
                                                     </div>
                                                 </div>
-                                            </div>
                                         </div>
                                         <hr>
 

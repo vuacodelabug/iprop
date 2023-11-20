@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Building;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\createBuildingRequest;
 // use App\Models\ZblockBuilding;
+use App\Models\Building;
 
 class BuildingController extends Controller
 {
@@ -27,7 +28,7 @@ class BuildingController extends Controller
     {
         return view('pages.building.create');
     }
-    public function postCreate(Request $req)
+    public function postCreate(createBuildingRequest $req)
     {
         $building = new Building;
         $building->name = $req->name;

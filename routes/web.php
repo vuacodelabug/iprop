@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
@@ -32,9 +33,8 @@ Route::controller(LoginController::class)->group(function () {
 });
 
 Route::prefix('/admin')->middleware('auth')->group(function () {
-    Route::get('/home', function () {
-        return view('home');
-    });
+    Route::get('/home', [HomeController::class, 'getHome']);
+   
 
     Route::controller(SearchController::class)->group(function () {
         Route::post('/search', 'postSearch');
