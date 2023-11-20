@@ -12,6 +12,7 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\UtilitiesController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\AddressController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,12 +34,21 @@ Route::controller(LoginController::class)->group(function () {
 });
 
 Route::prefix('/admin')->middleware('auth')->group(function () {
-    Route::get('/home', [HomeController::class, 'getHome']);
-   
+    Route::controller(HomeController::class)->group(function () {
+        Route::get('/home', 'getHome');
+
+    });
 
     Route::controller(SearchController::class)->group(function () {
         Route::post('/search', 'postSearch');
         Route::post('/clear-search', 'postClearSearch');
+    });
+
+    Route::prefix('/address')->group(function () {
+        Route::controller(AddressController::class)->group(function () {
+        Route::get('/render_districts/{id}', 'getDistrict');
+        Route::get('/render_wards/{id}', 'getWard');
+        });
     });
 
     Route::prefix('/profile')->name('nhansu')->group(function () {
@@ -83,6 +93,8 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
             Route::get('/list', 'getList');
 
             Route::get('/create', 'getCreate');
+            // Route::get('/get_district/{id}', 'getDistrict');
+            
             Route::post('/create', 'postCreate');
 
             Route::get('/show/{id}', 'getShow');

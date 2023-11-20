@@ -81,10 +81,10 @@
                                                             <div class="col-md-9">
                                                                 <div class="row mb-3">
                                                                     <div class="form-group">
-                                                                        <label for="inputName">Tên toà nhà</label>
+                                                                        <label for="name">Tên toà nhà</label>
                                                                         <span class="text-danger">*</span>
-                                                                        <input type="text" required name="name"
-                                                                            id="inputName"
+                                                                        <input type="text" required name="building_name"
+                                                                            id="building_name"
                                                                             class="form-control rounded-pill">
                                                                         <div class="invalid-feedback"></div>
                                                                     </div>
@@ -92,54 +92,61 @@
                                                                 <div class="row mb-3">
                                                                     <div class="form-group">
                                                                         <div class="row mb-3">
-                                                                            <div class="col-md-3">
+                                                                            <div class="col-md-4">
                                                                                 <div class="form-group">
-                                                                                    <label for="duong">Đường</label>
+                                                                                    <label for="province_id">Thành
+                                                                                        phố/Tỉnh</label>
+                                                                                    <span class="text-danger">*</span>
+                                                                                    <select required id="province"
+                                                                                        name="province_id"
+                                                                                        class="form-select  rounded-pill custom-select">
+                                                                                        <option value="">Chọn thành
+                                                                                            phố/tỉnh</option>
+                                                                                        @foreach ($provinces as $province)
+                                                                                            <option
+                                                                                                value="{{ $province->provinceid }}">
+                                                                                                {{ $province->name }}
+                                                                                            </option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        for="district_id">Quận/Huyện</label>
+                                                                                    <span class="text-danger">*</span>
+                                                                                    <select name="district_id" required
+                                                                                        id="district"
+                                                                                        class="form-select  rounded-pill custom-select">
+                                                                                        <option value="">Chọn
+                                                                                            quận/huyện</option>
+
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="ward_id">Phường/Xã</label>
+                                                                                    <span class="text-danger">*</span>
+                                                                                    <select name="ward_id" required
+                                                                                        id="ward"
+                                                                                        class="form-select  rounded-pill custom-select">
+                                                                                        <option value="">Chọn
+                                                                                            phường/xã</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                                <div class="form-group">
+                                                                                    <label for="address">Địa chỉ cụ thể</label>
                                                                                     <span class="text-danger">*</span>
                                                                                     <input type="text" required
-                                                                                        name="name" id="duong"
+                                                                                        name="address" id="address"
                                                                                         class="form-control rounded-pill">
                                                                                     <div class="invalid-feedback"></div>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="col-md-3">
-                                                                                <div class="form-group">
-                                                                                    <label for="tinhthanhpho">Tỉnh/Thành
-                                                                                        phố</label>
-                                                                                    <span class="text-danger">*</span>
-                                                                                    <select name="gender" required
-                                                                                        id="tinhthanhpho"
-                                                                                        class="form-select  rounded-pill custom-select">
-                                                                                        <option>1...</option>
-                                                                                        <option>2...</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-3">
-                                                                                <div class="form-group">
-                                                                                    <label
-                                                                                        for="tinhthanhpho">Quận/Huyện</label>
-                                                                                    <span class="text-danger">*</span>
-                                                                                    <select name="" required
-                                                                                        id="tinhthanhpho"
-                                                                                        class="form-select  rounded-pill custom-select">
-                                                                                        <option>1...</option>
-                                                                                        <option>2...</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-3">
-                                                                                <div class="form-group">
-                                                                                    <label for="phuongxa">Phường/Xã</label>
-                                                                                    <span class="text-danger">*</span>
-                                                                                    <select name="" required
-                                                                                        id="phuongxa"
-                                                                                        class="form-select  rounded-pill custom-select">
-                                                                                        <option>1...</option>
-                                                                                        <option>2...</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
                                                                         </div>
                                                                         <hr>
                                                                         <div class="row mb-3">
@@ -493,10 +500,10 @@
                                                                     </div>
                                                                 </div>
 
-                                                               
 
-                                                                
-                                                                 <div class="col d-flex">
+
+
+                                                                <div class="col d-flex">
                                                                     <div
                                                                         class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
 
@@ -506,7 +513,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                 <div class="col d-flex">
+                                                                <div class="col d-flex">
                                                                     <div
                                                                         class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
 
@@ -516,7 +523,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                 <div class="col d-flex">
+                                                                <div class="col d-flex">
                                                                     <div
                                                                         class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
 
@@ -526,7 +533,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                 <div class="col d-flex">
+                                                                <div class="col d-flex">
                                                                     <div
                                                                         class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
 
@@ -536,7 +543,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                 <div class="col d-flex">
+                                                                <div class="col d-flex">
                                                                     <div
                                                                         class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
 
@@ -546,7 +553,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                 <div class="col d-flex">
+                                                                <div class="col d-flex">
                                                                     <div
                                                                         class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
 
@@ -556,7 +563,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                 <div class="col d-flex">
+                                                                <div class="col d-flex">
                                                                     <div
                                                                         class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
 

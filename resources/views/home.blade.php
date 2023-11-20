@@ -8,19 +8,17 @@
             <select name="province" id="province">
                 <option value="">Chọn tỉnh</option>
                 @foreach($provinces as $province)
-                    <option value="{{ $province->id }}">{{ $province->name }}</option>
+                    <option value="{{ $province->provinceid }}">{{ $province->name }}</option>
                 @endforeach
             </select>
             
-            <select name="district" id="district" disabled>
+            <select name="district" id="district">
                 <option value="">Chọn huyện</option>
             </select>
-            
-            <select name="ward" id="ward" disabled>
+            {{-- disabled --}}
+            <select name="ward" id="ward">
                 <option value="">Chọn xã</option>
             </select>
-            
-            
         </div>
         <img src="" alt="">
     </div>
@@ -28,5 +26,7 @@
 @section('css')
 @endsection
 @section('script')
-
+    <script>
+       
+    </script>
 @endsection

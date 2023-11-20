@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\createBuildingRequest;
@@ -25,8 +26,9 @@ class BuildingController extends Controller
         return view('pages.building.list', $data);
     }
     public function getCreate()
-    {
-        return view('pages.building.create');
+    {   
+        $data['provinces']= Province::get();
+        return view('pages.building.create', $data);
     }
     public function postCreate(createBuildingRequest $req)
     {

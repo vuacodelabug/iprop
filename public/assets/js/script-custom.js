@@ -98,3 +98,19 @@ function ajaxCustom(url, requestData) {
         });
 */
 }
+
+$('html').on('change', '#province', function() {
+    province_id = $(this).val();
+    //lấy danh sách quận/huyện của tỉnh
+    $('#district').load('/admin/address/render_districts/'+ province_id);
+    $('#district').removeAttr('disabled');
+    $('#ward').load('/admin/address/render_wards/'+ '0');
+});
+
+ $('html').on('change', '#district', function() {
+    district_id = $(this).val();
+    //lấy danh sách quận/huyện của tỉnh
+    $('#ward').load('/admin/address/render_wards/'+ district_id);
+    $('#ward').removeAttr('disabled');
+
+});
