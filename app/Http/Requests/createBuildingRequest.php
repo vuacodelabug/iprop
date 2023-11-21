@@ -23,8 +23,8 @@ class createBuildingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:100',
-            'type' => 'required'
+            // 'name' => 'required|max:100',
+            // 'type' => 'required'
         ];
     }
 }

@@ -13,7 +13,7 @@ class AddressController extends Controller
         ->where('provinceid',$id)
         ->get();
 
-        echo '<option value="">Chọn quận/huyện</option>';
+        echo '<option value="">---</option>';
         foreach($districts as $district){
             echo '<option value="'.$district->districtid.'">'.$district->name.'</option>';
         }
@@ -24,7 +24,7 @@ class AddressController extends Controller
         ->where('districtid',$id)
         ->get();
 
-        echo '<option value="">Chọn phường/xã</option>';
+        echo '<option value="">---</option>';
         foreach($wards as $ward){
             echo '<option value="'.$ward->wardid.'">'.$ward->name.'</option>';
         }

@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,12 +25,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $place_of_issue
  * @property string|null $permanent_address
  * @property string|null $temporay_address
- * @property int $type
+ * @property int|null $type
  * @property int $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * 
  * @property User $user
+ * @property Collection|ZblockProfile[] $zblock_profiles
  *
  * @package App\Models
  */
@@ -60,8 +62,13 @@ class Profile extends Model
 		'status'
 	];
 
-	public function users()
+	public function user()
 	{
-		return $this->belongsTo(User::class, 'user_id');
+		return $this->belongsTo(User::class);
+	}
+
+	public function zblock_profiles()
+	{
+		return $this->hasMany(ZblockProfile::class, 'target_id');
 	}
 }

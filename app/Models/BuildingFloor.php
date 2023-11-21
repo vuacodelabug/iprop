@@ -11,35 +11,44 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Utility
+ * Class BuildingFloor
  * 
  * @property int $id
- * @property string|null $name
- * @property string|null $description
+ * @property int|null $id_building
+ * @property string|null $code_floor
+ * @property string|null $name_floor
  * @property int|null $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * 
+ * @property Building|null $building
  * @property Collection|BuildingUtility[] $building_utilities
  *
  * @package App\Models
  */
-class Utility extends Model
+class BuildingFloor extends Model
 {
-	protected $table = 'utilities';
+	protected $table = 'building_floor';
 
 	protected $casts = [
+		'id_building' => 'int',
 		'status' => 'int'
 	];
 
 	protected $fillable = [
-		'name',
-		'description',
+		'id_building',
+		'code_floor',
+		'name_floor',
 		'status'
 	];
 
+	public function building()
+	{
+		return $this->belongsTo(Building::class, 'id_building');
+	}
+
 	public function building_utilities()
 	{
-		return $this->hasMany(BuildingUtility::class, 'id_utilities');
+		return $this->hasMany(BuildingUtility::class, 'id_floor');
 	}
 }

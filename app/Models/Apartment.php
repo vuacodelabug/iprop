@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -14,11 +15,12 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id
  * @property string|null $name
- * @property string|null $address
  * @property string|null $description
  * @property int|null $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * 
+ * @property Collection|ApartmentTypeapartment[] $apartment_typeapartments
  *
  * @package App\Models
  */
@@ -35,4 +37,9 @@ class Apartment extends Model
 		'description',
 		'status'
 	];
+
+	public function apartment_typeapartments()
+	{
+		return $this->hasMany(ApartmentTypeapartment::class, 'id_apartment');
+	}
 }

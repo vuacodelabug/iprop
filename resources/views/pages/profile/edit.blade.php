@@ -205,7 +205,10 @@
 
                     </div>
                 </div>
-
+                {{-- component --}}
+                <div id="component">
+                    @include('pages.modal.crop')
+                </div>
             </div>
             <!-- end row mb-3 -->
 
@@ -213,33 +216,10 @@
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
-
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Cropper</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="img-container">
-                        <img id="image" alt="Picture">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="crop" class="btn btn-secondary" data-dismiss="modal">crop</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('css')
 
 @section('script')
-   
+
 @endsection

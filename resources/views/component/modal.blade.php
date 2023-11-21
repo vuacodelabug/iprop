@@ -23,7 +23,7 @@
 cách sử dụng
 @component('component.modal')
     @slot('md_id') id_modal @endslot
-    @slot('md_animation') id_modal @endslot
+    @slot('md_animation') md_animation @endslot
     @slot('md_size') modal-dialog-centered/ modal-dialog-scrollable @endslot
     @slot('md_title') Tiêu đề Modal @endslot
     @slot('form_start') <form class="needs-validation" novalidate="" action="#" method="GET"> @endslot

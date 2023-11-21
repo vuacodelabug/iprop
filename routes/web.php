@@ -36,7 +36,6 @@ Route::controller(LoginController::class)->group(function () {
 Route::prefix('/admin')->middleware('auth')->group(function () {
     Route::controller(HomeController::class)->group(function () {
         Route::get('/home', 'getHome');
-
     });
 
     Route::controller(SearchController::class)->group(function () {
@@ -93,8 +92,7 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
             Route::get('/list', 'getList');
 
             Route::get('/create', 'getCreate');
-            // Route::get('/get_district/{id}', 'getDistrict');
-            
+            Route::get('/utilities_discription/{id}', 'getUtilitiesDiscription');
             Route::post('/create', 'postCreate');
 
             Route::get('/show/{id}', 'getShow');

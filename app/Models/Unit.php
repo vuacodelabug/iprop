@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * 
+ * @property Collection|BuildingService[] $building_services
  *
  * @package App\Models
  */
@@ -34,7 +37,9 @@ class Unit extends Model
 		'description',
 		'status'
 	];
-	public function zblock_history(){
-        return $this->hasMany(ZblockHistory::class);
-    }
+
+	public function building_services()
+	{
+		return $this->hasMany(BuildingService::class, 'id_unit');
+	}
 }

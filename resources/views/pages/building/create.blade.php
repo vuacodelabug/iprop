@@ -51,24 +51,34 @@
                                 </div><!-- end col -->
                                 <div class="col-md-9">
                                     <div class="tab-content text-muted mt-4 mt-md-0" id="v-pills-tabContent">
-                                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                                        <div class="tab-pane detail fade show active" id="v-pills-home" role="tabpanel"
                                             aria-labelledby="v-pills-home-tab">
                                             <div class="card-body">
-                                                <form class="needs-validation" novalidate action="create" id="validateForm"
-                                                    method="POST" enctype="multipart/form-data">
+                                                <form class="needs-validation" action="create" id="validateForm"
+                                                    method="POST" enctype="multipart/form-data" novalidate>
                                                     @csrf
                                                     <div class="card-body">
+                                                        @if (count($errors) > 0)
+                                                            <div class="alert alert-borderless alert-danger">
+                                                                @foreach ($errors->all() as $error)
+                                                                    <b>
+                                                                        <li>{{ $error }}</li>
+                                                                    </b>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
                                                         <div class="row mb-3">
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <h5><b>Logo</b></h5>
                                                                     <div class="controls">
                                                                         <label for="avatar"
-                                                                            style="cursor: pointer; solid: 1; width: 100%;">
-                                                                            <!-- Rounded-circle Image -->
-                                                                            <img class="rounded-circle avatar-xl"
-                                                                                alt="200x200"
-                                                                                src="/assets/images/logo/logo-0.png">
+                                                                            style="cursor: pointer; width:100%;">
+                                                                            <div class="avatar-preview">
+                                                                                <div id="imagePreview"
+                                                                                    style="background-image: url(/assets/images/buiding-logo/logo-0.png)">
+                                                                                </div>
+                                                                            </div>
                                                                         </label>
                                                                         <input type="hidden" id="base64image"
                                                                             name="base64image">
@@ -100,8 +110,7 @@
                                                                                     <select required id="province"
                                                                                         name="province_id"
                                                                                         class="form-select  rounded-pill custom-select">
-                                                                                        <option value="">Chọn thành
-                                                                                            phố/tỉnh</option>
+                                                                                        <option value="">---</option>
                                                                                         @foreach ($provinces as $province)
                                                                                             <option
                                                                                                 value="{{ $province->provinceid }}">
@@ -119,8 +128,7 @@
                                                                                     <select name="district_id" required
                                                                                         id="district"
                                                                                         class="form-select  rounded-pill custom-select">
-                                                                                        <option value="">Chọn
-                                                                                            quận/huyện</option>
+                                                                                        <option value="">---</option>
 
                                                                                     </select>
                                                                                 </div>
@@ -132,41 +140,85 @@
                                                                                     <select name="ward_id" required
                                                                                         id="ward"
                                                                                         class="form-select  rounded-pill custom-select">
-                                                                                        <option value="">Chọn
-                                                                                            phường/xã</option>
+                                                                                        <option value="">---</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
-                                                                                <div class="form-group">
-                                                                                    <label for="address">Địa chỉ cụ thể</label>
-                                                                                    <span class="text-danger">*</span>
-                                                                                    <input type="text" required
-                                                                                        name="address" id="address"
-                                                                                        class="form-control rounded-pill">
-                                                                                    <div class="invalid-feedback"></div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <hr>
-                                                                        <div class="row mb-3">
-                                                                            <div class="col-md-6">
-                                                                                <label for="floor1">Số tầng hầm</label>
+                                                                            <div class="form-group">
+                                                                                <label for="address">Địa chỉ cụ
+                                                                                    thể</label>
                                                                                 <span class="text-danger">*</span>
-                                                                                <input type="number" required
-                                                                                    min="1" max="100"
-                                                                                    name="name" id="floor1"
+                                                                                <input type="text" required
+                                                                                    name="building_address" id="address"
                                                                                     class="form-control rounded-pill">
                                                                                 <div class="invalid-feedback"></div>
                                                                             </div>
-                                                                            <div class="col-md-6">
-                                                                                <label for="floor2">Số tầng nổi</label>
+                                                                        </div>
+                                                                        <hr>
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-md-6 ">
+                                                                                <div class="form-group mb-3 validate">
+                                                                                    <label for="numbfloor1">Số tầng hầm</label>
+                                                                                    <span class="text-danger">*</span>
+                                                                                    <input type="number" required
+                                                                                        min="1" max="100"
+                                                                                        name="floor1_numb" id="numbfloor1"
+                                                                                        class="form-control rounded-pill">
+                                                                                    <div class="invalid-feedback"></div>
+                                                                                    <!-- Base Radios -->
+                                                                                    <br>
+                                                                                    <label>Style tầng hầm</label>
+                                                                                    <div class="form-check ms-3 mb-2">
+                                                                                        <input class="form-check-input" type="radio"  name="floor1_style" value="floor1_style1" id="floor1_style1" checked>
+                                                                                        <label class="form-check-label" for="floor1_style1">
+                                                                                            B1, B2, B3...
+                                                                                        </label>
+                                                                                    </div>
+                                                                                    <div class="form-check ms-3">
+                                                                                        <input class="form-check-input" type="radio" name="floor1_style" value="floor_style4" id="floor_style4">
+                                                                                        <label class="form-check-label" for="floor_style4">
+                                                                                            Tuỳ chỉnh
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div id="floor1">
+                                                                                   
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6 border-start">
+                                                                                <label for="numbfloor2">Số tầng nổi</label>
                                                                                 <span class="text-danger">*</span>
                                                                                 <input type="number" required
                                                                                     min="1" max="100"
-                                                                                    name="name" id="floor2"
+                                                                                    name="numbfloor2" id="numbfloor2"
                                                                                     class="form-control rounded-pill">
                                                                                 <div class="invalid-feedback"></div>
+                                                                                <!-- Base Radios -->
+                                                                                <br>
+                                                                                <label for="numbfloor1">Style tầng nổi</label>
+                                                                                <div class="form-check ms-3 mb-2">
+                                                                                    <input class="form-check-input" type="radio" name="floor2_style" value="floor2_style1"  id="floor2_style1" checked>
+                                                                                    <label class="form-check-label" for="floor2_style1">
+                                                                                        1, 2, 3...
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div class="form-check ms-3 mb-2">
+                                                                                    <input class="form-check-input" type="radio" name="floor2_style" value="floor2_style2"  id="floor2_style2">
+                                                                                    <label class="form-check-label" for="floor2_style2">
+                                                                                        G, 1, 2, 3...
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div class="form-check ms-3">
+                                                                                    <input class="form-check-input" type="radio" name="floor2_style" value="floor_style4"  id="floor_style4">
+                                                                                    <label class="form-check-label" for="floor_style4">
+                                                                                        Tuỳ chỉnh
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div id="floor2">
+                                                                                   
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -174,7 +226,7 @@
                                                                         <div class="col-12">
                                                                             <input type="reset" value="Clear"
                                                                                 class="btn btn-warning float-right">
-                                                                            <button type="button"
+                                                                            <button type="subnit"
                                                                                 class="btn btn-success float">Save</button>
                                                                         </div>
                                                                     </div>
@@ -186,25 +238,30 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
+                                        <div class="tab-pane fade utilities" id="v-pills-profile" role="tabpanel"
                                             aria-labelledby="v-pills-profile-tab">
                                             <div class="card-body">
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="tienich">Tiện ích</label>
+                                                            <label for="utilities">Tiện ích</label>
                                                             <span class="text-danger">*</span>
                                                             <div class="row mb-3 g-3">
                                                                 <div class="col-md">
-                                                                    <select name="tienich" required id="tienich"
+                                                                    <select name="utilities_id" required
+                                                                        id="select-utilities"
                                                                         class="form-select rounded-pill custom-select">
                                                                         <option value="">...</option>
-                                                                        <option value="1">1...</option>
-                                                                        <option value="2">2...</option>
+                                                                        @foreach ($list_utilities as $utilities)
+                                                                            <option value="{{ $utilities->id }}">
+                                                                                {{ $utilities->name }}
+                                                                            </option>
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-auto">
-                                                                    <button type="button" class="btn btn-success float">
+                                                                    <button type="button" class="btn btn-success float"
+                                                                        id="btn-utilities_add">
                                                                         <i class="bx bx-plus"></i>
                                                                     </button>
                                                                 </div>
@@ -214,14 +271,8 @@
 
                                                     <div class="col-md-6">
                                                         <label>Mô tả</label>
-                                                        <div
-                                                            class="
-                                                    ms-2">
-                                                            Each design is a new, unique piece of art birthed into this
-                                                            world,
-                                                            and while you have the opportunity to be creative and make your
-                                                            own
-                                                            style choices.
+                                                        <div class="ms-2" id="utilities_discription">
+                                                            <span>---</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -232,16 +283,16 @@
                                                 <form class="needs-validation" novalidate action="create"
                                                     id="validateForm" method="POST" enctype="multipart/form-data">
                                                     @csrf
-                                                    <div class="utilities_content">
-                                                        <div class="row">
+                                                    <div id="utilities_content">
+                                                        <div class="row" id="item-utilities{{ $utilities->id }}">
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <div class="controls">
-                                                                        <h6>Tiện ích 1</h5>
-                                                                            <input type="hidden"
+                                                                        <h6>{{ $utilities->name }}</h5>
+                                                                            {{-- <input type="hidden"
                                                                                 name="utilities_id[utilities_id]"
                                                                                 class="form-control" value="utilities_id"
-                                                                                required="">
+                                                                                required=""> --}}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -261,7 +312,6 @@
                                                                                 <option value="2">Tầng 2</option>
                                                                                 <option value="3">Tầng 3</option>
                                                                             </optgroup>
-
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -276,7 +326,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
 
                                                     <div class="box-footer text-end mb-3">
@@ -616,8 +665,13 @@
                 <!--end col-->
             </div>
             <!--end row-->
+            {{-- component --}}
+            <div id="component">
+                @include('pages.modal.crop')
+            </div>
         </div>
         <!-- container-fluid -->
+
 
     </div>
     <!-- End Page-content -->
@@ -625,17 +679,177 @@
 @endsection
 
 @section('css')
-    <link rel="stylesheet" href="\assets\libs\cropper\cropper.css">
 @endsection
 
 @section('script')
-    <script src="\assets\libs\cropper\cropper.js"></script>
-    <script src="\assets\js\cropper-custom.js"></script>
     <script>
         $('html').on('click', '.btn-create_typepartment', function() {
             $('#create-record').attr('href', 'create');
             $('#create_typepartmentModal').modal('show');
-
         });
+
+        function renderFloor(floor_numb, floor_style)
+        {
+            var floor_code;
+            var floor_name;
+
+            data = '';
+            data +='<div class="row mb-3">';
+            data +='<div class="col-md-6">';
+            data +='<label for="floor_code">Mã tầng</label><span class="text-danger">*</span>';
+            data +='</div>';
+            data +='<div class="col-md-6">';
+            data +='<label for="floor_name">Tầng</label>';
+            data +='<span class="text-danger">*</span>';
+            data +='</div>';
+            data +='</div>';
+            data +='<div id="floor1-content" style="max-height: 174px; overflow-x: hidden;">';
+            for(var i = 0; i< floor_numb; i++){
+                switch(floor_style){
+                    case 'floor1_style1':
+                        floor_name = 'B'+ (i + 1);
+                        break;
+                    case 'floor2_style1':
+                        floor_name = (i + 1);
+                        break;
+                    case 'floor2_style2':
+                         floor_name = (i==0) ? "G" : i ;
+                        break;
+                    case 'floor_style4':
+                        floor_name = '';
+                        break;
+                }
+                
+                data +='<div class="row mb-3">';
+                data +='<div class="col-md-6">';
+                
+                floor_code = i+1;
+                data +='<input type="text" value="'+floor_code+'" name="floor_code" id="floor_code" class="form-control rounded" required>';
+            
+                data +='<div class="invalid-feedback"> </div>';
+                data +='</div>';
+                data +='<div class="col-md-6">';
+
+                if(floor_style == 'floor1_style1')
+                {
+                    
+                }
+
+                data +='<input type="text" value="'+floor_name+'" name="floor_name" id="floor_name" class="form-control rounded" required>';
+                
+                data +='<div class="invalid-feedback"></div>';
+                data +='</div>';
+                data +='</div>';
+            }
+            data +='</div>';
+                return data;
+        }
+
+        function functionName(floor_numb ,floor_style, floor)
+        {
+            var floor_numb = $(floor_numb).val();
+            var floor_style = $(floor_style).val();
+            
+            if(floor_numb > 0 && floor_numb <= 163)
+            {
+                var dataRender = renderFloor(floor_numb, floor_style);
+                $(floor).html(dataRender)
+            }else{
+                if(floor_numb > 300)
+                    toast('warning', 'Thông báo | Số tầng không được vượt quá 163')
+                $(floor).html('');
+            }
+        }
+
+        $('.detail').on('blur', '#numbfloor1', function() {
+            functionName('#numbfloor1','input[name="floor1_style"]:checked', '#floor1');
+        });
+
+        $('.detail').on('change', 'input[name="floor1_style"]:checked', function() {
+            functionName('#numbfloor1','input[name="floor1_style"]:checked', '#floor1');
+        });
+
+        $('.detail').on('blur', '#numbfloor2', function() {
+            functionName('#numbfloor2','input[name="floor2_style"]:checked', '#floor2');
+        });
+
+        $('.detail').on('change', 'input[name="floor2_style"]:checked', function() {
+            functionName('#numbfloor2','input[name="floor2_style"]:checked', '#floor2');
+        });
+
+
+/*
+        $('.utilities').on('change', '#select-utilities', function() {
+
+            utilities_id = $(this).val();
+            $('#utilities_discription').load('/admin/building/utilities_discription/' + utilities_id);
+        });
+
+        function renderUtilities() {
+            data = '';
+            data += '<div class="row">';
+            data += '                                                <div class="col-md-4">';
+            data += '                                                    <div class="form-group">';
+            data += '                                                        <div class="controls">';
+            data += '                                                            <h6>Tiện ích 1</h5>';
+            data += '                                                                <input type="hidden"';
+            data += '                                                                    name="utilities_id[utilities_id]"';
+            data +=
+                '                                                                    class="form-control" value="utilities_id"';
+            data += '                                                                    required="">';
+            data += '                                                        </div>';
+            data += '                                                    </div>';
+            data += '                                                </div>';
+            data += '                                                <div class="col-md-6">';
+            data += '                                                    <div class="form-group">';
+            data += '                                                        <div class="controls">';
+            data +=
+                '                                                            <select name="floor[floor_id]" required=""';
+            data +=
+                '                                                                class="form-select rounded-pill custom-select"';
+            data +=
+                '                                                                data-validation-required-message="Bạn chưa chọn tầng.">';
+            data += '                                                                <option value="">Chọn vị trí tầng';
+            data += '                                                                </option>';
+            data += '                                                                <optgroup label="Tầng hầm">';
+            data +=
+                '                                                                    <option value="B1">Tầng B1</option>';
+            data += '                                                                </optgroup>';
+            data += '                                                                <optgroup label="Tầng nổi">';
+            data += '                                                                    <option value="1">Tầng 1</option>';
+            data += '                                                                    <option value="2">Tầng 2</option>';
+            data += '                                                                    <option value="3">Tầng 3</option>';
+            data += '                                                                </optgroup>';
+            data += '                                                            </select>';
+            data += '                                                        </div>';
+            data += '                                                    </div>';
+            data += '                                                </div>';
+            data += '                                                <div class="col-md-2">';
+            data += '                                                    <div class="form-group">';
+            data += '                                                        <div class="controls">';
+            data +=
+                '                                                            <button type="button" data-item="utilities_id"';
+            data +=
+                '                                                                class="waves-effect waves-light btn btn-danger mb-5 btn-sm ">';
+            data +=
+                '                                                                    <i class=" ri-close-line"></i></button>';
+            data += '                                                        </div>';
+            data += '                                                    </div>';
+            data += '                                                </div>';
+            data += '                                            </div>';
+
+            return data;
+        }
+
+        $('.utilities').on('click', '#btn-utilities_add', function() {
+            //    alert('oke');
+
+            var id = $('#select-utilities').val();
+            var dataRender = renderUtilities();
+            $('#utilities_content').append(dataRender);
+            // utilities_id = $('#select-utilities').val();
+            // $('#utilities_discription').load('/admin/building/utilities_discription/' + utilities_id);
+        });
+*/
     </script>
 @endsection

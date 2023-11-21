@@ -1,4 +1,4 @@
-var modal = $('#modal');
+var modal = $('#modal_cropper');
 var image = document.getElementById('image');
 var cropper;
 $("body").on("change", ".imageUpload", function(e) {
@@ -46,8 +46,7 @@ $("body").on("click", "#crop", function() {
         reader.onloadend = function() {
             var base64data = reader.result;
             $('#base64image').val(base64data);
-            document.getElementById('imagePreview').style.backgroundImage = "url(" +
-                base64data + ")";
+            document.getElementById('imagePreview').style.backgroundImage = "url(" + base64data + ")";
             modal.modal('hide');
         }
     });
