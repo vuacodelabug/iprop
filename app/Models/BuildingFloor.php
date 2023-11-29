@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $code_floor
  * @property string|null $name_floor
  * @property int|null $status
+ * @property int $type
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * 
@@ -32,23 +33,25 @@ class BuildingFloor extends Model
 
 	protected $casts = [
 		'id_building' => 'int',
-		'status' => 'int'
+		'status' => 'int',
+		'type' => 'int'
 	];
 
 	protected $fillable = [
 		'id_building',
 		'code_floor',
 		'name_floor',
-		'status'
+		'status',
+		'type'
 	];
 
 	public function building()
 	{
 		return $this->belongsTo(Building::class, 'id_building');
 	}
-
 	public function building_utilities()
 	{
-		return $this->hasMany(BuildingUtility::class, 'id_floor');
+		return $this->hasMany(BuildingUtility::class,'id_floor');
 	}
+	
 }

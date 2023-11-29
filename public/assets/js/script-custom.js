@@ -28,7 +28,7 @@ $(document).ready(function(){
     
     $('.select2').select2({});
     
-    $('#validateForm').submit(function(event) {
+    $('.validateForm').submit(function(event) {
         if (this.checkValidity() === false) {
             event.preventDefault(); // Ngăn chặn hành động mặc định của sự kiện
             event.stopPropagation(); // Ngăn chặn sự kiện lan toả đến các phần tử cha hoặc các trình xử lý sự kiện khác.

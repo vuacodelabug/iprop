@@ -28,4 +28,7 @@ class Ward extends Model
 		'name',
 		'districtid'
 	];
+	public function building(){
+        return $this->hasOne(Building::class);
+    }
 }

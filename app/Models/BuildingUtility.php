@@ -54,7 +54,7 @@ class BuildingUtility extends Model
 		return $this->belongsTo(BuildingFloor::class, 'id_floor');
 	}
 
-	public function utility()
+	public function utilities()
 	{
 		return $this->belongsTo(Utility::class, 'id_utilities');
 	}

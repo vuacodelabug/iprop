@@ -28,4 +28,7 @@ class District extends Model
 		'name',
 		'provinceid'
 	];
+	public function building(){
+        return $this->hasOne(Building::class);
+    }
 }

@@ -19,8 +19,6 @@ class SearchController extends Controller
             $data['key'] = $req->key;
         }
 
-        
-
         //đẩy vào putSearch
         $this->putSearch($data);
     }

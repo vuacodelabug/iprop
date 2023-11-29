@@ -31,28 +31,28 @@
                                 <div class="col-md-2">
                                     <div class="nav flex-column nav-pills text-right" id="v-pills-tab" role="tablist"
                                         aria-orientation="vertical">
-                                        <a class="nav-link mb-2 active" id="v-pills-home-tab" data-bs-toggle="pill"
-                                            href="#v-pills-home" role="tab" aria-controls="v-pills-home"
+                                        <a class="nav-link mb-2 {{ Session('active_tab') ? '' : 'active' }}" id="v-pills-detail-tab" data-bs-toggle="pill"
+                                            href="#v-pills-detail" role="tab" aria-controls="v-pills-detail"
                                             aria-selected="true"><i class="ri-home-5-line align-middle me-1"></i>
                                             Chi tiết</a>
-                                        <a class="nav-link mb-2" id="v-pills-profile-tab" data-bs-toggle="pill"
-                                            href="#v-pills-profile" role="tab" aria-controls="v-pills-profile"
+                                        <a class="nav-link mb-2 {{ Session('active_tab')=='utilities' ? 'active' : '' }}" id="v-pills-utilities-tab" data-bs-toggle="pill"
+                                            href="#v-pills-utilities" role="tab" aria-controls="v-pills-utilities"
                                             aria-selected="false"><i class="ri-home-5-line align-middle me-1"></i>
                                             Tiện ích</a>
-                                        <a class="nav-link mb-2" id="v-pills-messages-tab" data-bs-toggle="pill"
-                                            href="#v-pills-messages" role="tab" aria-controls="v-pills-messages"
+                                        <a class="nav-link mb-2 {{ Session('active_tab')=='service' ? 'active' : '' }}" id="v-pills-service-tab" data-bs-toggle="pill"
+                                            href="#v-pills-service" role="tab" aria-controls="v-pills-service"
                                             aria-selected="false"><i class="ri-home-5-line align-middle me-1"></i>
                                             Dịch vụ</a>
-                                        <a class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill"
-                                            href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
+                                        <a class="nav-link {{ Session('active_tab')=='typepartment' ? 'active' : '' }}" id="v-pills-typepartment-tab" data-bs-toggle="pill"
+                                            href="#v-pills-typepartment" role="tab" aria-controls="v-pills-typepartment"
                                             aria-selected="false"><i class="ri-home-5-line align-middle me-1"></i>
                                             Loại phòng</a>
                                     </div>
                                 </div><!-- end col -->
                                 <div class="col-md-9">
                                     <div class="tab-content text-muted mt-4 mt-md-0" id="v-pills-tabContent">
-                                        <div class="tab-pane detail fade show active" id="v-pills-home" role="tabpanel"
-                                            aria-labelledby="v-pills-home-tab">
+                                        <div class="tab-pane fade {{ Session('active_tab') ? '' : 'show active' }}" id="v-pills-detail" role="tabpanel"
+                                            aria-labelledby="v-pills-detail-tab">
                                             <div class="card-body">
                                                 <form class="needs-validation" action="create" id="validateForm"
                                                     method="POST" enctype="multipart/form-data" novalidate>
@@ -163,7 +163,7 @@
                                                                                     <label for="numbfloor1">Số tầng hầm</label>
                                                                                     <span class="text-danger">*</span>
                                                                                     <input type="number" required
-                                                                                        min="1" max="100"
+                                                                                        min="0" max="163"
                                                                                         name="floor1_numb" id="numbfloor1"
                                                                                         class="form-control rounded-pill">
                                                                                     <div class="invalid-feedback"></div>
@@ -177,8 +177,8 @@
                                                                                         </label>
                                                                                     </div>
                                                                                     <div class="form-check ms-3">
-                                                                                        <input class="form-check-input" type="radio" name="floor1_style" value="floor_style4" id="floor_style4">
-                                                                                        <label class="form-check-label" for="floor_style4">
+                                                                                        <input class="form-check-input" type="radio" name="floor1_style" value="floor1_style4" id="floor1_style4">
+                                                                                        <label class="form-check-label" for="floor1_style4">
                                                                                             Tuỳ chỉnh
                                                                                         </label>
                                                                                     </div>
@@ -188,11 +188,11 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6 border-start">
-                                                                                <label for="numbfloor2">Số tầng nổi</label>
+                                                                                <label for="floor2_numb">Số tầng nổi</label>
                                                                                 <span class="text-danger">*</span>
                                                                                 <input type="number" required
-                                                                                    min="1" max="100"
-                                                                                    name="numbfloor2" id="numbfloor2"
+                                                                                    min="1" max="163"
+                                                                                    name="floor2_numb" id="floor2_numb"
                                                                                     class="form-control rounded-pill">
                                                                                 <div class="invalid-feedback"></div>
                                                                                 <!-- Base Radios -->
@@ -211,11 +211,12 @@
                                                                                     </label>
                                                                                 </div>
                                                                                 <div class="form-check ms-3">
-                                                                                    <input class="form-check-input" type="radio" name="floor2_style" value="floor_style4"  id="floor_style4">
-                                                                                    <label class="form-check-label" for="floor_style4">
+                                                                                    <input class="form-check-input" type="radio" name="floor2_style" value="floor2_style4"  id="floor2_style4">
+                                                                                    <label class="form-check-label" for="floor2_style4">
                                                                                         Tuỳ chỉnh
                                                                                     </label>
                                                                                 </div>
+                                                                                <br>
                                                                                 <div id="floor2">
                                                                                    
                                                                                 </div>
@@ -238,421 +239,28 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade utilities" id="v-pills-profile" role="tabpanel"
-                                            aria-labelledby="v-pills-profile-tab">
+                                        <div class="tab-pane fade {{ Session('active_tab')=='utilities' ? 'show active' : '' }}" id="v-pills-utilities" role="tabpanel"
+                                            aria-labelledby="v-pills-utilities-tab">
                                             <div class="card-body">
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="utilities">Tiện ích</label>
-                                                            <span class="text-danger">*</span>
-                                                            <div class="row mb-3 g-3">
-                                                                <div class="col-md">
-                                                                    <select name="utilities_id" required
-                                                                        id="select-utilities"
-                                                                        class="form-select rounded-pill custom-select">
-                                                                        <option value="">...</option>
-                                                                        @foreach ($list_utilities as $utilities)
-                                                                            <option value="{{ $utilities->id }}">
-                                                                                {{ $utilities->name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-auto">
-                                                                    <button type="button" class="btn btn-success float"
-                                                                        id="btn-utilities_add">
-                                                                        <i class="bx bx-plus"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <label>Mô tả</label>
-                                                        <div class="ms-2" id="utilities_discription">
-                                                            <span>---</span>
-                                                        </div>
-                                                    </div>
+                                                <div class="alert alert-danger mb-xl-0" role="alert">
+                                                         Bạn cần nhập thông tin chi tiết trước!
                                                 </div>
-
-                                                <div class="border-top-double"></div>
-                                                <br>
-
-                                                <form class="needs-validation" novalidate action="create"
-                                                    id="validateForm" method="POST" enctype="multipart/form-data">
-                                                    @csrf
-                                                    <div id="utilities_content">
-                                                        <div class="row" id="item-utilities{{ $utilities->id }}">
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <h6>{{ $utilities->name }}</h5>
-                                                                            {{-- <input type="hidden"
-                                                                                name="utilities_id[utilities_id]"
-                                                                                class="form-control" value="utilities_id"
-                                                                                required=""> --}}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <select name="floor[floor_id]" required=""
-                                                                            class="form-select rounded-pill custom-select"
-                                                                            data-validation-required-message="Bạn chưa chọn tầng.">
-                                                                            <option value="">Chọn vị trí tầng
-                                                                            </option>
-                                                                            <optgroup label="Tầng hầm">
-                                                                                <option value="B1">Tầng B1</option>
-                                                                            </optgroup>
-                                                                            <optgroup label="Tầng nổi">
-                                                                                <option value="1">Tầng 1</option>
-                                                                                <option value="2">Tầng 2</option>
-                                                                                <option value="3">Tầng 3</option>
-                                                                            </optgroup>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <button type="button" data-item="utilities_id"
-                                                                            class="waves-effect waves-light btn btn-danger mb-5 btn-sm "><i
-                                                                                class=" ri-close-line"></i></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="box-footer text-end mb-3">
-                                                        <input type="reset" value="Clear"
-                                                            class="btn btn-warning float-right">
-                                                        <button type="button" class="btn btn-success float">Save</button>
-                                                    </div>
-                                                </form>
-
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
-                                            aria-labelledby="v-pills-messages-tab">
+                                        <div class="tab-pane fade {{ Session('active_tab')=='service' ? 'show active' : '' }}" id="v-pills-service" role="tabpanel"
+                                            aria-labelledby="v-pills-service-tab">
                                             <div class="card-body">
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="dichvu">Dịch vụ</label>
-                                                            <span class="text-danger">*</span>
-                                                            <div class="row mb-3 g-3">
-                                                                <div class="col-md">
-                                                                    <select name="dichvu" required id="dichvu"
-                                                                        class="form-select rounded-pill custom-select">
-                                                                        <option value="">...</option>
-                                                                        <option value="1">1...</option>
-                                                                        <option value="2">2...</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-auto">
-                                                                    <button type="button" class="btn btn-success float">
-                                                                        <i class="bx bx-plus"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <label>Mô tả</label>
-                                                        <div class="ms-2">
-                                                            Each design is a new, unique piece of art birthed into this
-                                                            world,
-                                                            and while you have the opportunity to be creative and make your
-                                                            own
-                                                            style choices.
-                                                        </div>
-                                                    </div>
+                                                <div class="alert alert-danger mb-xl-0" role="alert">
+                                                         Bạn cần nhập thông tin chi tiết trước!
                                                 </div>
-
-                                                <div class="border-top-double"></div>
-                                                <br>
-
-                                                <form class="needs-validation" novalidate action="create"
-                                                    id="validateForm" method="POST" enctype="multipart/form-data">
-                                                    @csrf
-                                                    <div class="service_content">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <h6>Dịch vụ 1</h5>
-                                                                            <input type="hidden"
-                                                                                name="service_id[service_id]"
-                                                                                class="form-control" value="service_id"
-                                                                                required="">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <input type="number" required name="name"
-                                                                            id="giatien"
-                                                                            class="form-control rounded-pill"
-                                                                            placeholder="Giá tiền...">
-                                                                        <div class="invalid-feedback"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <select name="floor[floor_id]" required=""
-                                                                            class="form-select rounded-pill custom-select"
-                                                                            data-validation-required-message="Bạn chưa chọn tầng.">
-                                                                            <option value="">Đơn vị...
-                                                                            <option value="1">1</option>
-                                                                            <option value="2">2</option>
-                                                                            <option value="3">3</option>
-                                                                            </optgroup>
-
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <button type="button" data-item="service_id"
-                                                                            class="waves-effect waves-light btn btn-danger mb-5 btn-sm "><i
-                                                                                class=" ri-close-line"></i></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="box-footer text-end mb-3">
-                                                        <div class="col-12">
-                                                            <input type="reset" value="Clear"
-                                                                class="btn btn-warning float-right">
-                                                            <button type="button"
-                                                                class="btn btn-success float">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
-                                            aria-labelledby="v-pills-settings-tab">
+                                        <div class="tab-pane fade {{ Session('active_tab')=='typepartment' ? 'show active' : '' }}" id="v-pills-typepartment" role="tabpanel"
+                                            aria-labelledby="v-pills-typepartment-tab">
                                             <div class="card-body">
-                                                <form class="needs-validation" novalidate action="create"
-                                                    id="validateForm" method="POST" enctype="multipart/form-data">
-                                                    @csrf
-                                                    <div class="box-header with-border p-10">
-                                                        <div class="row ">
-                                                            <div class="col-md-8">
-                                                                <h4 class="box-title">Loại phòng</h4>
-                                                            </div>
-                                                            <div class="col-md-4 text-end">
-                                                                <button type="button"
-                                                                    class="card-animate btn btn-success float btn-create_typepartment">
-                                                                    <i class="bx bx-plus">Thêm loại phòng</i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <hr>
-
-                                                    <section>
-                                                        <div class="row row-cols-1 row-cols-md-3 g-3">
-                                                            <div class="col">
-                                                                <div class="card card-animate border border-3">
-                                                                    <div
-                                                                        class="card-header d-flex justify-content-between align-items-center">
-                                                                        <h5 class="fw-semibold">Studio Special</h5>
-
-                                                                        <button type="button"
-                                                                            class="btn btn-danger btn-sm btn-icon waves-effect waves-light">
-                                                                            <i class="ri-delete-bin-5-line"></i>
-                                                                        </button>
-                                                                    </div>
-
-
-                                                                    <div class="card-body">
-                                                                        <h6 class="text-muted">Phòng trong loại: 0</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col">
-                                                                <div class="card card-animate border border-3">
-                                                                    <div
-                                                                        class="card-header d-flex justify-content-between align-items-center">
-                                                                        <h5 class="fw-semibold">Studio Special</h5>
-
-                                                                        <button type="button"
-                                                                            class="btn btn-danger btn-sm btn-icon waves-effect waves-light">
-                                                                            <i class="ri-delete-bin-5-line"></i>
-                                                                        </button>
-                                                                    </div>
-
-
-                                                                    <div class="card-body">
-                                                                        <h6 class="text-muted">Phòng trong loại: 0</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <div class="card card-animate border border-3">
-                                                                    <div
-                                                                        class="card-header d-flex justify-content-between align-items-center">
-                                                                        <h5 class="fw-semibold">Studio Special</h5>
-
-                                                                        <button type="button"
-                                                                            class="btn btn-danger btn-sm btn-icon waves-effect waves-light">
-                                                                            <i class="ri-delete-bin-5-line"></i>
-                                                                        </button>
-                                                                    </div>
-
-
-                                                                    <div class="card-body">
-                                                                        <h6 class="text-muted">Phòng trong loại: 0</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </section>
-
-                                                    <section>
-                                                        <h5 class="fw-semibold">Sơ đồ giác quan</h5>
-
-                                                        <div class="d-flex gap-3">
-                                                            <div
-                                                                class="align-self-stretch d-flex align-items-center bg-primary px-5 text-nowrap">
-                                                                <h6 class="mb-0 text-uppercase text-white fw-bold">
-                                                                    Tầng G
-                                                                </h6>
-                                                            </div>
-
-                                                            <div class="flex-grow-1 row row-cols-md-6 g-1">
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-
-
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col">
-                                                                    <button type="button"
-                                                                        class="btn btn-outline-secondary custom-toggle w-100"
-                                                                        data-bs-toggle="button">
-                                                                        <span class="icon-on">
-                                                                            <b>101</b> <br>
-                                                                            Studio Special
-                                                                        </span>
-                                                                        <span class="icon-off">
-                                                                            <b>101</b> <br>
-                                                                            Studio Special
-                                                                        </span>
-                                                                    </button>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    </section>
-
-                                                    <div class="card-body text-right row mb-3">
-                                                        <div class="col-12">
-                                                            <input type="reset" value="Clear"
-                                                                class="btn btn-warning float-right">
-                                                            <button type="button"
-                                                                class="btn btn-success float">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                                {{-- component --}}
-                                                @include('pages.building.modal.create_typeapartment')
-                                                {{-- /component --}}
+                                                <div class="alert alert-danger mb-xl-0" role="alert">
+                                                         Bạn cần nhập thông tin chi tiết trước!
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -707,15 +315,18 @@
             for(var i = 0; i< floor_numb; i++){
                 switch(floor_style){
                     case 'floor1_style1':
-                        floor_name = 'B'+ (i + 1);
+                        floor_name ='Tầng B' + (i + 1);
                         break;
                     case 'floor2_style1':
-                        floor_name = (i + 1);
+                        floor_name = 'Tầng '+ (i + 1);
                         break;
                     case 'floor2_style2':
-                         floor_name = (i==0) ? "G" : i ;
+                        floor_name = (i == 0) ? "Tầng G" : 'Tầng '+ i;
                         break;
-                    case 'floor_style4':
+                    case 'floor1_style4':
+                        floor_name = '';
+                        break;
+                    case 'floor2_style4':
                         floor_name = '';
                         break;
                 }
@@ -724,18 +335,19 @@
                 data +='<div class="col-md-6">';
                 
                 floor_code = i+1;
-                data +='<input type="text" value="'+floor_code+'" name="floor_code" id="floor_code" class="form-control rounded" required>';
-            
+                if(floor_style.startsWith('floor1')){
+                    data +='<input type="text" value="'+floor_code+'" name="floor1_code['+floor_code+']" id="floor1_code'+floor_code+'" class="form-control rounded" required>';
+                }else if(floor_style.startsWith('floor2')){
+                    data +='<input type="text" value="'+floor_code+'" name="floor2_code['+floor_code+']" id="floor2_code'+floor_code+'" class="form-control rounded" required>';
+                }
                 data +='<div class="invalid-feedback"> </div>';
                 data +='</div>';
                 data +='<div class="col-md-6">';
-
-                if(floor_style == 'floor1_style1')
-                {
-                    
+                    if(floor_style.startsWith('floor1')){
+                        data +='<input type="text" value="'+floor_name+'" name="floor1_name['+floor_code+']" id="floor1_name'+floor_code+'" class="form-control rounded" required>';
+                }else if(floor_style.startsWith('floor2')){
+                    data +='<input type="text" value="'+floor_name+'" name="floor2_name['+floor_code+']" id="floor2_name'+floor_code+'" class="form-control rounded" required>';
                 }
-
-                data +='<input type="text" value="'+floor_name+'" name="floor_name" id="floor_name" class="form-control rounded" required>';
                 
                 data +='<div class="invalid-feedback"></div>';
                 data +='</div>';
@@ -761,95 +373,20 @@
             }
         }
 
-        $('.detail').on('blur', '#numbfloor1', function() {
+        $('#v-pills-detail').on('blur', '#numbfloor1', function() {
             functionName('#numbfloor1','input[name="floor1_style"]:checked', '#floor1');
         });
 
-        $('.detail').on('change', 'input[name="floor1_style"]:checked', function() {
+        $('#v-pills-detail').on('change', 'input[name="floor1_style"]:checked', function() {
             functionName('#numbfloor1','input[name="floor1_style"]:checked', '#floor1');
         });
 
-        $('.detail').on('blur', '#numbfloor2', function() {
-            functionName('#numbfloor2','input[name="floor2_style"]:checked', '#floor2');
+        $('#v-pills-detail').on('blur', '#floor2_numb', function() {
+            functionName('#floor2_numb','input[name="floor2_style"]:checked', '#floor2');
         });
 
-        $('.detail').on('change', 'input[name="floor2_style"]:checked', function() {
-            functionName('#numbfloor2','input[name="floor2_style"]:checked', '#floor2');
+        $('#v-pills-detail').on('change', 'input[name="floor2_style"]:checked', function() {
+            functionName('#floor2_numb','input[name="floor2_style"]:checked', '#floor2');
         });
-
-
-/*
-        $('.utilities').on('change', '#select-utilities', function() {
-
-            utilities_id = $(this).val();
-            $('#utilities_discription').load('/admin/building/utilities_discription/' + utilities_id);
-        });
-
-        function renderUtilities() {
-            data = '';
-            data += '<div class="row">';
-            data += '                                                <div class="col-md-4">';
-            data += '                                                    <div class="form-group">';
-            data += '                                                        <div class="controls">';
-            data += '                                                            <h6>Tiện ích 1</h5>';
-            data += '                                                                <input type="hidden"';
-            data += '                                                                    name="utilities_id[utilities_id]"';
-            data +=
-                '                                                                    class="form-control" value="utilities_id"';
-            data += '                                                                    required="">';
-            data += '                                                        </div>';
-            data += '                                                    </div>';
-            data += '                                                </div>';
-            data += '                                                <div class="col-md-6">';
-            data += '                                                    <div class="form-group">';
-            data += '                                                        <div class="controls">';
-            data +=
-                '                                                            <select name="floor[floor_id]" required=""';
-            data +=
-                '                                                                class="form-select rounded-pill custom-select"';
-            data +=
-                '                                                                data-validation-required-message="Bạn chưa chọn tầng.">';
-            data += '                                                                <option value="">Chọn vị trí tầng';
-            data += '                                                                </option>';
-            data += '                                                                <optgroup label="Tầng hầm">';
-            data +=
-                '                                                                    <option value="B1">Tầng B1</option>';
-            data += '                                                                </optgroup>';
-            data += '                                                                <optgroup label="Tầng nổi">';
-            data += '                                                                    <option value="1">Tầng 1</option>';
-            data += '                                                                    <option value="2">Tầng 2</option>';
-            data += '                                                                    <option value="3">Tầng 3</option>';
-            data += '                                                                </optgroup>';
-            data += '                                                            </select>';
-            data += '                                                        </div>';
-            data += '                                                    </div>';
-            data += '                                                </div>';
-            data += '                                                <div class="col-md-2">';
-            data += '                                                    <div class="form-group">';
-            data += '                                                        <div class="controls">';
-            data +=
-                '                                                            <button type="button" data-item="utilities_id"';
-            data +=
-                '                                                                class="waves-effect waves-light btn btn-danger mb-5 btn-sm ">';
-            data +=
-                '                                                                    <i class=" ri-close-line"></i></button>';
-            data += '                                                        </div>';
-            data += '                                                    </div>';
-            data += '                                                </div>';
-            data += '                                            </div>';
-
-            return data;
-        }
-
-        $('.utilities').on('click', '#btn-utilities_add', function() {
-            //    alert('oke');
-
-            var id = $('#select-utilities').val();
-            var dataRender = renderUtilities();
-            $('#utilities_content').append(dataRender);
-            // utilities_id = $('#select-utilities').val();
-            // $('#utilities_discription').load('/admin/building/utilities_discription/' + utilities_id);
-        });
-*/
     </script>
 @endsection

@@ -73,7 +73,6 @@ class UnitController extends Controller
     {
         $unit = Unit::find($id);
         $unit->status = '0';
-        $unit->updated_at = date('Y-m-d H:m:s');
         $unit->save();
 
         $block_unit = new ZblockHistory;

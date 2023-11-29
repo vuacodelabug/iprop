@@ -72,4 +72,22 @@ class Building extends Model
 	{
 		return $this->hasMany(BuildingUtility::class, 'id_building');
 	}
+	public function building_floor()
+	{
+		return $this->hasMany(BuildingFloor::class, 'id_building');
+	}
+
+	public function province()
+	{
+		return $this->belongsTo(Province::class, 'province_id');
+	}
+	public function district()
+	{
+		return $this->belongsTo(District::class,'district_id');
+	}
+	public function ward()
+	{
+		return $this->belongsTo(Ward::class, 'ward_id');
+	}
+
 }

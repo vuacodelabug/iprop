@@ -26,4 +26,7 @@ class Province extends Model
 	protected $fillable = [
 		'name'
 	];
+	public function building(){
+        return $this->hasOne(Building::class);
+    }
 }

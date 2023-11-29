@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BuildingUtility;
 use App\Models\Province;
 use App\Models\BuildingFloor;
 use App\Models\Typeapartment;
@@ -33,10 +34,7 @@ class BuildingController extends Controller
     public function getCreate()
     {   
         $data['provinces']= Province::select('provinceid', 'name')->get();
-        $data['list_utilities']= Utility::select('name', 'id', 'description')
-        ->where('status','1')
-        ->get();
-
+       
         return view('pages.building.create', $data);
     }
     public function getUtilitiesDiscription($id)
@@ -51,8 +49,10 @@ class BuildingController extends Controller
 
     public function postCreate(createBuildingRequest $req)
     {
-        dd($req);
-        /*
+        // echo '<pre>';
+        // var_dump($req->toArray());
+        // echo '</pre>';
+        // die();
         $building = new Building;
         $building->name = $req->building_name;
         $building->address = $req->building_address;
@@ -77,21 +77,36 @@ class BuildingController extends Controller
             $building->logo ='assets/images/buiding-logo/logo-0.png';
             $building->save();
         }
+        $building_id=$building->id;
+        if(isset($req->floor1_code) AND count($req->floor1_code) > 0){
+            foreach($req->floor1_code as $key => $floor1_code){
+                $buildingfloor = new BuildingFloor;
+                $buildingfloor->id_building =  $building_id; 
+                $buildingfloor->code_floor =  $floor1_code;
+                $buildingfloor->name_floor =  $req->floor1_name[$key];
+                $buildingfloor->type = '1';
+                $buildingfloor->save();
 
-        for($i = 0; $i < $req->numbfloor1; $i++){
-            $buildingfloor = new BuildingFloor;
-            $buildingfloor->id_building = $building->id; 
-            $buildingfloor->code_floor =  'B'.$i;
+            }
         }
-*/
-        // // $block_building = new ZblockBuilding;
-        // // $block_building->name = 'create building';
-        // // $block_building->content = 'Thêm mới khách hàng';
-        // // $block_building->target_id = $building->id;
-        // // $block_building->user_id = auth()->user()->id;
-        // // $block_building->save();
+        
+        if(isset($req->floor2_code) and count($req->floor2_code)>0){
+            foreach($req->floor2_code as $key => $floor2_code){
+                $buildingfloor = new BuildingFloor;
+            $buildingfloor->id_building =  $building_id; 
+            $buildingfloor->code_floor =  $floor2_code;
+            $buildingfloor->name_floor =  $req->floor2_name[$key];
+            $buildingfloor->type = '2';
+            $buildingfloor->save();
 
-        return redirect('/admin/building/create');
+            }
+        }
+
+    // Đặt dữ liệu vào flash session với key là 'active_tab' và giá trị là 'utilities'
+    Session::flash('active_tab', 'utilities');
+
+        // return redirect('/admin/building/edit/'.$building_id);
+        return redirect('/admin/building/edit/'.'11');
     }
 
     //Hien thi chi tiet nhan vien
@@ -105,25 +120,70 @@ class BuildingController extends Controller
     //chinh sua phan tu
     public function getEdit($id)
     {
+        
         $data['building'] = Building::find($id);
+        $data['provinces']= Province::select('provinceid', 'name')->get();
+        $data['list_utilities']= Utility::select('name', 'id', 'description')
+        ->where('status','1')
+        ->get();
+
         return view('pages.building.edit', $data);
     }
     public function postEdit(Request $req)
     {
-        $building = Building::find($req->id);  
-        $building->name = $req->name;
-        $building->address = $req->address;
-        $building->description = $req->description;
-        $building->save();
+        $building = Building::find($req->buiding_id);
+        
+        //detail
+        if($req->active_tab=='detail'){
+            $building->name = $req->building_name;
+            $building->address = $req->building_address;
+            $building->province_id = $req->province_id;
+            $building->district_id = $req->district_id;
+            $building->ward_id = $req->ward_id;
 
-        // $block_building = new ZblockBuilding;
-        // $block_building->name = 'edit building';
-        // $block_building->content = 'Cập nhật thông tin khách hàng';
-        // $block_building->target_id = $building->id;
-        // $block_building->user_id = auth()->user()->id;
-        // $block_building->save();
+            Session::flash('active_tab', 'utilities');
+        }
+        //utilities
+        if($req->active_tab=='utilities'){
+            if(isset($req->buildingutilities_id) and count($req->buildingutilities_id)>0)
+            {
+                foreach ($req->buildingutilities_id as $key => $id) {
+                    
+                    if($id=='0')
+                    {
+                        $buildingutilities = new BuildingUtility;
+                            $buildingutilities->id_building = $req->buiding_id;
+                            $buildingutilities->id_utilities = $req->utilities_id[$key];
+                            $buildingutilities->id_floor = $req->floor_id[$key];
+                            $buildingutilities->save();
+                    }else{
+                        $buildingutilities = BuildingUtility::find($id);
+                            $buildingutilities->id_building = $req->buiding_id;
+                            $buildingutilities->id_utilities = $req->utilities_id[$key];
+                            $buildingutilities->id_floor = $req->floor_id[$key];
+                            $buildingutilities->save();
+                    }
+                }
+            }
+            if(isset($req->utilities_delete) and count($req->utilities_delete)>0)
+            {
+                $buildingutilities = BuildingUtility::whereIn('id', $req->utilities_delete)->get();
+                foreach ($buildingutilities as $key => $buildingutilities) {
+                    $buildingutilities->delete();
+                }
+               
+            }
+            Session::flash('active_tab', 'service');
+        }
 
-        return redirect('/admin/building/list');
+        if($req->active_tab == 'service'){
+            Session::flash('active_tab', 'typepartment');
+        }
+        if($req->active_tab == 'typepartment'){
+
+        }
+        // return redirect('/admin/building/edit/'.$building_id);
+        return redirect('/admin/building/edit/'.'11');
     }
     //xoa phan tu
     public function postChangeStatus($id)
