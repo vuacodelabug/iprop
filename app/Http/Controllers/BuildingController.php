@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\BuildingUtility;
 use App\Models\Province;
+use App\Models\District;
+use App\Models\Ward;
+
 use App\Models\BuildingFloor;
 use App\Models\Typeapartment;
 use App\Models\Utility;
@@ -20,7 +23,7 @@ class BuildingController extends Controller
     public function getList()
     {
         $this->isSearch();
-        
+
         $data['buildings'] = Building::where(function ($query) {
             if (isset(Session::get('search')['key'])) {
                 $key = Session::get('search')['key'];
@@ -32,28 +35,22 @@ class BuildingController extends Controller
         return view('pages.building.list', $data);
     }
     public function getCreate()
-    {   
-        $data['provinces']= Province::select('provinceid', 'name')->get();
-       
+    {
+        $data['provinces'] = Province::select('provinceid', 'name')->get();
+
         return view('pages.building.create', $data);
     }
     public function getUtilitiesDiscription($id)
-    {   
-        $utilities= Utility::select('description')
-        ->where('id',$id)
-        ->first();
+    {
+        $utilities = Utility::select('description')
+            ->where('id', $id)
+            ->first();
 
-        echo ' <span>'.$utilities->description.'</span>';
+        echo ' <span>' . $utilities->description . '</span>';
     }
 
-
-    public function postCreate(createBuildingRequest $req)
+    public function postDetail($building, $req)
     {
-        // echo '<pre>';
-        // var_dump($req->toArray());
-        // echo '</pre>';
-        // die();
-        $building = new Building;
         $building->name = $req->building_name;
         $building->address = $req->building_address;
         $building->province_id = $req->province_id;
@@ -61,7 +58,10 @@ class BuildingController extends Controller
         $building->ward_id = $req->ward_id;
 
         if (isset($req->base64image) and $req->base64image != null) {
-            
+            $link = ltrim($building->logo, "/");
+            if (file_exists($link)) {
+                unlink($link);
+            }
             $folderPath = public_path('assets/images/buiding-logo/');
             $image_parts = explode(";base64,", $req->base64image);
             $image_type_aux = explode("image/", $image_parts[0]);
@@ -73,117 +73,117 @@ class BuildingController extends Controller
             $part = 'assets/images/buiding-logo/' . $filename;
             $building->logo = $part;
             $building->save();
-        }else{
-            $building->logo ='assets/images/buiding-logo/logo-0.png';
-            $building->save();
         }
-        $building_id=$building->id;
-        if(isset($req->floor1_code) AND count($req->floor1_code) > 0){
-            foreach($req->floor1_code as $key => $floor1_code){
+        $building_id = $building->id;
+
+        $buildingfloor = BuildingFloor::where('id_building', $building_id)->get();
+        
+        if ($buildingfloor) {
+            foreach ($buildingfloor as $floor) {
+                BuildingUtility::where('id_building', $building_id)
+                    ->where('id_floor', $floor->id)
+                    ->delete();
+            }
+            
+            // Xóa tất cả các bản ghi trong Collection
+            $buildingfloor->delete();
+    }
+        if (isset($req->floor1_code) and count($req->floor1_code) > 0) {
+            foreach ($req->floor1_code as $key => $floor1_code) {
                 $buildingfloor = new BuildingFloor;
-                $buildingfloor->id_building =  $building_id; 
-                $buildingfloor->code_floor =  $floor1_code;
-                $buildingfloor->name_floor =  $req->floor1_name[$key];
+                $buildingfloor->id_building = $building_id;
+                $buildingfloor->code_floor = $floor1_code;
+                $buildingfloor->name_floor = $req->floor1_name[$key];
                 $buildingfloor->type = '1';
                 $buildingfloor->save();
-
             }
         }
-        
-        if(isset($req->floor2_code) and count($req->floor2_code)>0){
-            foreach($req->floor2_code as $key => $floor2_code){
+
+        if (isset($req->floor2_code) and count($req->floor2_code) > 0) {
+            foreach ($req->floor2_code as $key => $floor2_code) {
                 $buildingfloor = new BuildingFloor;
-            $buildingfloor->id_building =  $building_id; 
-            $buildingfloor->code_floor =  $floor2_code;
-            $buildingfloor->name_floor =  $req->floor2_name[$key];
-            $buildingfloor->type = '2';
-            $buildingfloor->save();
-
+                $buildingfloor->id_building = $building_id;
+                $buildingfloor->code_floor = $floor2_code;
+                $buildingfloor->name_floor = $req->floor2_name[$key];
+                $buildingfloor->type = '2';
+                $buildingfloor->save();
             }
         }
 
-    // Đặt dữ liệu vào flash session với key là 'active_tab' và giá trị là 'utilities'
-    Session::flash('active_tab', 'utilities');
-
-        // return redirect('/admin/building/edit/'.$building_id);
-        return redirect('/admin/building/edit/'.'11');
+        // Đặt dữ liệu vào flash session với key là 'active_tab' và giá trị là 'utilities'
+        Session::flash('active_tab', 'utilities');
     }
 
-    //Hien thi chi tiet nhan vien
-    public function getShow($id)
+    public function postCreate(createBuildingRequest $req)
     {
-        $data['building'] = Building::find($id);
-        return view('pages.building.view', $data);
+        $building = new Building;
+        $building->logo = 'assets/images/buiding-logo/logo-0.png';
+        $this->postDetail($building, $req);
+        // return redirect('/admin/building/edit/'.$building_id);
+        return redirect('/admin/building/edit/' . '11');
     }
-
 
     //chinh sua phan tu
     public function getEdit($id)
     {
-        
+
         $data['building'] = Building::find($id);
-        $data['provinces']= Province::select('provinceid', 'name')->get();
-        $data['list_utilities']= Utility::select('name', 'id', 'description')
-        ->where('status','1')
-        ->get();
+        $data['provinces'] = Province::get();
+        $data['districts'] = (!empty($data['building']->district_id)) ? District::where('provinceid', $data['building']->province_id)->get() : array();
+        $data['wards'] = (!empty($data['building']->ward_id)) ? Ward::where('districtid', $data['building']->district_id)->get() : array();
+        $data['list_utilities'] = Utility::select('name', 'id', 'description')
+            ->where('status', '1')
+            ->get();
 
         return view('pages.building.edit', $data);
     }
     public function postEdit(Request $req)
     {
         $building = Building::find($req->buiding_id);
-        
-        //detail
-        if($req->active_tab=='detail'){
-            $building->name = $req->building_name;
-            $building->address = $req->building_address;
-            $building->province_id = $req->province_id;
-            $building->district_id = $req->district_id;
-            $building->ward_id = $req->ward_id;
 
-            Session::flash('active_tab', 'utilities');
+        //detail
+        if ($req->active_tab == 'detail') {
+            $this->postDetail($building, $req);
         }
+
         //utilities
-        if($req->active_tab=='utilities'){
-            if(isset($req->buildingutilities_id) and count($req->buildingutilities_id)>0)
-            {
+        if ($req->active_tab == 'utilities') {
+            if (isset($req->buildingutilities_id) and count($req->buildingutilities_id) > 0) {
                 foreach ($req->buildingutilities_id as $key => $id) {
-                    
-                    if($id=='0')
-                    {
+
+                    if ($id == '0') {
                         $buildingutilities = new BuildingUtility;
-                            $buildingutilities->id_building = $req->buiding_id;
-                            $buildingutilities->id_utilities = $req->utilities_id[$key];
-                            $buildingutilities->id_floor = $req->floor_id[$key];
-                            $buildingutilities->save();
-                    }else{
+                        $buildingutilities->id_building = $req->buiding_id;
+                        $buildingutilities->id_utilities = $req->utilities_id[$key];
+                        $buildingutilities->id_floor = $req->floor_id[$key];
+                        $buildingutilities->save();
+                    } else {
                         $buildingutilities = BuildingUtility::find($id);
-                            $buildingutilities->id_building = $req->buiding_id;
-                            $buildingutilities->id_utilities = $req->utilities_id[$key];
-                            $buildingutilities->id_floor = $req->floor_id[$key];
-                            $buildingutilities->save();
+                        $buildingutilities->id_building = $req->buiding_id;
+                        $buildingutilities->id_utilities = $req->utilities_id[$key];
+                        $buildingutilities->id_floor = $req->floor_id[$key];
+                        $buildingutilities->save();
                     }
                 }
             }
-            if(isset($req->utilities_delete) and count($req->utilities_delete)>0)
-            {
+            if (isset($req->utilities_delete) and count($req->utilities_delete) > 0) {
                 $buildingutilities = BuildingUtility::whereIn('id', $req->utilities_delete)->get();
                 foreach ($buildingutilities as $key => $buildingutilities) {
                     $buildingutilities->delete();
                 }
-               
+
             }
             Session::flash('active_tab', 'service');
         }
 
-        if($req->active_tab == 'service'){
+        if ($req->active_tab == 'service') {
             Session::flash('active_tab', 'typepartment');
         }
-        if($req->active_tab == 'typepartment'){
+        if ($req->active_tab == 'typepartment') {
 
         }
         // return redirect('/admin/building/edit/'.$building_id);
-        return redirect('/admin/building/edit/'.'11');
+        return redirect('/admin/building/edit/' . '11');
     }
     //xoa phan tu
     public function postChangeStatus($id)
@@ -191,7 +191,7 @@ class BuildingController extends Controller
         $building = Building::find($id);
         if ($building->status == '1') {
             $building->status = '0';
-        } else{
+        } else {
             $building->status = '1';
         }
         $building->save();
@@ -205,5 +205,12 @@ class BuildingController extends Controller
 
         return $building->status;
         // return redirect('/admin/building/list');
+    }
+
+    //Hien thi chi tiet nhan vien
+    public function getShow($id)
+    {
+        $data['building'] = Building::find($id);
+        return view('pages.building.view', $data);
     }
 }

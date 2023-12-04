@@ -31,4 +31,9 @@ class District extends Model
 	public function building(){
         return $this->hasOne(Building::class);
     }
+	
+	public function province(){
+        return $this->belongsTo(Province::class, 'provinceid');
+    }
+
 }

@@ -29,4 +29,7 @@ class Province extends Model
 	public function building(){
         return $this->hasOne(Building::class);
     }
+	public function district(){
+        return $this->hasMany(District::class, 'provinceid');
+    }
 }
