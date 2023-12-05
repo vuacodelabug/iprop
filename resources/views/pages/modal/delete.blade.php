@@ -1,4 +1,4 @@
-@component('component.modal')
+@component('components.modal')
     @slot('md_id')
         deleteModal
     @endslot

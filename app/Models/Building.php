@@ -51,9 +51,9 @@ class Building extends Model
 		'status'
 	];
 
-	public function apartment_typeapartments()
+	public function building_typeapartment()
 	{
-		return $this->hasMany(ApartmentTypeapartment::class, 'id_building');
+		return $this->hasMany(BuildingTypeapartment::class, 'id_building');
 	}
 
 	public function building_floors()
@@ -71,6 +71,11 @@ class Building extends Model
 	public function building_utilities()
 	{
 		return $this->hasMany(BuildingUtility::class, 'id_building');
+	}
+
+	public function building_service()
+	{
+		return $this->hasMany(BuildingService::class, 'id_building');
 	}
 	public function building_floor()
 	{

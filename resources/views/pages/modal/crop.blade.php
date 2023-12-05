@@ -1,5 +1,5 @@
 
-@component('component.modal')
+@component('components.modal')
     @slot('md_id') modal_cropper @endslot
     @slot('md_animation') @endslot
     @slot('md_size') @endslot

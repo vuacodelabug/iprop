@@ -274,7 +274,7 @@
             </div>
             <!--end row-->
             {{-- component --}}
-            <div id="component">
+            <div id="components">
                 @include('pages.modal.crop')
             </div>
         </div>

@@ -20,7 +20,7 @@
 </div><!-- /.modal -->
 
 
-@component('component.modal')
+@component('components.modal')
     @slot('md_id') create_typepartmentModal @endslot
     @slot('md_animation') zoomIn @endslot
     @slot('md_size') modal-xl @endslot
@@ -34,13 +34,16 @@
                     <label for="loaiphong">Loại phòng</label>
                     <span class="text-danger">*</span>
                     <div class="row mb-3 g-3">
-                        <div class="col-md">
-                            <select name="loaiphong" required
-                                id="loaiphong"
+                        <div class="col">
+                            <select name="typepartment_id" required
+                                id="select-typepartment"
                                 class="form-select rounded-pill custom-select">
-                                <option value="">...</option>
-                                <option value="1">1...</option>
-                                <option value="2">2...</option>
+                                <option value="">Chọn loại phòng</option>
+                                @foreach ($typepartments as $typepartment)
+                                    <option value="{{ $typepartment->id }}">
+                                        {{ $typepartment->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -49,18 +52,15 @@
             </div>
             <div class="row">
                 <label>Mô tả</label>
-                <div class="ms-2">
-                    Each design is a new, unique piece of art birthed into
-                    this world,
-                    and while you have the opportunity to be creative and
-                    make your own
-                    style choices.
+                <div class="ms-2" id="typepartment_discription">
+                    <span>---</span>
                 </div>
             </div>
 
         </div>
         <div class="col-md-8">
-            <h5>Phòng áp dụng:</h5>
+            <label for="loaiphong">Phòng áp dụng:</label>
+            <span class="text-danger">*</span>
             <div class="row">
                 <div class="col-md-5">
                     <div class="form-group">
@@ -76,20 +76,26 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="controls">
-                            <select name="floor[floor_id]" required=""
-                                class="form-select  rounded-pill custom-select"
+                            <select name="floor_id[floor_id]"
+                                required
+                                class="form-select rounded-pill custom-select"
                                 data-validation-required-message="Bạn chưa chọn tầng.">
-                                <option value="">Chọn vị trí tầng
-                                </option>
                                 <optgroup label="Tầng hầm">
-                                    <option value="B1">Tầng B1</option>
+                                    @foreach ($building->building_floor->where('type', '1') as $building_floor)
+                                        <option
+                                            value="{{ $building_floor->id }}">
+                                            {{ $building_floor->name_floor }}
+                                        </option>
+                                    @endforeach
                                 </optgroup>
                                 <optgroup label="Tầng nổi">
-                                    <option value="1">Tầng 1</option>
-                                    <option value="2">Tầng 2</option>
-                                    <option value="3">Tầng 3</option>
+                                    @foreach ($building->building_floor->where('type', '2') as $building_floor)
+                                        <option
+                                            value="{{ $building_floor->id }}">
+                                            {{ $building_floor->name_floor }}
+                                        </option>
+                                    @endforeach
                                 </optgroup>
-
                             </select>
                         </div>
                     </div>
@@ -106,7 +112,13 @@
                 </div>
             </div>
             <hr>
-                <div class="row" id="apartment_content">
+            <div id="typepartment_content"
+            style="max-height: 300px; overflow-x: hidden;">
+            @foreach ($building->building_typepartment as $key => $item)
+                @include('components.building-typeapartment')
+            @endforeach
+        </div>
+                {{-- <div class="row" id="apartment_content">
                     <div class="col-md-5">
                         <div class="form-group">
                             <div class="controls">
@@ -154,7 +166,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
         </div>
     </div>
 

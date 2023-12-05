@@ -63,7 +63,7 @@
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     <input type="hidden" name="active_tab" value="detail">
-                                                    <input type="hidden" name="buiding_id" value="{{$building->id}}">
+                                                    <input type="hidden" name="buiding_id" value="{{ $building->id }}">
                                                     <div class="card-body">
                                                         @if (count($errors) > 0)
                                                             <div class="alert alert-borderless alert-danger">
@@ -119,7 +119,8 @@
                                                                                         class="form-select rounded-pill custom-select">
                                                                                         @foreach ($provinces as $province)
                                                                                             <option
-                                                                                                value="{{ $province->provinceid }}" @if ($province->provinceid == $building->province_id) selected @endif>
+                                                                                                value="{{ $province->provinceid }}"
+                                                                                                @if ($province->provinceid == $building->province_id) selected @endif>
                                                                                                 {{ $province->name }}
                                                                                             </option>
                                                                                         @endforeach
@@ -135,11 +136,12 @@
                                                                                         id="district"
                                                                                         class="form-select  rounded-pill custom-select">
                                                                                         @foreach ($districts as $district)
-                                                                                        <option
-                                                                                            value="{{ $district->districtid }}" @if ($district->districtid == $building->district_id) selected @endif>
-                                                                                            {{ $district->name }}
-                                                                                        </option>
-                                                                                    @endforeach
+                                                                                            <option
+                                                                                                value="{{ $district->districtid }}"
+                                                                                                @if ($district->districtid == $building->district_id) selected @endif>
+                                                                                                {{ $district->name }}
+                                                                                            </option>
+                                                                                        @endforeach
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -151,11 +153,12 @@
                                                                                         id="ward"
                                                                                         class="form-select  rounded-pill custom-select">
                                                                                         @foreach ($wards as $ward)
-                                                                                        <option
-                                                                                            value="{{ $ward->wardid }}" @if ($ward->wardid == $building->ward_id) selected @endif>
-                                                                                            {{ $ward->name }}
-                                                                                        </option>
-                                                                                    @endforeach
+                                                                                            <option
+                                                                                                value="{{ $ward->wardid }}"
+                                                                                                @if ($ward->wardid == $building->ward_id) selected @endif>
+                                                                                                {{ $ward->name }}
+                                                                                            </option>
+                                                                                        @endforeach
                                                                                     </select>
 
                                                                                 </div>
@@ -313,50 +316,50 @@
                                                                                 <br>
                                                                                 <div id="floor2">
                                                                                     @if ($building->building_floor->where('type', '2')->count() > 0)
-                                                                                    <div class="row mb-3">
-                                                                                        <div class="col-md-6"><label
-                                                                                                for="floor_code">Mã
-                                                                                                tầng</label><span
-                                                                                                class="text-danger">*</span>
-                                                                                        </div>
-                                                                                        <div class="col-md-6"><label
-                                                                                                for="floor_name">Tầng</label><span
-                                                                                                class="text-danger">*</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div id="floor2-content"
-                                                                                        style="max-height: 174px; overflow-x: hidden;">
-
-                                                                                        @foreach ($building->building_floor->where('type', '2') as $item)
-                                                                                            <div class="row mb-3">
-                                                                                                <div class="col-md-6">
-                                                                                                    <input
-                                                                                                        type="text"
-                                                                                                        value="{{ $item->code_floor }}"
-                                                                                                        name="floor2_code[{{ $item->id }}]"
-                                                                                                        id="floor2_code1"
-                                                                                                        class="form-control rounded"
-                                                                                                        required="">
-                                                                                                    <div
-                                                                                                        class="invalid-feedback">
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-md-6">
-                                                                                                    <input
-                                                                                                        type="text"
-                                                                                                        value="{{ $item->name_floor }}"
-                                                                                                        name="floor2_name[{{ $item->id }}]"
-                                                                                                        id="floor2_name1"
-                                                                                                        class="form-control rounded"
-                                                                                                        required="">
-                                                                                                    <div
-                                                                                                        class="invalid-feedback">
-                                                                                                    </div>
-                                                                                                </div>
+                                                                                        <div class="row mb-3">
+                                                                                            <div class="col-md-6"><label
+                                                                                                    for="floor_code">Mã
+                                                                                                    tầng</label><span
+                                                                                                    class="text-danger">*</span>
                                                                                             </div>
-                                                                                        @endforeach
-                                                                                    </div>
-                                                                                @endif
+                                                                                            <div class="col-md-6"><label
+                                                                                                    for="floor_name">Tầng</label><span
+                                                                                                    class="text-danger">*</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div id="floor2-content"
+                                                                                            style="max-height: 174px; overflow-x: hidden;">
+
+                                                                                            @foreach ($building->building_floor->where('type', '2') as $item)
+                                                                                                <div class="row mb-3">
+                                                                                                    <div class="col-md-6">
+                                                                                                        <input
+                                                                                                            type="text"
+                                                                                                            value="{{ $item->code_floor }}"
+                                                                                                            name="floor2_code[{{ $item->id }}]"
+                                                                                                            id="floor2_code1"
+                                                                                                            class="form-control rounded"
+                                                                                                            required="">
+                                                                                                        <div
+                                                                                                            class="invalid-feedback">
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-6">
+                                                                                                        <input
+                                                                                                            type="text"
+                                                                                                            value="{{ $item->name_floor }}"
+                                                                                                            name="floor2_name[{{ $item->id }}]"
+                                                                                                            id="floor2_name1"
+                                                                                                            class="form-control rounded"
+                                                                                                            required="">
+                                                                                                        <div
+                                                                                                            class="invalid-feedback">
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            @endforeach
+                                                                                        </div>
+                                                                                    @endif
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -429,7 +432,7 @@
                                                     novalidate action="/admin/building/edit" method="POST"
                                                     enctype="multipart/form-data">
                                                     @csrf
-                                                    <input type="hidden" name="buiding_id" value="{{ $building->id }}">
+                                                    <input type="hidden" name="building_id" value="{{ $building->id }}">
                                                     <input type="hidden" name="active_tab" value="utilities">
 
                                                     <div id="utilities_content"
@@ -509,19 +512,30 @@
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="dichvu">Dịch vụ</label>
+                                                            <label for="select-service">Dịch vụ</label>
                                                             <span class="text-danger">*</span>
                                                             <div class="row mb-3 g-3">
                                                                 <div class="col-md">
-                                                                    <select name="dichvu" required id="dichvu"
+                                                                    <select name="select-service" required
+                                                                        id="select-service"
                                                                         class="form-select rounded-pill custom-select">
-                                                                        <option value="">...</option>
-                                                                        <option value="1">1...</option>
-                                                                        <option value="2">2...</option>
+                                                                        <option value="">
+                                                                            Chọn dịch vụ
+                                                                        </option>
+                                                                        @foreach ($services as $service)
+                                                                            <option value="{{ $service->id }}">
+                                                                                {{ $service->name }}
+                                                                            </option>
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-auto">
-                                                                    <button type="button" class="btn btn-success float">
+                                                                    @foreach ($building->building_service as $key => $item)
+                                                                    @endforeach
+                                                                    <button type="submit"
+                                                                        value="{{ isset($item) ? $item->id : '0' }}"
+                                                                        id="btn-service_add"
+                                                                        class="btn btn-success float">
                                                                         <i class="bx bx-plus"></i>
                                                                     </button>
                                                                 </div>
@@ -531,12 +545,8 @@
 
                                                     <div class="col-md-6">
                                                         <label>Mô tả</label>
-                                                        <div class="ms-2">
-                                                            Each design is a new, unique piece of art birthed into this
-                                                            world,
-                                                            and while you have the opportunity to be creative and make your
-                                                            own
-                                                            style choices.
+                                                        <div class="ms-2" id="service_discription">
+                                                            <span>---</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -544,66 +554,31 @@
                                                 <div class="border-top-double"></div>
                                                 <br>
 
-                                                <form class="needs-validation" novalidate action="create"
-                                                    id="validateForm" method="POST" enctype="multipart/form-data">
+                                                <form class="needs-validation validateForm" novalidate action="/admin/building/edit"
+                                                    method="POST" enctype="multipart/form-data">
                                                     @csrf
-                                                    <div class="service_content">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <h6>Dịch vụ 1</h5>
-                                                                            <input type="hidden"
-                                                                                name="service_id[service_id]"
-                                                                                class="form-control" value="service_id"
-                                                                                required="">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <input type="number" required name="name"
-                                                                            id="giatien"
-                                                                            class="form-control rounded-pill"
-                                                                            placeholder="Giá tiền...">
-                                                                        <div class="invalid-feedback"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <select name="floor[floor_id]" required=""
-                                                                            class="form-select rounded-pill custom-select"
-                                                                            data-validation-required-message="Bạn chưa chọn tầng.">
-                                                                            <option value="">Đơn vị...
-                                                                            <option value="1">1</option>
-                                                                            <option value="2">2</option>
-                                                                            <option value="3">3</option>
-                                                                            </optgroup>
+                                                    <input type="hidden" name="building_id" value="{{ $building->id }}">
+                                                    <input type="hidden" name="active_tab" value="service">
 
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
+                                                    <div id="service_content"
+                                                        style="max-height: 300px; overflow-x: hidden;">
+                                                        @foreach ($building->building_service as $item)
+                                                            <div class="row" id="buildingservice{{ $item->id }}">
+                                                                <x-building-service :buildingserviceId="$item->id" 
+                                                                    :serviceName="$item->service->name"
+                                                                    :serviceId="$item->id_service" 
+                                                                    :price="$item->price" 
+                                                                    :units="$units"
+                                                                    :selectedUnitId="$item->id_unit" />
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <button type="button" data-item="service_id"
-                                                                            class="waves-effect waves-light btn btn-danger mb-5 btn-sm "><i
-                                                                                class=" ri-close-line"></i></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        @endforeach
                                                     </div>
 
                                                     <div class="box-footer text-end mb-3">
                                                         <div class="col-12">
                                                             <input type="reset" value="Clear"
                                                                 class="btn btn-warning float-right">
-                                                            <button type="button"
+                                                            <button type="submit"
                                                                 class="btn btn-success float">Save</button>
                                                         </div>
                                                     </div>
@@ -833,7 +808,7 @@
             </div>
             <!--end row-->
             {{-- component --}}
-            <div id="component">
+            <div id="components">
                 @include('pages.modal.crop')
             </div>
         </div>
@@ -953,10 +928,10 @@
 
         //utilities
         $('#v-pills-utilities').on('change', '#select-utilities', function() {
-
+            var active_tab ="utilities";
             utilities_id = $(this).val();
             if (utilities_id) {
-                $('#utilities_discription').load('/admin/building/utilities_discription/' + utilities_id);
+                $('#utilities_discription').load('/admin/building/get_discription/' + utilities_id +'?active_tab=' + active_tab);
             } else {
                 $('#utilities_discription').text('---');
             }
@@ -1013,7 +988,6 @@
             var utilities_id = $('#select-utilities').val();
             var utilities_name = $('#select-utilities').find('option:selected').text();
             if (utilities_id) {
-
                 var dataRender = renderUtilities(utilities_id, utilities_name, buildingutilities_id);
                 $('#utilities_content').append(dataRender);
             }
@@ -1026,6 +1000,50 @@
             $('#buildingutilities' + buildingutilities_id).html('').html(utilities_delete);
         });
         //service
+
+        $('#v-pills-service').on('change', '#select-service', function() {
+            service_id = $(this).val();
+            var active_tab ="service";
+            if (service_id) {
+                $('#service_discription').load('/admin/building/get_discription/' + service_id+'?active_tab=' + active_tab);
+            } else {
+                $('#service_discription').text('---');
+            }
+        });
+
+        $('#v-pills-service').on('click', '.btn-service_delete', function() {
+            var buildingservice_id = $(this).attr('data-item');
+            service_delete = '<input type="hidden" name="service_delete[' + buildingservice_id +
+                ']" value="' + buildingservice_id + '">';
+            $('#buildingservice' + buildingservice_id).html('').html(service_delete);
+        });
+
+        function renderService(buildingservice_id, service_id, service_name) {
+            data = '';
+            return data;
+        }
+
+        var buildingservice_id = $('#btn-service_add').val();
+        $('#v-pills-service').on('click', '#btn-service_add', function() {
+            buildingservice_id = parseInt(buildingservice_id, 10) + 1;
+            alert(buildingservice_id);
+            var service_id = $('#select-service').val();
+            var service_name = $('#select-service').find('option:selected').text();
+            if (service_id) {
+                var dataRender = renderService(buildingservice_id, service_id, service_name);
+                $('#service_content').append(dataRender);
+            }
+        });
+
         //typepartment
+        $('#v-pills-typepartment').on('change', '#select-typepartment', function() {
+        var typepartment_id = $(this).val();
+        var active_tab ="typepartment";
+        if (typepartment_id) {
+            $('#typepartment_discription').load('/admin/building/get_discription/' + typepartment_id +'?active_tab=' + active_tab);
+        } else {
+            $('#typepartment_discription').text('---');
+        }
+        });
     </script>
 @endsection

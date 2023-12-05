@@ -92,8 +92,8 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
             Route::get('/list', 'getList');
 
             Route::get('/create', 'getCreate');
-            Route::get('/utilities_discription/{id}', 'getUtilitiesDiscription');
-            Route::post('/create', 'postCreate');
+            Route::get('/get_discription/{id}', 'getDiscription');
+            Route::post('/create', 'postCreutilities_discriptionate');
 
             Route::get('/show/{id}', 'getShow');
 

@@ -21,7 +21,7 @@
 
 {{--
 cách sử dụng
-@component('component.modal')
+@component('components.modal')
     @slot('md_id') id_modal @endslot
     @slot('md_animation') md_animation @endslot
     @slot('md_size') modal-dialog-centered/ modal-dialog-scrollable @endslot

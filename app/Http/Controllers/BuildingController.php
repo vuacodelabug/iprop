@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BuildingUtility;
+use App\Models\BuildingService ;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\Ward;
@@ -40,13 +41,44 @@ class BuildingController extends Controller
 
         return view('pages.building.create', $data);
     }
-    public function getUtilitiesDiscription($id)
+    
+    public function postCreate(createBuildingRequest $req)
     {
-        $utilities = Utility::select('description')
-            ->where('id', $id)
-            ->first();
-
-        echo ' <span>' . $utilities->description . '</span>';
+        $building = new Building;
+        $building->logo = 'assets/images/buiding-logo/logo-0.png';
+        $this->postDetail($building, $req);
+        // return redirect('/admin/building/edit/'.$building_id);
+        return redirect('/admin/building/edit/' . '11');
+    }
+    
+    public function getDiscription($id)
+    {
+        switch (request('active_tab')) {
+            case 'utilities':
+            {
+                $utilities = Utility::select('description')
+                ->where('id', $id)
+                ->first();
+                echo ' <span>' . $utilities->description . '</span>';
+            }
+            case 'service':
+            {
+                $service = Service::select('description')
+                ->where('id', $id)
+                ->first();
+                echo ' <span>' . $service->description . '</span>';
+                break;
+            }
+            case 'typepartment':
+            {
+                $typepartment = Typeapartment::select('description')
+                ->where('id', $id)
+                ->first();
+                echo ' <span>' . $typepartment->description . '</span>';
+                break;
+            }
+        }
+        
     }
 
     public function postDetail($building, $req)
@@ -113,16 +145,72 @@ class BuildingController extends Controller
         // Đặt dữ liệu vào flash session với key là 'active_tab' và giá trị là 'utilities'
         Session::flash('active_tab', 'utilities');
     }
-
-    public function postCreate(createBuildingRequest $req)
+    public function postUtilities($building, $req)
     {
-        $building = new Building;
-        $building->logo = 'assets/images/buiding-logo/logo-0.png';
-        $this->postDetail($building, $req);
-        // return redirect('/admin/building/edit/'.$building_id);
-        return redirect('/admin/building/edit/' . '11');
-    }
+        if (isset($req->buildingutilities_id) and count($req->buildingutilities_id) > 0) {
+            foreach ($req->buildingutilities_id as $key => $id) {
 
+                if ($id == '0') {
+                    $buildingutilities = new BuildingUtility;
+                    $buildingutilities->id_building = $req->building_id;
+                    $buildingutilities->id_utilities = $req->utilities_id[$key];
+                    $buildingutilities->id_floor = $req->floor_id[$key];
+                    $buildingutilities->save();
+                } else {
+                    $buildingutilities = BuildingUtility::find($id);
+                    $buildingutilities->id_building = $req->building_id;
+                    $buildingutilities->id_utilities = $req->utilities_id[$key];
+                    $buildingutilities->id_floor = $req->floor_id[$key];
+                    $buildingutilities->save();
+                }
+            }
+        }
+        if (isset($req->utilities_delete) and count($req->utilities_delete) > 0) {
+            $buildingutilities = BuildingUtility::whereIn('id', $req->utilities_delete)->get();
+            foreach ($buildingutilities as $key => $buildingutilities) {
+                $buildingutilities->delete();
+            }
+
+        }
+        Session::flash('active_tab', 'service');
+    }
+    public function postService($building, $req)
+    {
+        // dd($req);
+        // echo    '<pre>';
+        // var_dump($req->toArray());
+        // echo        '</pre>';
+
+        if (isset($req->buildingservice_id) and count($req->buildingservice_id) > 0) {
+            foreach ($req->buildingservice_id as $key => $id) {
+
+                if ($id == '0') {
+                    $buildingservice = new BuildingService;
+                    $buildingservice->id_building =$req->building_id;
+                    $buildingservice->id_service  =$req->service_id[$key];
+                    $buildingservice->id_unit  =$req->unit_id[$key];
+                    $buildingservice->price =$req->price[$key];
+                    $buildingservice->save();
+                   
+                } else {
+                    $buildingservice = BuildingService::find($id);
+                    $buildingservice->id_building =$req->building_id;
+                    $buildingservice->id_service  =$req->service_id[$key];
+                    $buildingservice->id_unit  =$req->unit_id[$key];
+                    $buildingservice->price =$req->price[$key];
+                    $buildingservice->save();
+                }
+            }
+        }
+        if (isset($req->service_delete) and count($req->service_delete) > 0) {
+            $buildingservice = BuildingService::whereIn('id', $req->service_delete)->get();
+            foreach ($buildingservice as $key => $buildingservice) {
+                $buildingservice->delete();
+            }
+
+        }
+        Session::flash('active_tab', 'typepartment');
+    }
     //chinh sua phan tu
     public function getEdit($id)
     {
@@ -131,7 +219,17 @@ class BuildingController extends Controller
         $data['provinces'] = Province::get();
         $data['districts'] = (!empty($data['building']->district_id)) ? District::where('provinceid', $data['building']->province_id)->get() : array();
         $data['wards'] = (!empty($data['building']->ward_id)) ? Ward::where('districtid', $data['building']->district_id)->get() : array();
-        $data['list_utilities'] = Utility::select('name', 'id', 'description')
+        
+        $data['typepartments'] = Typeapartment::select('name', 'id')
+            ->where('status', '1')
+            ->get();
+        $data['services'] = Service::select('name', 'id')
+            ->where('status', '1')
+            ->get();
+        $data['units'] = Unit::select('name', 'id')
+            ->where('status', '1')
+            ->get();
+        $data['list_utilities'] = Utility::select('name', 'id')
             ->where('status', '1')
             ->get();
 
@@ -148,37 +246,14 @@ class BuildingController extends Controller
 
         //utilities
         if ($req->active_tab == 'utilities') {
-            if (isset($req->buildingutilities_id) and count($req->buildingutilities_id) > 0) {
-                foreach ($req->buildingutilities_id as $key => $id) {
-
-                    if ($id == '0') {
-                        $buildingutilities = new BuildingUtility;
-                        $buildingutilities->id_building = $req->buiding_id;
-                        $buildingutilities->id_utilities = $req->utilities_id[$key];
-                        $buildingutilities->id_floor = $req->floor_id[$key];
-                        $buildingutilities->save();
-                    } else {
-                        $buildingutilities = BuildingUtility::find($id);
-                        $buildingutilities->id_building = $req->buiding_id;
-                        $buildingutilities->id_utilities = $req->utilities_id[$key];
-                        $buildingutilities->id_floor = $req->floor_id[$key];
-                        $buildingutilities->save();
-                    }
-                }
-            }
-            if (isset($req->utilities_delete) and count($req->utilities_delete) > 0) {
-                $buildingutilities = BuildingUtility::whereIn('id', $req->utilities_delete)->get();
-                foreach ($buildingutilities as $key => $buildingutilities) {
-                    $buildingutilities->delete();
-                }
-
-            }
-            Session::flash('active_tab', 'service');
+           $this->postUtilities($building, $req);
         }
 
+        //service
         if ($req->active_tab == 'service') {
-            Session::flash('active_tab', 'typepartment');
+            $this->postService($building, $req);
         }
+
         if ($req->active_tab == 'typepartment') {
 
         }

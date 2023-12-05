@@ -44,4 +44,8 @@ class Service extends Model
 					->withPivot('id', 'price', 'id_unit', 'status')
 					->withTimestamps();
 	}
+	public function building_service()
+	{
+		return $this->hasMany(BuildingService::class, 'id_service');
+	}
 }
