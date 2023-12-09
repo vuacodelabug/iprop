@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BuildingTypeapartment;
 use App\Models\BuildingUtility;
 use App\Models\BuildingService ;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\Ward;
-
+use App\Models\Apartment;
 use App\Models\BuildingFloor;
 use App\Models\Typeapartment;
 use App\Models\Utility;
@@ -69,12 +70,12 @@ class BuildingController extends Controller
                 echo ' <span>' . $service->description . '</span>';
                 break;
             }
-            case 'typepartment':
+            case 'typeapartment':
             {
-                $typepartment = Typeapartment::select('description')
+                $typeapartment = Typeapartment::select('description')
                 ->where('id', $id)
                 ->first();
-                echo ' <span>' . $typepartment->description . '</span>';
+                echo ' <span>' . $typeapartment->description . '</span>';
                 break;
             }
         }
@@ -209,8 +210,45 @@ class BuildingController extends Controller
             }
 
         }
-        Session::flash('active_tab', 'typepartment');
+        Session::flash('active_tab', 'typeapartment');
     }
+    public function postTypeapartment($building, $req)
+    {
+        // dd($req);
+        // echo    '<pre>';
+        // var_dump($req->toArray());
+        // echo        '</pre>';
+        // die();
+
+        if (isset($req->buildingTypeApartment_id) and count($req->buildingTypeApartment_id) > 0) {
+            foreach ($req->buildingTypeApartment_id as $key => $id) {
+                if ($id == '0') {
+                    $apartment = new Apartment;
+                    $apartment->name = $req->apartment[$key];
+                    $apartment->save();
+
+                    $buildingTA = new BuildingTypeapartment ;
+                    $buildingTA->id_building  = $req->building_id;
+                    $buildingTA->id_typeapartment  = $req->typeapartment_id;
+                    $buildingTA->id_apartment  = $apartment->id;
+                    $buildingTA->id_floor = $req->floor[$key];
+                    $buildingTA->save();
+                } else {
+                    $buildingTA = BuildingTypeapartment::find($id) ;
+                    $buildingTA->id_typeapartment  = $req->typeapartment_id;
+                    $buildingTA->id_floor = $req->floor[$key];
+                    $buildingTA->save();
+
+                    $apartment =  Apartment::find($buildingTA->id_apartment);
+                    $apartment->name = $req->apartment[$key];
+                    $apartment->save();
+                }
+            }
+        }
+        
+        Session::flash('active_tab', 'typeapartment');
+    }
+    
     //chinh sua phan tu
     public function getEdit($id)
     {
@@ -220,7 +258,7 @@ class BuildingController extends Controller
         $data['districts'] = (!empty($data['building']->district_id)) ? District::where('provinceid', $data['building']->province_id)->get() : array();
         $data['wards'] = (!empty($data['building']->ward_id)) ? Ward::where('districtid', $data['building']->district_id)->get() : array();
         
-        $data['typepartments'] = Typeapartment::select('name', 'id')
+        $data['typeapartments'] = Typeapartment::select('name', 'id')
             ->where('status', '1')
             ->get();
         $data['services'] = Service::select('name', 'id')
@@ -254,8 +292,8 @@ class BuildingController extends Controller
             $this->postService($building, $req);
         }
 
-        if ($req->active_tab == 'typepartment') {
-
+        if ($req->active_tab == 'typeapartment') {
+            $this->postTypeapartment($building, $req);
         }
         // return redirect('/admin/building/edit/'.$building_id);
         return redirect('/admin/building/edit/' . '11');

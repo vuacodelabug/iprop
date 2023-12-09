@@ -46,9 +46,9 @@
                                             role="tab" aria-controls="v-pills-service" aria-selected="false"><i
                                                 class="ri-home-5-line align-middle me-1"></i>
                                             Dịch vụ</a>
-                                        <a class="nav-link {{ Session('active_tab') == 'typepartment' ? 'active' : '' }}"
-                                            id="v-pills-typepartment-tab" data-bs-toggle="pill" href="#v-pills-typepartment"
-                                            role="tab" aria-controls="v-pills-typepartment" aria-selected="false"><i
+                                        <a class="nav-link {{ Session('active_tab') == 'typeapartment' ? 'active' : '' }}"
+                                            id="v-pills-typeapartment-tab" data-bs-toggle="pill" href="#v-pills-typeapartment"
+                                            role="tab" aria-controls="v-pills-typeapartment" aria-selected="false"><i
                                                 class="ri-home-5-line align-middle me-1"></i>
                                             Loại phòng</a>
                                     </div>
@@ -586,12 +586,11 @@
 
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade {{ Session('active_tab') == 'typepartment' ? 'show active' : '' }}"
-                                            id="v-pills-typepartment" role="tabpanel"
-                                            aria-labelledby="v-pills-typepartment-tab">
+                                        <div class="tab-pane fade {{ Session('active_tab') == 'typeapartment' ? 'show active' : '' }}"
+                                            id="v-pills-typeapartment" role="tabpanel"
+                                            aria-labelledby="v-pills-typeapartment-tab">
                                             <div class="card-body">
-                                                <form class="needs-validation" novalidate action="create"
-                                                    id="validateForm" method="POST" enctype="multipart/form-data">
+                                                <form class="formBuildingTypeApartment validateForm" method="POST">
                                                     @csrf
                                                     <div class="box-header with-border p-10">
                                                         <div class="row ">
@@ -600,78 +599,69 @@
                                                             </div>
                                                             <div class="col-md-4 text-end">
                                                                 <button type="button"
-                                                                    class="card-animate btn btn-success float btn-create_typepartment">
+                                                                    class="card-animate btn btn-success float btn-createModaltypeapartment">
                                                                     <i class="bx bx-plus">Thêm loại phòng</i>
                                                                 </button>
                                                             </div>
                                                         </div>
                                                     </div>
-
+                                                    <div>
+                                                        
+                                                    </div>
                                                     <hr>
 
                                                     <section>
-                                                        <div class="row row-cols-1 row-cols-md-3 g-3">
-                                                            <div class="col">
+                                                        <div class="row row-cols-1 row-cols-md-3 g-3" id="typeapartment-content">
+                                                            @foreach ($building->building_typeapartment->groupBy('id_typeapartment') as $building_type)
+                                                                <div class="col">
+                                                                    <div class="card card-animate border border-3">
+                                                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                                                            <h5 class="fw-semibold">{{$building_type->first()->typeapartment->name}}</h5>
+
+                                                                            <button type="button"
+                                                                                class="btn btn-danger btn-sm btn-icon waves-effect waves-light pull-right">
+                                                                                <i class="ri-delete-bin-5-line"></i>
+                                                                            </button>
+                                                                            <button type="button" type-id="{{$building_type->first()->id}}"
+                                                                                class="btn btn-secondary btn-sm btn-icon waves-effect waves-light btn-editModaltypeapartment">
+                                                                                <i class="ri-edit-box-line"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="card-body">
+                                                                            <h6 class="text-muted">Phòng trong loại: {{$building_type->count()}}</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            @endforeach
+                                                            {{-- <div class="col">
                                                                 <div class="card card-animate border border-3">
                                                                     <div
                                                                         class="card-header d-flex justify-content-between align-items-center">
                                                                         <h5 class="fw-semibold">Studio Special</h5>
 
                                                                         <button type="button"
-                                                                            class="btn btn-danger btn-sm btn-icon waves-effect waves-light">
+                                                                            class="btn btn-danger btn-sm btn-icon waves-effect waves-light pull-right">
                                                                             <i class="ri-delete-bin-5-line"></i>
                                                                         </button>
-                                                                    </div>
-
-
-                                                                    <div class="card-body">
-                                                                        <h6 class="text-muted">Phòng trong loại: 0</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col">
-                                                                <div class="card card-animate border border-3">
-                                                                    <div
-                                                                        class="card-header d-flex justify-content-between align-items-center">
-                                                                        <h5 class="fw-semibold">Studio Special</h5>
-
                                                                         <button type="button"
-                                                                            class="btn btn-danger btn-sm btn-icon waves-effect waves-light">
-                                                                            <i class="ri-delete-bin-5-line"></i>
+                                                                            class="btn btn-secondary btn-sm btn-icon waves-effect waves-light">
+                                                                            <i class="ri-edit-box-line"></i>
                                                                         </button>
                                                                     </div>
-
-
                                                                     <div class="card-body">
                                                                         <h6 class="text-muted">Phòng trong loại: 0</h6>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <div class="card card-animate border border-3">
-                                                                    <div
-                                                                        class="card-header d-flex justify-content-between align-items-center">
-                                                                        <h5 class="fw-semibold">Studio Special</h5>
+                                                            </div> --}}
 
-                                                                        <button type="button"
-                                                                            class="btn btn-danger btn-sm btn-icon waves-effect waves-light">
-                                                                            <i class="ri-delete-bin-5-line"></i>
-                                                                        </button>
-                                                                    </div>
-
-
-                                                                    <div class="card-body">
-                                                                        <h6 class="text-muted">Phòng trong loại: 0</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     </section>
 
                                                     <section>
-                                                        <h5 class="fw-semibold">Sơ đồ giác quan</h5>
+                                                        <h5 class="fw-semibold">Sơ đồ:</h5>
 
+                                                     
                                                         <div class="d-flex gap-3">
                                                             <div
                                                                 class="align-self-stretch d-flex align-items-center bg-primary px-5 text-nowrap">
@@ -690,10 +680,6 @@
                                                                             Special</h6>
                                                                     </div>
                                                                 </div>
-
-
-
-
                                                                 <div class="col d-flex">
                                                                     <div
                                                                         class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
@@ -826,11 +812,7 @@
 @section('script')
     <script>
         //detail
-        $('html').on('click', '.btn-create_typepartment', function() {
-            $('#create-record').attr('href', 'create');
-            $('#create_typepartmentModal').modal('show');
-        });
-
+       
         function renderFloor(floor_numb, floor_style) {
             var floor_code;
             var floor_name;
@@ -987,6 +969,7 @@
             buildingutilities_id = parseInt(buildingutilities_id, 10) + 1;
             var utilities_id = $('#select-utilities').val();
             var utilities_name = $('#select-utilities').find('option:selected').text();
+            
             if (utilities_id) {
                 var dataRender = renderUtilities(utilities_id, utilities_name, buildingutilities_id);
                 $('#utilities_content').append(dataRender);
@@ -995,15 +978,17 @@
 
         $('#v-pills-utilities').on('click', '.btn-utilities_delete', function() {
             var buildingutilities_id = $(this).attr('data-item');
-            utilities_delete = '<input type="hidden" name="utilities_delete[' + buildingutilities_id +
+            var utilities_delete = '<input type="hidden" name="utilities_delete[' + buildingutilities_id +
                 ']" value="' + buildingutilities_id + '">';
-            $('#buildingutilities' + buildingutilities_id).html('').html(utilities_delete);
+            
+                $('#buildingutilities' + buildingutilities_id).html('').html(utilities_delete);
         });
         //service
 
         $('#v-pills-service').on('change', '#select-service', function() {
-            service_id = $(this).val();
+            var service_id = $(this).val();
             var active_tab ="service";
+            
             if (service_id) {
                 $('#service_discription').load('/admin/building/get_discription/' + service_id+'?active_tab=' + active_tab);
             } else {
@@ -1013,6 +998,7 @@
 
         $('#v-pills-service').on('click', '.btn-service_delete', function() {
             var buildingservice_id = $(this).attr('data-item');
+            
             service_delete = '<input type="hidden" name="service_delete[' + buildingservice_id +
                 ']" value="' + buildingservice_id + '">';
             $('#buildingservice' + buildingservice_id).html('').html(service_delete);
@@ -1035,15 +1021,94 @@
             }
         });
 
-        //typepartment
-        $('#v-pills-typepartment').on('change', '#select-typepartment', function() {
-        var typepartment_id = $(this).val();
-        var active_tab ="typepartment";
-        if (typepartment_id) {
-            $('#typepartment_discription').load('/admin/building/get_discription/' + typepartment_id +'?active_tab=' + active_tab);
-        } else {
-            $('#typepartment_discription').text('---');
+        //typeapartment
+        $('html').on('click', '.btn-createModaltypeapartment', function() {
+            $('#create-record').attr('href', 'create');
+            $('#create_typeapartmentModal').modal('show');
+        });
+        $('html').on('click', '.btn-editModaltypeapartment', function() {
+            var typeapartment_id = $(this).attr('type-id');
+            $('#create-record').attr('href', 'create');
+            $('#create_typeapartmentModal').modal('show');
+        });
+
+        $('#v-pills-typeapartment').on('change', '#select-typeapartment', function() {
+            var typeapartment_id = $(this).val();
+            var active_tab ="typeapartment";
+            
+            if (typeapartment_id) {
+                $('#typeapartment_discription').load('/admin/building/get_discription/' + typeapartment_id +'?active_tab=' + active_tab);
+            } else {
+                $('#typeapartment_discription').text('---');
+            }
+        });
+        
+        function renderTypeapartment(typeapartment_id, buildingtypeapartment_id, typeapartment_floor)
+        {
+            data = '';
+             data += '             <div class="row" id="apartment_content">';
+            data += '        <input type="hidden" name="typeapartment_id" value="'+typeapartment_id+'" class="form-control rounded">';
+            data += '        <input type="hidden" name="buildingTypeApartment_id['+buildingtypeapartment_id+']" value="0" class="form-control rounded">';
+             data += '                 <div class="col-md-5">';
+             data += '                     <div class="form-group">';
+             data += '                         <div class="controls">';
+             data += '                             <input type="number" required name="apartment['+buildingtypeapartment_id+']" class="form-control rounded-pill"';
+             data += '                                 placeholder="Mã phòng...">';
+             data += '                             <div class="invalid-feedback"></div>';
+             data += '                         </div>';
+             data += '                     </div>';
+             data += '                 </div>';
+             data += '                 <div class="col-md-6">';
+             data += '                     <div class="form-group">';
+             data += '                         <div class="controls">';
+             data += '                             <select name="floor['+buildingtypeapartment_id+']" required class="form-select rounded-pill custom-select"';
+             data += '                                 data-validation-required-message="Bạn chưa chọn tầng.">';
+             data += '                                 <optgroup label="Tầng hầm">';
+             data += '                                     @foreach ($building->building_floor->where('type', '1') as $building_floor)';
+             data += '                                     <option value="{{ $building_floor->id }}" @if ($building_floor->id == '+typeapartment_floor+')';
+             data += '                                         selected @endif>';
+             data += '                                         {{ $building_floor->name_floor }}';
+             data += '                                     </option>';
+             data += '                                     @endforeach';
+             data += '                                 </optgroup>';
+             data += '                                 <optgroup label="Tầng nổi">';
+             data += '                                     @foreach ($building->building_floor->where('type', '2') as $building_floor)';
+             data += '                                     <option value="{{ $building_floor->id }}" @if ($building_floor->id == '+typeapartment_floor+')';
+             data += '                                         selected @endif>';
+             data += '                                         {{ $building_floor->name_floor }}';
+             data += '                                     </option>';
+             data += '                                     @endforeach';
+             data += '                                 </optgroup>';
+             data += '                             </select>';
+             data += '                         </div>';
+             data += '                     </div>';
+             data += '                 </div>';
+             data += '                 <div class="col-md-1 text-end">';
+             data += '                     <div class="form-group">';
+             data += '                         <div class="controls">';
+             data += '                             <button type="button" data-item="service_id"';
+             data += '                                 class="waves-effect waves-light btn btn-danger mb-5 btn-sm "><i class=" ri-close-line"></i></button>';
+             data += '                         </div>';
+             data += '                     </div>';
+             data += '                 </div>';
+             data += '             </div>';
+            return data;
         }
+
+        var buildingtypeapartment_id = $('.btn-typeapartment_add').val();
+        $('#v-pills-typeapartment').on('click', '.btn-typeapartment_add', function() {
+            
+            var typeapartment_id = $('#select-typeapartment').val();
+            var typeapartment_floor = $('select[name ="floor"]').val();
+            var typeapartment_numb = $('input[name ="typeapartment_numb"]').val();
+           
+            if(typeapartment_floor && typeapartment_numb && typeapartment_id){
+                for(var i=0; i<typeapartment_numb; i++) {
+                    buildingtypeapartment_id = parseInt(buildingtypeapartment_id, 10) + 1;
+                    var dataRender = renderTypeapartment(typeapartment_id, buildingtypeapartment_id, typeapartment_floor);
+                    $('#typeapartment_content').append(dataRender);
+                }
+            }
         });
     </script>
 @endsection

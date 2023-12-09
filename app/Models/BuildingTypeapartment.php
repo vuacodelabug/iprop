@@ -58,4 +58,8 @@ class BuildingTypeapartment extends Model
 	{
 		return $this->belongsTo(Typeapartment::class, 'id_typeapartment');
 	}
+	public function building_floor()
+	{
+		return $this->belongsTo(BuildingFloor::class, 'id_floor');
+	}
 }
