@@ -28,12 +28,4 @@ class District extends Model
 		'name',
 		'provinceid'
 	];
-	public function building(){
-        return $this->hasOne(Building::class);
-    }
-	
-	public function province(){
-        return $this->belongsTo(Province::class, 'provinceid');
-    }
-
 }

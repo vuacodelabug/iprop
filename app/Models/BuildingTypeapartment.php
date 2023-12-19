@@ -16,7 +16,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $id_building
  * @property int|null $id_typeapartment
  * @property int|null $id_apartment
+ * @property int $id_floor
  * @property int|null $status
+ * @property int|null $delete_type
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * 
@@ -34,14 +36,18 @@ class BuildingTypeapartment extends Model
 		'id_building' => 'int',
 		'id_typeapartment' => 'int',
 		'id_apartment' => 'int',
-		'status' => 'int'
+		'id_floor' => 'int',
+		'status' => 'int',
+		'delete_type' => 'int'
 	];
 
 	protected $fillable = [
 		'id_building',
 		'id_typeapartment',
 		'id_apartment',
-		'status'
+		'id_floor',
+		'status',
+		'delete_type'
 	];
 
 	public function building()
@@ -57,9 +63,5 @@ class BuildingTypeapartment extends Model
 	public function typeapartment()
 	{
 		return $this->belongsTo(Typeapartment::class, 'id_typeapartment');
-	}
-	public function building_floor()
-	{
-		return $this->belongsTo(BuildingFloor::class, 'id_floor');
 	}
 }

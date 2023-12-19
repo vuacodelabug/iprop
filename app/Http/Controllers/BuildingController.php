@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BuildingTypeapartment;
 use App\Models\BuildingUtility;
-use App\Models\BuildingService ;
+use App\Models\BuildingService;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\Ward;
@@ -14,6 +14,7 @@ use App\Models\Typeapartment;
 use App\Models\Utility;
 use App\Models\Service;
 use App\Models\Unit;
+use App\Models\ZblockBuildingtype;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\createBuildingRequest;
@@ -42,7 +43,7 @@ class BuildingController extends Controller
 
         return view('pages.building.create', $data);
     }
-    
+
     public function postCreate(createBuildingRequest $req)
     {
         $building = new Building;
@@ -51,35 +52,32 @@ class BuildingController extends Controller
         // return redirect('/admin/building/edit/'.$building_id);
         return redirect('/admin/building/edit/' . '11');
     }
-    
+
     public function getDiscription($id)
     {
         switch (request('active_tab')) {
-            case 'utilities':
-            {
-                $utilities = Utility::select('description')
-                ->where('id', $id)
-                ->first();
-                echo ' <span>' . $utilities->description . '</span>';
-            }
-            case 'service':
-            {
-                $service = Service::select('description')
-                ->where('id', $id)
-                ->first();
-                echo ' <span>' . $service->description . '</span>';
-                break;
-            }
-            case 'typeapartment':
-            {
-                $typeapartment = Typeapartment::select('description')
-                ->where('id', $id)
-                ->first();
-                echo ' <span>' . $typeapartment->description . '</span>';
-                break;
-            }
+            case 'utilities': {
+                    $utilities = Utility::select('description')
+                        ->where('id', $id)
+                        ->first();
+                    echo ' <span>' . $utilities->description . '</span>';
+                }
+            case 'service': {
+                    $service = Service::select('description')
+                        ->where('id', $id)
+                        ->first();
+                    echo ' <span>' . $service->description . '</span>';
+                    break;
+                }
+            case 'typeapartment': {
+                    $typeapartment = Typeapartment::select('description')
+                        ->where('id', $id)
+                        ->first();
+                    echo ' <span>' . $typeapartment->description . '</span>';
+                    break;
+                }
         }
-        
+
     }
 
     public function postDetail($building, $req)
@@ -110,17 +108,17 @@ class BuildingController extends Controller
         $building_id = $building->id;
 
         $buildingfloor = BuildingFloor::where('id_building', $building_id)->get();
-        
-        if ($buildingfloor) {
-            foreach ($buildingfloor as $floor) {
-                BuildingUtility::where('id_building', $building_id)
-                    ->where('id_floor', $floor->id)
-                    ->delete();
-            }
-            
-            // Xóa tất cả các bản ghi trong Collection
-            $buildingfloor->delete();
-    }
+
+        // if ($buildingfloor) {
+        //     foreach ($buildingfloor as $floor) {
+        //         BuildingUtility::where('id_building', $building_id)
+        //             ->where('id_floor', $floor->id)
+        //             ->delete();
+        //     }
+
+        //     // Xóa tất cả các bản ghi trong Collection
+        //     $buildingfloor->delete();
+        // }
         if (isset($req->floor1_code) and count($req->floor1_code) > 0) {
             foreach ($req->floor1_code as $key => $floor1_code) {
                 $buildingfloor = new BuildingFloor;
@@ -187,18 +185,14 @@ class BuildingController extends Controller
 
                 if ($id == '0') {
                     $buildingservice = new BuildingService;
-                    $buildingservice->id_building =$req->building_id;
-                    $buildingservice->id_service  =$req->service_id[$key];
-                    $buildingservice->id_unit  =$req->unit_id[$key];
-                    $buildingservice->price =$req->price[$key];
+                    $buildingservice->id_building = $req->building_id;
+                    $buildingservice->id_service = $req->service_id[$key];
                     $buildingservice->save();
-                   
+
                 } else {
                     $buildingservice = BuildingService::find($id);
-                    $buildingservice->id_building =$req->building_id;
-                    $buildingservice->id_service  =$req->service_id[$key];
-                    $buildingservice->id_unit  =$req->unit_id[$key];
-                    $buildingservice->price =$req->price[$key];
+                    $buildingservice->id_building = $req->building_id;
+                    $buildingservice->id_service = $req->service_id[$key];
                     $buildingservice->save();
                 }
             }
@@ -227,28 +221,46 @@ class BuildingController extends Controller
                     $apartment->name = $req->apartment[$key];
                     $apartment->save();
 
-                    $buildingTA = new BuildingTypeapartment ;
-                    $buildingTA->id_building  = $req->building_id;
-                    $buildingTA->id_typeapartment  = $req->typeapartment_id;
-                    $buildingTA->id_apartment  = $apartment->id;
+                    $buildingTA = new BuildingTypeapartment;
+                    $buildingTA->id_building = $req->building_id;
+                    $buildingTA->id_typeapartment = $req->typeapartment_id;
+                    $buildingTA->id_apartment = $apartment->id;
                     $buildingTA->id_floor = $req->floor[$key];
                     $buildingTA->save();
                 } else {
-                    $buildingTA = BuildingTypeapartment::find($id) ;
-                    $buildingTA->id_typeapartment  = $req->typeapartment_id;
+                    $buildingTA = BuildingTypeapartment::find($id);
+                    $buildingTA->id_typeapartment = $req->typeapartment_id;
                     $buildingTA->id_floor = $req->floor[$key];
                     $buildingTA->save();
 
-                    $apartment =  Apartment::find($buildingTA->id_apartment);
+                    $apartment = Apartment::find($buildingTA->id_apartment);
                     $apartment->name = $req->apartment[$key];
                     $apartment->save();
                 }
             }
+
+
         }
-        
+
+        if (isset($req->typeapartment_delete) and count($req->typeapartment_delete) > 0) {
+            $buildingtypeapartment = BuildingTypeapartment::whereIn('id', $req->typeapartment_delete)->get();
+            foreach ($buildingtypeapartment as $key => $buildingtypeapartment) {
+                $buildingtypeapartment->delete_type = '0';
+                $buildingtypeapartment->save();
+
+                $block = new ZblockBuildingtype;
+                $block->name = 'delete apartment';
+                $block->content = 'Xoá phòng';
+                $block->target_id = $buildingtypeapartment->id;
+                $block->user_id = auth()->user()->id;
+                $block->save();
+            }
+
+        }
+
         Session::flash('active_tab', 'typeapartment');
     }
-    
+
     //chinh sua phan tu
     public function getEdit($id)
     {
@@ -257,7 +269,7 @@ class BuildingController extends Controller
         $data['provinces'] = Province::get();
         $data['districts'] = (!empty($data['building']->district_id)) ? District::where('provinceid', $data['building']->province_id)->get() : array();
         $data['wards'] = (!empty($data['building']->ward_id)) ? Ward::where('districtid', $data['building']->district_id)->get() : array();
-        
+
         $data['typeapartments'] = Typeapartment::select('name', 'id')
             ->where('status', '1')
             ->get();
@@ -271,6 +283,12 @@ class BuildingController extends Controller
             ->where('status', '1')
             ->get();
 
+        $data['blockfloors'] = BuildingTypeapartment::join('building_floor', 'building_floor.id', '=', 'building_typeapartment.id_floor')
+            ->where('building_typeapartment.id_building', $id)
+            ->select('building_floor.name_floor', 'building_typeapartment.id_floor')
+            ->groupBy('building_floor.name_floor', 'building_typeapartment.id_floor')
+            ->orderBy('building_floor.name_floor', 'asc')
+            ->get();
         return view('pages.building.edit', $data);
     }
     public function postEdit(Request $req)
@@ -284,7 +302,7 @@ class BuildingController extends Controller
 
         //utilities
         if ($req->active_tab == 'utilities') {
-           $this->postUtilities($building, $req);
+            $this->postUtilities($building, $req);
         }
 
         //service
@@ -326,4 +344,37 @@ class BuildingController extends Controller
         $data['building'] = Building::find($id);
         return view('pages.building.view', $data);
     }
+    public function getTypeApartment(Request $req)
+    {
+
+        $dataReander['buildingType'] = BuildingTypeapartment::where([['id_building', $req->building_id], ['id_typeapartment', $req->typeapartment_id]])
+            ->get();
+
+        $dataReander['building'] = Building::find($req->building_id);
+        $typeapartment = Typeapartment::find($req->typeapartment_id);
+        echo '<script>
+            $("#select-typeapartment").val('.$typeapartment->id.').prop("disabled",true); 
+            $("#typeapartment_discription").html("<span>'.$typeapartment->description.'</span>");
+        </script>';
+        return view('pages.building.render.typeapartment', $dataReander);
+
+    }
+
+    public function renderService(Request $req){
+        $service_id = $req->service_id;
+        $data['service'] = Service::find($service_id);
+        $data['countId'] = $req->countId;
+
+        return view('pages.building.render.service', $data);
+    }
+    public function renderUtilities(Request $req){
+        $utilities_id = $req->utilities_id;
+        $data['utilities'] = Utility::find($utilities_id);
+        $data['countId'] = $req->countId;
+        $data['building'] = Building::find($req->building_id);
+
+        return view('pages.building.render.utilities', $data);
+    }
+
+
 }

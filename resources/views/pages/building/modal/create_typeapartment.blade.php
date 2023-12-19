@@ -13,7 +13,7 @@
                     <div class="row mb-3 g-3">
                         <div class="col">
                             <select name="typeapartment_id" required
-                                id="select-typeapartment"
+                                id="select-typeapartment" 
                                 class="form-select rounded-pill custom-select">
                                 <option value="">Chọn loại phòng</option>
                                 @foreach ($typeapartments as $typeapartment)
@@ -83,7 +83,7 @@
                 <div class="col-md-1">
                     <div class="form-group">
                         <div class="controls">
-                            @foreach ($building->building_typeapartment as $key => $item)
+                            @foreach ($building->building_typeapartment as $item)
                             @endforeach
                             <button type="button"
                             value="{{ isset($item) ? $item->id : '0' }}"
@@ -99,7 +99,7 @@
                 @csrf
                 <div id="typeapartment_content"
             style="max-height: 300px; overflow-x: hidden;">
-            {{-- @foreach ($building->building_typeapartment as $key => $item)
+            {{-- @foreach ($building->building_typeapartment as $item)
                 @include('components.building-typeapartment')
             @endforeach --}}
         </div>

@@ -1,0 +1,10 @@
+.select2-container--default .select2-selection--single {
+    border-radius: 20px;
+    height: 37.1px;
+    padding: 3px;
+    color: var(--vz-input-bg);
+    border: 1px solid var(--vz-input-border);;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    padding: 17px 27px 17px 17px;
+}

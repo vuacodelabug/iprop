@@ -49,13 +49,9 @@ class BuildingFloor extends Model
 	{
 		return $this->belongsTo(Building::class, 'id_building');
 	}
+
 	public function building_utilities()
 	{
-		return $this->hasMany(BuildingUtility::class,'id_floor');
+		return $this->hasMany(BuildingUtility::class, 'id_floor');
 	}
-	public function building_typeapartment()
-	{
-		return $this->hasMany(BuildingTypeapartment::class,'id_floor');
-	}
-	
 }

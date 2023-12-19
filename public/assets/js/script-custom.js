@@ -53,12 +53,12 @@ $(document).ready(function(){
 });
 
 
-function ajaxCustom(url, requestData) {
+function ajaxCustom(url, requestData, method) {
     var deferred = $.Deferred();
 
     $.ajax({
         url: url,
-        method: 'post',
+        method: method,
         data: requestData,
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -88,7 +88,12 @@ function ajaxCustom(url, requestData) {
         customer_id: customer_id,
     };
 
-    ajaxCustom(url, requestData)
+    Input
+        Url:url
+        requestData: object
+        method: Post/Get
+    
+    ajaxCustom(url, requestData, method)
         .then(function(data) {
             //khi data có du lieu chay lệnh o day
             // console.log("Dữ liệu thành công:", data);

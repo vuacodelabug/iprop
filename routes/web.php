@@ -93,7 +93,8 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
 
             Route::get('/create', 'getCreate');
             Route::get('/get_discription/{id}', 'getDiscription');
-            Route::post('/create', 'postCreutilities_discriptionate');
+            Route::post('/get_typeapartment', 'getTypeApartment');
+            // Route::post('/create', 'postCreutilities_discriptionate');
 
             Route::get('/show/{id}', 'getShow');
 
@@ -101,6 +102,11 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
             Route::post('/edit', 'postEdit');
 
             Route::post('/change-status/{id}', 'postChangeStatus');
+           
+            Route::get('/renderService', 'renderService');
+            Route::get('/renderUtilities', 'renderUtilities');
+
+            
         });
     });
     Route::prefix('/typeapartment')->name('khoitao')->group(function () {

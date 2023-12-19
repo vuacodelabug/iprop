@@ -20,7 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * 
- * @property Collection|ApartmentTypeapartment[] $apartment_typeapartments
+ * @property Collection|Building[] $buildings
+ * @property Collection|Cart[] $carts
+ * @property Collection|Deal[] $deals
  *
  * @package App\Models
  */
@@ -38,8 +40,20 @@ class Apartment extends Model
 		'status'
 	];
 
-	public function apartment_typeapartments()
+	public function buildings()
 	{
-		return $this->hasMany(ApartmentTypeapartment::class, 'id_apartment');
+		return $this->belongsToMany(Building::class, 'building_typeapartment', 'id_apartment', 'id_building')
+					->withPivot('id', 'id_typeapartment', 'id_floor', 'status', 'delete_type')
+					->withTimestamps();
+	}
+
+	public function carts()
+	{
+		return $this->hasMany(Cart::class, 'id_apartment');
+	}
+
+	public function deals()
+	{
+		return $this->hasMany(Deal::class, 'id_apartment');
 	}
 }

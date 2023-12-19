@@ -4,7 +4,7 @@
 @section('content')
     <div class="page-content">
         <div>
-            <h1 class="text-container blinking-text animate__animated animate__pulse">Hello World</h1>
+            <h1 class="text-container">Hello World</h1>
             <select name="province" id="province">
                 <option value="">Chọn tỉnh</option>
                 @foreach ($provinces as $province)

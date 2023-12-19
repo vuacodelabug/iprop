@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -27,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * 
+ * @property Collection|Deal[] $deals
  *
  * @package App\Models
  */
@@ -54,4 +57,9 @@ class Customer extends Model
 		'type',
 		'status'
 	];
+
+	public function deals()
+	{
+		return $this->hasMany(Deal::class, 'id_customer');
+	}
 }

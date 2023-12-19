@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $updated_at
  * 
  * @property Collection|Building[] $buildings
+ * @property Collection|Deal[] $deals
  *
  * @package App\Models
  */
@@ -44,8 +45,11 @@ class Service extends Model
 					->withPivot('id', 'price', 'id_unit', 'status')
 					->withTimestamps();
 	}
-	public function building_service()
+
+	public function deals()
 	{
-		return $this->hasMany(BuildingService::class, 'id_service');
+		return $this->belongsToMany(Deal::class, 'deal_service', 'id_service', 'id_deal')
+					->withPivot('id', 'id_contract', 'price', 'id_unit', 'status')
+					->withTimestamps();
 	}
 }

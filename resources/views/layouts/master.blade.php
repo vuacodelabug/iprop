@@ -26,6 +26,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="{{ URL::asset('assets/css/custom-avatar.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ URL::asset('assets\libs\cropper\cropper.css') }}" />
+    <link rel="stylesheet" href="{{ URL::asset('assets\css\my-custom.css') }}" />
 
     @yield('css')
 </head>

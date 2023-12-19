@@ -1,4 +1,4 @@
-<input type="hidden" name="buildingservice_id[{{$buildingserviceId ?? 'buildingserviceId'}}]" value="{{$buildingserviceId ?? 'buildingserviceId'}}">
+<input type="hidden" name="buildingservice_id[{{$buildingserviceId ?? 'buildingserviceId'}}]" value="{{$buildingserviceId ?? '0'}}">
     <div class="col-md-4">
         <div class="form-group">
             <div class="controls">
@@ -52,7 +52,7 @@
             </div>
         </div>
     </div>
-{{-- 
+{{--
 Huong dan su dung
 @component('components.building-service')
     @slot('buildingserviceId') {{ $item->id }} @endslot

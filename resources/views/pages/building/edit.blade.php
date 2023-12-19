@@ -47,8 +47,9 @@
                                                 class="ri-home-5-line align-middle me-1"></i>
                                             Dịch vụ</a>
                                         <a class="nav-link {{ Session('active_tab') == 'typeapartment' ? 'active' : '' }}"
-                                            id="v-pills-typeapartment-tab" data-bs-toggle="pill" href="#v-pills-typeapartment"
-                                            role="tab" aria-controls="v-pills-typeapartment" aria-selected="false"><i
+                                            id="v-pills-typeapartment-tab" data-bs-toggle="pill"
+                                            href="#v-pills-typeapartment" role="tab"
+                                            aria-controls="v-pills-typeapartment" aria-selected="false"><i
                                                 class="ri-home-5-line align-middle me-1"></i>
                                             Loại phòng</a>
                                     </div>
@@ -111,12 +112,11 @@
                                                                         <div class="row mb-3">
                                                                             <div class="col-md-4">
                                                                                 <div class="form-group">
-                                                                                    <label for="province_id">Thành
-                                                                                        phố/Tỉnh</label>
+                                                                                    <label for="province_id">Thành phố/Tỉnh</label>
                                                                                     <span class="text-danger">*</span>
                                                                                     <select required id="province"
                                                                                         name="province_id"
-                                                                                        class="form-select rounded-pill custom-select">
+                                                                                        class="form-select rounded-pill custom-select select2">
                                                                                         @foreach ($provinces as $province)
                                                                                             <option
                                                                                                 value="{{ $province->provinceid }}"
@@ -394,7 +394,7 @@
                                                                     <select name="utilities_id" required
                                                                         data-validation-required-message="Bạn chưa chọn tiện ích."
                                                                         id="select-utilities"
-                                                                        class="form-select rounded-pill custom-select">
+                                                                        class="form-select rounded-pill select2">
                                                                         <option value="">Chọn tiện ích</option>
                                                                         @foreach ($list_utilities as $utilities)
                                                                             <option value="{{ $utilities->id }}">
@@ -404,10 +404,8 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-auto">
-                                                                    @foreach ($building->building_utilities as $key => $item)
-                                                                    @endforeach
                                                                     <button type="submit"
-                                                                        value="{{ isset($item) ? $item->id : '0' }}"
+                                                                        value="{{$building->building_utilities->count()}}"
                                                                         id="btn-utilities_add"
                                                                         class="btn btn-success float">
                                                                         <i class="bx bx-plus"></i>
@@ -432,24 +430,25 @@
                                                     novalidate action="/admin/building/edit" method="POST"
                                                     enctype="multipart/form-data">
                                                     @csrf
-                                                    <input type="hidden" name="building_id" value="{{ $building->id }}">
+                                                    <input type="hidden" name="building_id"
+                                                        value="{{ $building->id }}">
                                                     <input type="hidden" name="active_tab" value="utilities">
 
                                                     <div id="utilities_content"
                                                         style="max-height: 300px; overflow-x: hidden;">
-                                                        @foreach ($building->building_utilities as $key => $item)
+                                                        @foreach ($building->building_utilities as $building_utilities)
                                                             <div class="row"
-                                                                id="buildingutilities{{ $item->id }}">
+                                                                id="buildingutilities{{ $building_utilities->id }}">
                                                                 <input type="hidden"
-                                                                    name="buildingutilities_id[{{ $item->id }}]"
-                                                                    value="{{ $item->id }}">
+                                                                    name="buildingutilities_id[{{ $building_utilities->id }}]"
+                                                                    value="{{ $building_utilities->id }}">
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <div class="controls">
-                                                                            <h6>{{ $item->utilities->name ?? '...' }}</h6>
+                                                                            <h6>{{ $building_utilities->utilities->name ?? '...' }}</h6>
                                                                             <input type="hidden"
-                                                                                name="utilities_id[{{ $item->id }}]"
-                                                                                value="{{ $item->id_utilities }}"
+                                                                                name="utilities_id[{{ $building_utilities->id }}]"
+                                                                                value="{{ $building_utilities->id_utilities }}"
                                                                                 required>
                                                                         </div>
                                                                     </div>
@@ -457,7 +456,7 @@
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <div class="controls">
-                                                                            <select name="floor_id[{{ $item->id }}]"
+                                                                            <select name="floor_id[{{ $building_utilities->id }}]"
                                                                                 required
                                                                                 class="form-select rounded-pill custom-select"
                                                                                 data-validation-required-message="Bạn chưa chọn tầng.">
@@ -465,7 +464,7 @@
                                                                                     @foreach ($building->building_floor->where('type', '1') as $building_floor)
                                                                                         <option
                                                                                             value="{{ $building_floor->id }}"
-                                                                                            @if ($building_floor->id == $item->building_floor->id) selected @endif>
+                                                                                            @if ($building_floor->id == $building_utilities->building_floor->id) selected @endif>
                                                                                             {{ $building_floor->name_floor }}
                                                                                         </option>
                                                                                     @endforeach
@@ -474,7 +473,7 @@
                                                                                     @foreach ($building->building_floor->where('type', '2') as $building_floor)
                                                                                         <option
                                                                                             value="{{ $building_floor->id }}"
-                                                                                            @if ($building_floor->id == $item->building_floor->id) selected @endif>
+                                                                                            @if ($building_floor->id == $building_utilities->building_floor->id) selected @endif>
                                                                                             {{ $building_floor->name_floor }}
                                                                                         </option>
                                                                                     @endforeach
@@ -487,7 +486,7 @@
                                                                     <div class="form-group">
                                                                         <div class="controls">
                                                                             <button type="button"
-                                                                                data-item="{{ $item->id }}"
+                                                                                data-item="{{ $building_utilities->id }}"
                                                                                 class="btn-utilities_delete waves-effect waves-light btn btn-danger mb-3 btn-sm "><i
                                                                                     class=" ri-close-line"></i></button>
                                                                         </div>
@@ -518,7 +517,7 @@
                                                                 <div class="col-md">
                                                                     <select name="select-service" required
                                                                         id="select-service"
-                                                                        class="form-select rounded-pill custom-select">
+                                                                        class="form-select rounded-pill select2">
                                                                         <option value="">
                                                                             Chọn dịch vụ
                                                                         </option>
@@ -530,10 +529,9 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-auto">
-                                                                    @foreach ($building->building_service as $key => $item)
-                                                                    @endforeach
-                                                                    <button type="submit"
-                                                                        value="{{ isset($item) ? $item->id : '0' }}"
+                                                                   
+                                                                    <button type="buttom"
+                                                                        value="{{count($building->building_service)}}"
                                                                         id="btn-service_add"
                                                                         class="btn btn-success float">
                                                                         <i class="bx bx-plus"></i>
@@ -554,26 +552,44 @@
                                                 <div class="border-top-double"></div>
                                                 <br>
 
-                                                <form class="needs-validation validateForm" novalidate action="/admin/building/edit"
-                                                    method="POST" enctype="multipart/form-data">
+                                                <form class="needs-validation validateForm" novalidate
+                                                    action="/admin/building/edit" method="POST"
+                                                    enctype="multipart/form-data">
                                                     @csrf
-                                                    <input type="hidden" name="building_id" value="{{ $building->id }}">
+                                                    <input type="hidden" name="building_id"
+                                                        value="{{ $building->id }}">
                                                     <input type="hidden" name="active_tab" value="service">
 
-                                                    <div id="service_content"
+                                                    <div id="service_content" class="row"
                                                         style="max-height: 300px; overflow-x: hidden;">
-                                                        @foreach ($building->building_service as $item)
-                                                            <div class="row" id="buildingservice{{ $item->id }}">
-                                                                <x-building-service :buildingserviceId="$item->id" 
-                                                                    :serviceName="$item->service->name"
-                                                                    :serviceId="$item->id_service" 
-                                                                    :price="$item->price" 
-                                                                    :units="$units"
-                                                                    :selectedUnitId="$item->id_unit" />
-                                                            </div>
+                                                        @foreach ($building->building_service as $building_service)
+                                                        <div class="col-md-6" id="buildingservice{{$building_service->id}}">
+                                                            <input type="hidden" name="buildingservice_id[{{ $building_service->id ?? 'buildingserviceId' }}]"
+                                                                value="{{ $building_service->id ?? 'buildingserviceId' }}">
+                                                                <div class="row">
+                                                                    <div class="col-md-10">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <h6 style="line-height: 25px">{{ $building_service->service->name ?? 'serviceName' }}</h6>
+                                                                                    <input type="hidden" name="service_id[{{ $building_service->id ?? 'buildingserviceId' }}]"
+                                                                                        class="form-control" value="{{ $building_service->id_service ?? 'serviceId' }}" required>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-2 text-end">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <button type="button" data-item="{{ $building_service->id ?? 'buildingserviceId' }}"
+                                                                                    class="btn-service_delete waves-effect waves-light btn btn-danger mb-3 btn-sm "><i
+                                                                                        class=" ri-close-line"></i></button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
                                                         @endforeach
                                                     </div>
-
+                                                    <hr>
                                                     <div class="box-footer text-end mb-3">
                                                         <div class="col-12">
                                                             <input type="reset" value="Clear"
@@ -606,180 +622,78 @@
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        
+
                                                     </div>
                                                     <hr>
 
                                                     <section>
-                                                        <div class="row row-cols-1 row-cols-md-3 g-3" id="typeapartment-content">
-                                                            @foreach ($building->building_typeapartment->groupBy('id_typeapartment') as $building_type)
+                                                        <div class="row row-cols-1 row-cols-md-3 g-3"
+                                                            id="typeapartment-content">
+                                                            @foreach ($building->building_typeapartment->where('status', '1')->where('delete_type', '1')->groupBy('id_typeapartment') as $building_type)
                                                                 <div class="col">
                                                                     <div class="card card-animate border border-3">
-                                                                        <div class="card-header d-flex justify-content-between align-items-center">
-                                                                            <h5 class="fw-semibold">{{$building_type->first()->typeapartment->name}}</h5>
+                                                                        <div
+                                                                            class="card-header d-flex justify-content-between align-items-center">
+                                                                            <h5 class="fw-semibold mb-0">
+                                                                                {{ $building_type->first()->typeapartment->name }}
+                                                                            </h5>
 
                                                                             <button type="button"
-                                                                                class="btn btn-danger btn-sm btn-icon waves-effect waves-light pull-right">
-                                                                                <i class="ri-delete-bin-5-line"></i>
-                                                                            </button>
-                                                                            <button type="button" type-id="{{$building_type->first()->id}}"
+                                                                                type-id="{{ $building_type->first()->id_typeapartment}}"
                                                                                 class="btn btn-secondary btn-sm btn-icon waves-effect waves-light btn-editModaltypeapartment">
                                                                                 <i class="ri-edit-box-line"></i>
                                                                             </button>
                                                                         </div>
                                                                         <div class="card-body">
-                                                                            <h6 class="text-muted">Phòng trong loại: {{$building_type->count()}}</h6>
+                                                                            <h6 class="text-muted">Phòng trong loại:
+                                                                                {{ $building_type->count() }}</h6>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
                                                             @endforeach
-                                                            {{-- <div class="col">
-                                                                <div class="card card-animate border border-3">
-                                                                    <div
-                                                                        class="card-header d-flex justify-content-between align-items-center">
-                                                                        <h5 class="fw-semibold">Studio Special</h5>
-
-                                                                        <button type="button"
-                                                                            class="btn btn-danger btn-sm btn-icon waves-effect waves-light pull-right">
-                                                                            <i class="ri-delete-bin-5-line"></i>
-                                                                        </button>
-                                                                        <button type="button"
-                                                                            class="btn btn-secondary btn-sm btn-icon waves-effect waves-light">
-                                                                            <i class="ri-edit-box-line"></i>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="card-body">
-                                                                        <h6 class="text-muted">Phòng trong loại: 0</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div> --}}
-
                                                         </div>
                                                     </section>
 
                                                     <section>
                                                         <h5 class="fw-semibold">Sơ đồ:</h5>
 
-                                                     
-                                                        <div class="d-flex gap-3">
-                                                            <div
-                                                                class="align-self-stretch d-flex align-items-center bg-primary px-5 text-nowrap">
-                                                                <h6 class="mb-0 text-uppercase text-white fw-bold">
-                                                                    Tầng G
-                                                                </h6>
-                                                            </div>
-
-                                                            <div class="flex-grow-1 row row-cols-md-6 g-1">
-                                                                <div class="col d-flex">
+                                                        <div class="d-flex flex-column gap-2">
+                                                            @foreach ($blockfloors as $blockfloor)
+                                                                <div class="d-flex gap-3">
                                                                     <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
+                                                                        class="align-self-stretch d-flex align-items-center bg-primary px-5 text-nowrap rounded-3">
+                                                                        <h6 class="mb-0 text-uppercase text-white fw-bold"
+                                                                            style="min-width: 53px">
+                                                                            {{ $blockfloor->name_floor }}
+                                                                        </h6>
+                                                                    </div>
+                                                                    <div class="flex-grow-1 row row-cols-md-6 g-2">
+                                                                        @foreach ($blockfloor->getBuildingTypeApartmentByIdFloor($blockfloor->id_floor) as $floor)
+                                                                            <div class="col d-flex ">
+                                                                                <div
+                                                                                    class="sanpham{{$floor->status}} rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
 
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
+                                                                                    <h5
+                                                                                        class="fw-semibold text-white mt-2">
+                                                                                        {{ $floor->name }}</h5>
+                                                                                    <h6
+                                                                                        class="fw-semibold text-white mb-2">
+                                                                                        {{ $floor->typeapartment->name }}
+                                                                                    </h6>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        @endforeach
+                                                                       
                                                                     </div>
                                                                 </div>
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col d-flex">
-                                                                    <div
-                                                                        class="bg-danger rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
-
-                                                                        <h5 class="  fw-semibold text-white mb-1">101</h5>
-                                                                        <h6 class="fw-semibold text-white mb-0">Studio
-                                                                            Special</h6>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col">
-                                                                    <button type="button"
-                                                                        class="btn btn-outline-secondary custom-toggle w-100"
-                                                                        data-bs-toggle="button">
-                                                                        <span class="icon-on">
-                                                                            <b>101</b> <br>
-                                                                            Studio Special
-                                                                        </span>
-                                                                        <span class="icon-off">
-                                                                            <b>101</b> <br>
-                                                                            Studio Special
-                                                                        </span>
-                                                                    </button>
-                                                                </div>
-
-                                                            </div>
+                                                            @endforeach
                                                         </div>
                                                     </section>
-
-                                                    <div class="card-body text-right row mb-3">
-                                                        <div class="col-12">
-                                                            <input type="reset" value="Clear"
-                                                                class="btn btn-warning float-right">
-                                                            <button type="button"
-                                                                class="btn btn-success float">Save</button>
-                                                        </div>
-                                                    </div>
                                                 </form>
                                                 {{-- component --}}
                                                 @include('pages.building.modal.create_typeapartment')
+
                                                 {{-- /component --}}
                                             </div>
                                         </div>
@@ -807,12 +721,33 @@
 @endsection
 
 @section('css')
+<style>
+    .sanpham0 {
+        background-color: #B5D33D;
+    }
+
+    .sanpham1 {
+        background-color: #706e6e ;
+    }
+
+    .sanpham2 {
+        background-color: #F6AE2D;
+    }
+
+    .sanpham3 {
+        background-color: #6CA2EA;
+    }
+
+    .sanpham4 {
+        background-color: #800080;
+    }
+</style>
 @endsection
 
 @section('script')
     <script>
         //detail
-       
+
         function renderFloor(floor_numb, floor_style) {
             var floor_code;
             var floor_name;
@@ -910,69 +845,38 @@
 
         //utilities
         $('#v-pills-utilities').on('change', '#select-utilities', function() {
-            var active_tab ="utilities";
+            var active_tab = "utilities";
             utilities_id = $(this).val();
             if (utilities_id) {
-                $('#utilities_discription').load('/admin/building/get_discription/' + utilities_id +'?active_tab=' + active_tab);
+                $('#utilities_discription').load('/admin/building/get_discription/' + utilities_id +
+                    '?active_tab=' + active_tab);
             } else {
                 $('#utilities_discription').text('---');
             }
         });
 
-        function renderUtilities(utilities_id, utilities_name, buildingutilities_id) {
-            data = '';
-            data += '   <div class="row" id="buildingutilities' + buildingutilities_id + '">';
-            data += '   <input type="hidden" name="buildingutilities_id[' + buildingutilities_id + ']" value="0">';
-            data += '        <div class="col-md-4">';
-            data += '            <div class="form-group">';
-            data += '                <div class="controls">';
-            data += '                    <h6>' + utilities_name + '</h5>';
-            data += '                        <input type="hidden" name="utilities_id[' + buildingutilities_id +
-                ']" value="' + utilities_id + '" required>';
-            data += '                </div>';
-            data += '            </div>';
-            data += '        </div>';
-            data += '        <div class="col-md-6">';
-            data += '            <div class="form-group">';
-            data += '                <div class="controls">';
-            data += '                    <select name="floor_id[' + buildingutilities_id +
-                ']" class="form-select rounded-pill custom-select" required data-validation-required-message="Bạn chưa chọn tầng.">';
-            data += '                        <option value="">Chọn vị trí tầng</option>';
-            data += '                        <optgroup label="Tầng hầm">';
-            @foreach ($building->building_floor->where('type', '1') as $item)
-                data += '<option value="{{ $item->id }}">{{ $item->name_floor }}</option>';
-            @endforeach
-            data += '                        </optgroup>';
-            data += '                        <optgroup label="Tầng nổi">';
-            @foreach ($building->building_floor->where('type', '2') as $item)
-                data += '<option value="{{ $item->id }}">{{ $item->name_floor }}</option>';
-            @endforeach
-            data += '                        </optgroup>';
-            data += '                    </select>';
-            data += '                </div>';
-            data += '            </div>';
-            data += '        </div>';
-            data += '        <div class="col-md-2">';
-            data += '            <div class="form-group">';
-            data += '                <div class="controls">';
-            data += '                    <button type="button" data-item="' + buildingutilities_id +
-                '" class=" btn-utilities_delete waves-effect waves-light btn btn-danger mb-3 btn-sm "><i class=" ri-close-line"></i></button>';
-            data += '                </div>';
-            data += '            </div>';
-            data += '        </div>';
-            data += '    </div>';
-            return data;
-        }
-
-        var buildingutilities_id = $('#btn-utilities_add').val();
         $('#v-pills-utilities').on('click', '#btn-utilities_add', function() {
-            buildingutilities_id = parseInt(buildingutilities_id, 10) + 1;
+            countId = Number($('#btn-utilities_add').val())+1;
             var utilities_id = $('#select-utilities').val();
-            var utilities_name = $('#select-utilities').find('option:selected').text();
+            var building_id = $("input[name='building_id']").val();
             
             if (utilities_id) {
-                var dataRender = renderUtilities(utilities_id, utilities_name, buildingutilities_id);
-                $('#utilities_content').append(dataRender);
+                var url = '/admin/building/renderUtilities';
+                var requestData = {
+                    utilities_id: utilities_id,
+                    countId: countId,
+                    building_id: building_id, 
+                };
+
+                ajaxCustom(url, requestData, 'GET')
+                    .then(function(data) {
+                        $('#btn-utilities_add').val(countId);
+                        $('#utilities_content').append(data);
+                        $('.select2').select2();
+                    })
+                    .catch(function(error) {
+                        console.error("Lỗi:", error);
+                    });
             }
         });
 
@@ -980,17 +884,18 @@
             var buildingutilities_id = $(this).attr('data-item');
             var utilities_delete = '<input type="hidden" name="utilities_delete[' + buildingutilities_id +
                 ']" value="' + buildingutilities_id + '">';
-            
-                $('#buildingutilities' + buildingutilities_id).html('').html(utilities_delete);
+
+            $('#buildingutilities' + buildingutilities_id).html('').html(utilities_delete);
         });
         //service
 
         $('#v-pills-service').on('change', '#select-service', function() {
             var service_id = $(this).val();
-            var active_tab ="service";
-            
+            var active_tab = "service";
+
             if (service_id) {
-                $('#service_discription').load('/admin/building/get_discription/' + service_id+'?active_tab=' + active_tab);
+                $('#service_discription').load('/admin/building/get_discription/' + service_id + '?active_tab=' +
+                    active_tab);
             } else {
                 $('#service_discription').text('---');
             }
@@ -998,117 +903,155 @@
 
         $('#v-pills-service').on('click', '.btn-service_delete', function() {
             var buildingservice_id = $(this).attr('data-item');
-            
+
             service_delete = '<input type="hidden" name="service_delete[' + buildingservice_id +
                 ']" value="' + buildingservice_id + '">';
             $('#buildingservice' + buildingservice_id).html('').html(service_delete);
         });
 
-        function renderService(buildingservice_id, service_id, service_name) {
-            data = '';
-            return data;
-        }
-
-        var buildingservice_id = $('#btn-service_add').val();
+        
         $('#v-pills-service').on('click', '#btn-service_add', function() {
-            buildingservice_id = parseInt(buildingservice_id, 10) + 1;
-            alert(buildingservice_id);
+            var countId = Number($('#btn-service_add').val())+1;
             var service_id = $('#select-service').val();
-            var service_name = $('#select-service').find('option:selected').text();
             if (service_id) {
-                var dataRender = renderService(buildingservice_id, service_id, service_name);
-                $('#service_content').append(dataRender);
+                var url = '/admin/building/renderService';
+                var requestData = {
+                    service_id: service_id,
+                    countId: countId,
+                };
+
+                ajaxCustom(url, requestData, 'GET')
+                    .then(function(data) {
+                        $('#btn-service_add').val(countId)
+                        $('#service_content').append(data);
+                        $('.select2').select2();
+                    })
+                    .catch(function(error) {
+                        console.error("Lỗi:", error);
+                    });
             }
         });
 
         //typeapartment
         $('html').on('click', '.btn-createModaltypeapartment', function() {
-            $('#create-record').attr('href', 'create');
+            $("#select-typeapartment").val('').prop("disabled",false);
+            $("#typeapartment_discription").html("<span>---</span>");
+            $('#typeapartment_content').html('');
             $('#create_typeapartmentModal').modal('show');
         });
         $('html').on('click', '.btn-editModaltypeapartment', function() {
             var typeapartment_id = $(this).attr('type-id');
-            $('#create-record').attr('href', 'create');
-            $('#create_typeapartmentModal').modal('show');
+            var building_id = $('input[name="building_id"]').val();
+            var url = '/admin/building/get_typeapartment/';
+
+            var requestData = {
+                building_id: building_id,
+                typeapartment_id:typeapartment_id,
+            };
+
+            ajaxCustom(url, requestData)
+                .then(function(data) {
+                    console.log(data);
+                    $('#typeapartment_content').html(data);
+                    $('#create_typeapartmentModal').modal('show');
+                })
+                .catch(function(error) {
+                    console.error("Không nhận được dữ liệu trả về");
+                    // console.error("Lỗi:", error);
+                });
+           
         });
 
         $('#v-pills-typeapartment').on('change', '#select-typeapartment', function() {
             var typeapartment_id = $(this).val();
-            var active_tab ="typeapartment";
-            
+            var active_tab = "typeapartment";
+
             if (typeapartment_id) {
-                $('#typeapartment_discription').load('/admin/building/get_discription/' + typeapartment_id +'?active_tab=' + active_tab);
+                $('#typeapartment_discription').load('/admin/building/get_discription/' + typeapartment_id +
+                    '?active_tab=' + active_tab);
             } else {
                 $('#typeapartment_discription').text('---');
             }
         });
-        
-        function renderTypeapartment(typeapartment_id, buildingtypeapartment_id, typeapartment_floor)
-        {
+
+        function renderTypeapartment(typeapartment_id, buildingtypeapartment_id, typeapartment_floor) {
             data = '';
-             data += '             <div class="row" id="apartment_content">';
-            data += '        <input type="hidden" name="typeapartment_id" value="'+typeapartment_id+'" class="form-control rounded">';
-            data += '        <input type="hidden" name="buildingTypeApartment_id['+buildingtypeapartment_id+']" value="0" class="form-control rounded">';
-             data += '                 <div class="col-md-5">';
-             data += '                     <div class="form-group">';
-             data += '                         <div class="controls">';
-             data += '                             <input type="number" required name="apartment['+buildingtypeapartment_id+']" class="form-control rounded-pill"';
-             data += '                                 placeholder="Mã phòng...">';
-             data += '                             <div class="invalid-feedback"></div>';
-             data += '                         </div>';
-             data += '                     </div>';
-             data += '                 </div>';
-             data += '                 <div class="col-md-6">';
-             data += '                     <div class="form-group">';
-             data += '                         <div class="controls">';
-             data += '                             <select name="floor['+buildingtypeapartment_id+']" required class="form-select rounded-pill custom-select"';
-             data += '                                 data-validation-required-message="Bạn chưa chọn tầng.">';
-             data += '                                 <optgroup label="Tầng hầm">';
-             data += '                                     @foreach ($building->building_floor->where('type', '1') as $building_floor)';
-             data += '                                     <option value="{{ $building_floor->id }}" @if ($building_floor->id == '+typeapartment_floor+')';
+            data += '             <div class="row" id="apartment_content' + buildingtypeapartment_id +'">';
+            data += '        <input type="hidden" name="typeapartment_id" value="' + typeapartment_id +
+                '" class="form-control rounded">';
+            data += '        <input type="hidden" name="buildingTypeApartment_id[' + buildingtypeapartment_id +
+                ']" value="0" class="form-control rounded">';
+            data += '                 <div class="col-md-5">';
+            data += '                     <div class="form-group">';
+            data += '                         <div class="controls">';
+            data += '                             <input type="number" required name="apartment[' +
+                buildingtypeapartment_id + ']" class="form-control rounded-pill"';
+            data += '                                 placeholder="Mã phòng...">';
+            data += '                             <div class="invalid-feedback"></div>';
+            data += '                         </div>';
+            data += '                     </div>';
+            data += '                 </div>';
+            data += '                 <div class="col-md-6">';
+            data += '                     <div class="form-group">';
+            data += '                         <div class="controls">';
+            data += '                             <select name="floor[' + buildingtypeapartment_id +']" required class="form-select rounded-pill custom-select"';
+            data += '                                 data-validation-required-message="Bạn chưa chọn tầng.">';
+            data += '                                 <optgroup label="Tầng hầm">';
+            data += '                                     @foreach ($building->building_floor->where('type', '1') as $building_floor)';
+            data +=
+                '                                     <option value="{{ $building_floor->id }}" @if ($building_floor->id == '+typeapartment_floor+') ';
              data += '                                         selected @endif>';
-             data += '                                         {{ $building_floor->name_floor }}';
-             data += '                                     </option>';
-             data += '                                     @endforeach';
-             data += '                                 </optgroup>';
-             data += '                                 <optgroup label="Tầng nổi">';
-             data += '                                     @foreach ($building->building_floor->where('type', '2') as $building_floor)';
-             data += '                                     <option value="{{ $building_floor->id }}" @if ($building_floor->id == '+typeapartment_floor+')';
+            data += '                                         {{ $building_floor->name_floor }}';
+            data += '                                     </option>';
+            data += '                                     @endforeach';
+            data += '                                 </optgroup>';
+            data += '                                 <optgroup label="Tầng nổi">';
+            data += '                                     @foreach ($building->building_floor->where('type', '2') as $building_floor)';
+            data +=
+                '                                     <option value="{{ $building_floor->id }}" @if ($building_floor->id == '+typeapartment_floor+') ';
              data += '                                         selected @endif>';
-             data += '                                         {{ $building_floor->name_floor }}';
-             data += '                                     </option>';
-             data += '                                     @endforeach';
-             data += '                                 </optgroup>';
-             data += '                             </select>';
-             data += '                         </div>';
-             data += '                     </div>';
-             data += '                 </div>';
-             data += '                 <div class="col-md-1 text-end">';
-             data += '                     <div class="form-group">';
-             data += '                         <div class="controls">';
-             data += '                             <button type="button" data-item="service_id"';
-             data += '                                 class="waves-effect waves-light btn btn-danger mb-5 btn-sm "><i class=" ri-close-line"></i></button>';
-             data += '                         </div>';
-             data += '                     </div>';
-             data += '                 </div>';
-             data += '             </div>';
+            data += '                                         {{ $building_floor->name_floor }}';
+            data += '                                     </option>';
+            data += '                                     @endforeach';
+            data += '                                 </optgroup>';
+            data += '                             </select>';
+            data += '                         </div>';
+            data += '                     </div>';
+            data += '                 </div>';
+            data += '                 <div class="col-md-1 text-end">';
+            data += '                     <div class="form-group">';
+            data += '                         <div class="controls">';
+            data += '                             <button type="button" data-item="' + buildingtypeapartment_id +'"';
+            data +=
+                                                    'class="btn-typeapartment_delete waves-effect waves-light btn btn-danger mb-3 btn-sm "><i class=" ri-close-line"></i></button>';
+            data += '                         </div>';
+            data += '                     </div>';
+            data += '                 </div>';
+            data += '             </div>';
             return data;
         }
 
         var buildingtypeapartment_id = $('.btn-typeapartment_add').val();
         $('#v-pills-typeapartment').on('click', '.btn-typeapartment_add', function() {
-            
+
             var typeapartment_id = $('#select-typeapartment').val();
             var typeapartment_floor = $('select[name ="floor"]').val();
             var typeapartment_numb = $('input[name ="typeapartment_numb"]').val();
-           
-            if(typeapartment_floor && typeapartment_numb && typeapartment_id){
-                for(var i=0; i<typeapartment_numb; i++) {
+
+            if (typeapartment_floor && typeapartment_numb && typeapartment_id) {
+                for (var i = 0; i < typeapartment_numb; i++) {
                     buildingtypeapartment_id = parseInt(buildingtypeapartment_id, 10) + 1;
-                    var dataRender = renderTypeapartment(typeapartment_id, buildingtypeapartment_id, typeapartment_floor);
+                    var dataRender = renderTypeapartment(typeapartment_id, buildingtypeapartment_id,
+                        typeapartment_floor);
                     $('#typeapartment_content').append(dataRender);
                 }
             }
+        });
+        $('#v-pills-typeapartment').on('click', '.btn-typeapartment_delete', function() {
+            var buildingtypeapartment_id = $(this).attr('data-item');
+            typeapartment_delete = '<input type="hidden" name="typeapartment_delete[' + buildingtypeapartment_id +
+                ']" value="' + buildingtypeapartment_id + '">';
+            $('#apartment_content' + buildingtypeapartment_id).html('').html(typeapartment_delete);
         });
     </script>
 @endsection
