@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BuildingTypeapartment;
-use App\Models\BuildingUtility;
+use App\Models\BuildingUtilities;
 use App\Models\BuildingService;
 use App\Models\Province;
 use App\Models\District;
@@ -11,7 +11,7 @@ use App\Models\Ward;
 use App\Models\Apartment;
 use App\Models\BuildingFloor;
 use App\Models\Typeapartment;
-use App\Models\Utility;
+use App\Models\Utilities;
 use App\Models\Service;
 use App\Models\Unit;
 use App\Models\ZblockBuildingtype;
@@ -23,10 +23,11 @@ use App\Models\Building;
 
 class BuildingController extends Controller
 {
+    // Hiển thị danh sách các tòa nhà
     public function getList()
     {
         $this->isSearch();
-
+        // Truy vấn database và trả về trang danh sách
         $data['buildings'] = Building::where(function ($query) {
             if (isset(Session::get('search')['key'])) {
                 $key = Session::get('search')['key'];
@@ -37,27 +38,29 @@ class BuildingController extends Controller
         })->orderBy('id', 'desc')->paginate(5);
         return view('pages.building.list', $data);
     }
+    // Hiển thị form tạo mới tòa nhà
     public function getCreate()
     {
+        // Lấy danh sách tỉnh/thành phố
         $data['provinces'] = Province::select('provinceid', 'name')->get();
 
         return view('pages.building.create', $data);
     }
 
+    // Xử lý khi người dùng gửi form tạo mới tòa nhà
     public function postCreate(createBuildingRequest $req)
     {
         $building = new Building;
         $building->logo = 'assets/images/buiding-logo/logo-0.png';
         $this->postDetail($building, $req);
-        // return redirect('/admin/building/edit/'.$building_id);
-        return redirect('/admin/building/edit/' . '11');
+        return redirect('/admin/building/edit/' . $building->id);
     }
-
+    // Hiển thị mô tả của các loại dịch vụ theo ID
     public function getDiscription($id)
     {
         switch (request('active_tab')) {
             case 'utilities': {
-                    $utilities = Utility::select('description')
+                    $utilities = Utilities::select('description')
                         ->where('id', $id)
                         ->first();
                     echo ' <span>' . $utilities->description . '</span>';
@@ -79,15 +82,16 @@ class BuildingController extends Controller
         }
 
     }
-
+    // Xử lý lưu thông tin chi tiết của tòa nhà
     public function postDetail($building, $req)
     {
+
         $building->name = $req->building_name;
         $building->address = $req->building_address;
         $building->province_id = $req->province_id;
         $building->district_id = $req->district_id;
         $building->ward_id = $req->ward_id;
-
+        $building->save();
         if (isset($req->base64image) and $req->base64image != null) {
             $link = ltrim($building->logo, "/");
             if (file_exists($link)) {
@@ -111,7 +115,7 @@ class BuildingController extends Controller
 
         // if ($buildingfloor) {
         //     foreach ($buildingfloor as $floor) {
-        //         BuildingUtility::where('id_building', $building_id)
+        //         BuildingUtilities::where('id_building', $building_id)
         //             ->where('id_floor', $floor->id)
         //             ->delete();
         //     }
@@ -144,19 +148,21 @@ class BuildingController extends Controller
         // Đặt dữ liệu vào flash session với key là 'active_tab' và giá trị là 'utilities'
         Session::flash('active_tab', 'utilities');
     }
+    // Xử lý lưu thông tin về utilities của tòa nhà
     public function postUtilities($building, $req)
     {
+        // Lưu thông tin về utilities của tòa nhà
         if (isset($req->buildingutilities_id) and count($req->buildingutilities_id) > 0) {
             foreach ($req->buildingutilities_id as $key => $id) {
 
                 if ($id == '0') {
-                    $buildingutilities = new BuildingUtility;
+                    $buildingutilities = new BuildingUtilities;
                     $buildingutilities->id_building = $req->building_id;
                     $buildingutilities->id_utilities = $req->utilities_id[$key];
                     $buildingutilities->id_floor = $req->floor_id[$key];
                     $buildingutilities->save();
                 } else {
-                    $buildingutilities = BuildingUtility::find($id);
+                    $buildingutilities = BuildingUtilities::find($id);
                     $buildingutilities->id_building = $req->building_id;
                     $buildingutilities->id_utilities = $req->utilities_id[$key];
                     $buildingutilities->id_floor = $req->floor_id[$key];
@@ -164,8 +170,9 @@ class BuildingController extends Controller
                 }
             }
         }
+        // Xóa các bản ghi utilities nếu có yêu cầu xóa
         if (isset($req->utilities_delete) and count($req->utilities_delete) > 0) {
-            $buildingutilities = BuildingUtility::whereIn('id', $req->utilities_delete)->get();
+            $buildingutilities = BuildingUtilities::whereIn('id', $req->utilities_delete)->get();
             foreach ($buildingutilities as $key => $buildingutilities) {
                 $buildingutilities->delete();
             }
@@ -173,6 +180,7 @@ class BuildingController extends Controller
         }
         Session::flash('active_tab', 'service');
     }
+    // Xử lý lưu thông tin về service của tòa nhà
     public function postService($building, $req)
     {
         // dd($req);
@@ -180,6 +188,7 @@ class BuildingController extends Controller
         // var_dump($req->toArray());
         // echo        '</pre>';
 
+        // Lưu thông tin về service của tòa nhà
         if (isset($req->buildingservice_id) and count($req->buildingservice_id) > 0) {
             foreach ($req->buildingservice_id as $key => $id) {
 
@@ -197,15 +206,17 @@ class BuildingController extends Controller
                 }
             }
         }
+
+        // Xóa các bản ghi service nếu có yêu cầu xóa
         if (isset($req->service_delete) and count($req->service_delete) > 0) {
             $buildingservice = BuildingService::whereIn('id', $req->service_delete)->get();
             foreach ($buildingservice as $key => $buildingservice) {
                 $buildingservice->delete();
             }
-
         }
         Session::flash('active_tab', 'typeapartment');
     }
+    // Xử lý lưu thông tin về typeapartment của tòa nhà
     public function postTypeapartment($building, $req)
     {
         // dd($req);
@@ -214,11 +225,13 @@ class BuildingController extends Controller
         // echo        '</pre>';
         // die();
 
+        // Lưu thông tin về typeapartment của tòa nhà
         if (isset($req->buildingTypeApartment_id) and count($req->buildingTypeApartment_id) > 0) {
             foreach ($req->buildingTypeApartment_id as $key => $id) {
                 if ($id == '0') {
                     $apartment = new Apartment;
                     $apartment->name = $req->apartment[$key];
+                    $apartment->id_building = $req->building_id;
                     $apartment->save();
 
                     $buildingTA = new BuildingTypeapartment;
@@ -241,82 +254,107 @@ class BuildingController extends Controller
 
 
         }
-
+        // Xóa các bản ghi typeapartment nếu có yêu cầu xóa
         if (isset($req->typeapartment_delete) and count($req->typeapartment_delete) > 0) {
-            $buildingtypeapartment = BuildingTypeapartment::whereIn('id', $req->typeapartment_delete)->get();
-            foreach ($buildingtypeapartment as $key => $buildingtypeapartment) {
-                $buildingtypeapartment->delete_type = '0';
-                $buildingtypeapartment->save();
+
+            $buildingTA = BuildingTypeapartment::whereIn('id', $req->typeapartment_delete)->get();
+
+            foreach ($buildingTA as $key => $buildingTA) {
+                $buildingTA->_delete = '0';
+                $buildingTA->status = '0';
+                $buildingTA->save();
+
+
+                $apartment = Apartment::find($buildingTA->id_apartment);
+                $apartment->_delete = '0';
+                $apartment->save();
 
                 $block = new ZblockBuildingtype;
-                $block->name = 'delete apartment';
-                $block->content = 'Xoá phòng';
-                $block->target_id = $buildingtypeapartment->id;
+                $block->name = 'delete TypeApartment';
+                $block->content = 'Xoá loại phòng';
+                $block->target_id = $buildingTA->id;
                 $block->user_id = auth()->user()->id;
                 $block->save();
             }
-
         }
 
         Session::flash('active_tab', 'typeapartment');
     }
 
-    //chinh sua phan tu
+    // Hiển thị trang chỉnh sửa tòa nhà
     public function getEdit($id)
-    {
-
+    {   
+        // Lấy thông tin của tòa nhà theo ID
         $data['building'] = Building::find($id);
-        $data['provinces'] = Province::get();
-        $data['districts'] = (!empty($data['building']->district_id)) ? District::where('provinceid', $data['building']->province_id)->get() : array();
-        $data['wards'] = (!empty($data['building']->ward_id)) ? Ward::where('districtid', $data['building']->district_id)->get() : array();
 
+        // Lấy danh sách tỉnh/thành phố
+        $data['provinces'] = Province::get();
+
+        // Lấy danh sách quận/huyện dựa trên tỉnh/thành phố được chọn
+        $data['districts'] = (!empty($data['building']->district_id)) ? District::where('provinceid', $data['building']->province_id)->get() : [];
+
+        // Lấy danh sách phường/xã dựa trên quận/huyện được chọn
+        $data['wards'] = (!empty($data['building']->ward_id)) ? Ward::where('districtid', $data['building']->district_id)->get() : [];
+
+        // Lấy danh sách loại phòng
         $data['typeapartments'] = Typeapartment::select('name', 'id')
             ->where('status', '1')
             ->get();
+
+        // Lấy danh sách dịch vụ 
         $data['services'] = Service::select('name', 'id')
             ->where('status', '1')
             ->get();
+
+        // Lấy danh sách đơn vị tính
         $data['units'] = Unit::select('name', 'id')
             ->where('status', '1')
             ->get();
-        $data['list_utilities'] = Utility::select('name', 'id')
+
+        // Lấy danh sách tiện ích 
+        $data['list_utilities'] = Utilities::select('name', 'id')
             ->where('status', '1')
             ->get();
 
+        // Lấy danh sách tầng và loại phòng trong tòa nhà
         $data['blockfloors'] = BuildingTypeapartment::join('building_floor', 'building_floor.id', '=', 'building_typeapartment.id_floor')
             ->where('building_typeapartment.id_building', $id)
             ->select('building_floor.name_floor', 'building_typeapartment.id_floor')
             ->groupBy('building_floor.name_floor', 'building_typeapartment.id_floor')
-            ->orderBy('building_floor.name_floor', 'asc')
+            ->orderBy('building_floor.code_floor', 'asc')
+            ->where('building_typeapartment._delete', 1)
             ->get();
+
         return view('pages.building.edit', $data);
     }
+    
+    // Xử lý khi người dùng gửi form chỉnh sửa tòa nhà
     public function postEdit(Request $req)
     {
-        $building = Building::find($req->buiding_id);
+        $building = Building::find($req->building_id);
 
-        //detail
-        if ($req->active_tab == 'detail') {
-            $this->postDetail($building, $req);
+
+        switch ($req->active_tab) {
+            case 'detail':
+                $this->postDetail($building, $req);
+                break;
+
+            case 'utilities':
+                $this->postUtilities($building, $req);
+                break;
+
+            case 'service':
+                $this->postService($building, $req);
+                break;
+
+            case 'typeapartment':
+                $this->postTypeapartment($building, $req);
+                break;
         }
 
-        //utilities
-        if ($req->active_tab == 'utilities') {
-            $this->postUtilities($building, $req);
-        }
-
-        //service
-        if ($req->active_tab == 'service') {
-            $this->postService($building, $req);
-        }
-
-        if ($req->active_tab == 'typeapartment') {
-            $this->postTypeapartment($building, $req);
-        }
-        // return redirect('/admin/building/edit/'.$building_id);
-        return redirect('/admin/building/edit/' . '11');
+        return redirect('/admin/building/edit/' . $req->building_id);
     }
-    //xoa phan tu
+    // Thay đổi trạng thái (hiển thị/ẩn) của tòa nhà
     public function postChangeStatus($id)
     {
         $building = Building::find($id);
@@ -338,42 +376,61 @@ class BuildingController extends Controller
         // return redirect('/admin/building/list');
     }
 
-    //Hien thi chi tiet nhan vien
+    // Hiển thị trang xem chi tiết tòa nhà
     public function getShow($id)
     {
         $data['building'] = Building::find($id);
         return view('pages.building.view', $data);
     }
+
     public function getTypeApartment(Request $req)
     {
-
-        $dataReander['buildingType'] = BuildingTypeapartment::where([['id_building', $req->building_id], ['id_typeapartment', $req->typeapartment_id]])
-            ->get();
-
+        // Lấy danh sách các bản ghi của BuildingTypeapartment dựa trên building_id và typeapartment_id 
+        $dataReander['buildingType'] = BuildingTypeapartment::where([
+            ['id_building', $req->building_id],
+            ['id_typeapartment', $req->typeapartment_id],
+            ['_delete', 1]
+        ])->get();
+        // Lấy thông tin của tòa nhà
         $dataReander['building'] = Building::find($req->building_id);
+        // Lấy thông tin của loại phòng và gửi dữ liệu về
         $typeapartment = Typeapartment::find($req->typeapartment_id);
+
         echo '<script>
-            $("#select-typeapartment").val('.$typeapartment->id.').prop("disabled",true); 
-            $("#typeapartment_discription").html("<span>'.$typeapartment->description.'</span>");
-        </script>';
+                    $("#select-typeapartment").val(' . $typeapartment->id . ').prop("disabled",true); 
+                    $("#typeapartment_discription").html("<span>' . $typeapartment->description . '</span>");
+                </script>';
         return view('pages.building.render.typeapartment', $dataReander);
 
     }
 
-    public function renderService(Request $req){
+    public function renderService(Request $req)
+    {
         $service_id = $req->service_id;
         $data['service'] = Service::find($service_id);
         $data['countId'] = $req->countId;
 
         return view('pages.building.render.service', $data);
     }
-    public function renderUtilities(Request $req){
+    public function renderUtilities(Request $req)
+    {
         $utilities_id = $req->utilities_id;
-        $data['utilities'] = Utility::find($utilities_id);
+        $data['utilities'] = Utilities::find($utilities_id);
         $data['countId'] = $req->countId;
         $data['building'] = Building::find($req->building_id);
 
         return view('pages.building.render.utilities', $data);
+    }
+    public function renderTypeApartment(Request $req)
+    {
+        $typeapartment_id = $req->typeapartment_id;
+        $data['typeapartment_id'] = $typeapartment_id;
+        $data['countId'] = $req->countId;
+        $data['building'] = Building::find($req->building_id);
+        $data['typeapartment_numb']= $req->typeapartment_numb;
+        $data['floor_id']= $req->floor_id;
+        $data['page'] = 'pageCreate';
+        return view('pages.building.render.typeapartment', $data);
     }
 
 

@@ -8,3 +8,28 @@
 .select2-container--default .select2-selection--single .select2-selection__arrow{
     padding: 17px 27px 17px 17px;
 }
+
+/* 0 trống */
+.sanpham0 {
+    background-color: #B5D33D;
+}
+
+/* 1 Khoá */
+.sanpham1 {
+    background-color: #706e6e;
+}
+
+/* 2 cọc giữ chỗ */
+.sanpham2 {
+    background-color: #F6AE2D;
+}
+
+/* 3 cọc đủ */
+.sanpham3 {
+    background-color: #6CA2EA;
+}
+
+/* 4 đang ở */
+.sanpham4 {
+    background-color: #800080;
+}

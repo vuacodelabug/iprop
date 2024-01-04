@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class BuildingUtility
+ * Class BuildingUtilities
  * 
  * @property int $id
  * @property int|null $id_building
@@ -22,11 +22,11 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property Building|null $building
  * @property BuildingFloor|null $building_floor
- * @property Utility|null $utility
+ * @property Utilities|null $utilities
  *
  * @package App\Models
  */
-class BuildingUtility extends Model
+class BuildingUtilities extends Model
 {
 	protected $table = 'building_utilities';
 
@@ -54,8 +54,8 @@ class BuildingUtility extends Model
 		return $this->belongsTo(BuildingFloor::class, 'id_floor');
 	}
 
-	public function utility()
+	public function utilities()
 	{
-		return $this->belongsTo(Utility::class, 'id_utilities');
+		return $this->belongsTo(Utilities::class, 'id_utilities');
 	}
 }

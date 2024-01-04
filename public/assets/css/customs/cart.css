@@ -1,0 +1,60 @@
+.build-room{
+    width: 39px;
+    /* width: 38px;     */
+    margin-bottom: 0;
+}
+
+.btn__build-room .build-room{
+    width: 25px;    
+    color: #43548B;
+    text-align: center;
+}
+
+.btn__build-room{
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    border: #43548B 1px solid;
+    font-weight: 700;
+    padding: 8px 15px;
+    font-size: 13px;
+}
+
+.btn__build-room.active{
+    background-color: #43548B;
+}
+
+.btn__build-room.active .build-room{
+    color: #ffffff;
+}
+
+.build-room:hover{
+    cursor: pointer;
+}
+    
+.width-110-85{
+    width: 85px;
+}
+
+
+
+@media (max-width: 991.98px) {
+    .build-room{
+        /* width: 39px; */
+        width: 36px;
+    }
+
+
+
+}
+
+@media (max-width: 767.98px) {  
+    .build-room{
+        width: 47px;
+        /* width: 38px; */
+    }
+
+    .width-110-85{
+        width: 110px;
+    }
+}

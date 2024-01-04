@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $updated_at
  * 
  * @property Building|null $building
- * @property Collection|BuildingUtility[] $building_utilities
+ * @property Collection|BuildingUtilities[] $building_utilities
  *
  * @package App\Models
  */
@@ -52,6 +52,8 @@ class BuildingFloor extends Model
 
 	public function building_utilities()
 	{
-		return $this->hasMany(BuildingUtility::class, 'id_floor');
+		return $this->hasMany(BuildingUtilities::class, 'id_floor');
 	}
+
+	
 }

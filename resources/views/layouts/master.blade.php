@@ -128,6 +128,10 @@
     <!--crypto-kyc init-->
     <script src="{{ URL::asset('assets/js/pages/crypto-kyc.init.js') }}"></script>
 
+    <!-- Form Validation -->
+    <script src="{{ URL::asset('assets/libs/prismjs/prism.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/pages/form-validation.init.js') }}"></script>
+
     <!-- App js -->
     <script src="{{ URL::asset('assets/js/app.js') }}"></script>
     <!-- script-custom Js -->

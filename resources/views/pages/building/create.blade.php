@@ -291,11 +291,13 @@
 
 @section('script')
     <script>
+        // Bắt sự kiện click trên nút tạo bộ phận, hiển thị modal và cập nhật liên kết
         $('html').on('click', '.btn-create_typepartment', function() {
             $('#create-record').attr('href', 'create');
             $('#create_typepartmentModal').modal('show');
         });
 
+        // Hàm render nội dung cho các tầng dựa trên số lượng và kiểu tầng
         function renderFloor(floor_numb, floor_style)
         {
             var floor_code;
@@ -357,6 +359,7 @@
                 return data;
         }
 
+        // Hàm xử lý sự kiện thay đổi hoặc mất focus trên số tầng cho tầng 
         function functionName(floor_numb ,floor_style, floor)
         {
             var floor_numb = $(floor_numb).val();
@@ -373,18 +376,22 @@
             }
         }
 
+        // Bắt sự kiện blur khi nhập số tầng cho tầng hầm
         $('#v-pills-detail').on('blur', '#numbfloor1', function() {
             functionName('#numbfloor1','input[name="floor1_style"]:checked', '#floor1');
         });
 
+        // Bắt sự kiện thay đổi kiểu tầng cho tầng nổi
         $('#v-pills-detail').on('change', 'input[name="floor1_style"]:checked', function() {
             functionName('#numbfloor1','input[name="floor1_style"]:checked', '#floor1');
         });
 
+        // Bắt sự kiện blur khi nhập số tầng cho tầng hầm
         $('#v-pills-detail').on('blur', '#floor2_numb', function() {
             functionName('#floor2_numb','input[name="floor2_style"]:checked', '#floor2');
         });
-
+        
+        // Bắt sự kiện thay đổi kiểu tầng cho tầng nổi
         $('#v-pills-detail').on('change', 'input[name="floor2_style"]:checked', function() {
             functionName('#floor2_numb','input[name="floor2_style"]:checked', '#floor2');
         });

@@ -202,6 +202,8 @@
 @section('script')
 <script>
     $(document).ready(function() {
+        
+        //Tạo HTML cho trạng thái của tòa nhà
         function renderStatus(building_status) {
             data = '';
             if (building_status == '1') {
@@ -213,7 +215,7 @@
             return data;
         }
 
-       
+       // Xử lý sự kiện click cho nút thay đổi trạng thái
         $('html').on('click', '.change-status', function() {
             var building_id = $(this).attr('data-id');
             
@@ -224,6 +226,7 @@
 
             ajaxCustom(url, requestData)
                 .then(function(data) {
+                    // Kiểm tra dữ liệu trả về và cập nhật giao diện người dùng
                     if (data) {
                         var dataRender = renderStatus(data);
                         toast('success', "Thông báo | Cập nhật thành công");
@@ -235,7 +238,7 @@
                 });
         });
 
-
+         // Xử lý sự kiện click cho nút tìm kiếm
         $('.search').click(function() {
             var key = $('#key').val();
 

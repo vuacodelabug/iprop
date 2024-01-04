@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Collection|Service[] $services
  * @property Collection|Apartment[] $apartments
  * @property Collection|Typeapartment[] $typeapartments
- * @property Collection|BuildingUtility[] $building_utilities
+ * @property Collection|BuildingUtilities[] $building_utilities
  *
  * @package App\Models
  */
@@ -56,7 +56,7 @@ class Building extends Model
 		'status'
 	];
 
-	public function building_floors()
+	public function building_floor()
 	{
 		return $this->hasMany(BuildingFloor::class, 'id_building');
 	}
@@ -68,22 +68,28 @@ class Building extends Model
 					->withTimestamps();
 	}
 
-	public function apartments()
+	public function apartment()
 	{
-		return $this->belongsToMany(Apartment::class, 'building_typeapartment', 'id_building', 'id_apartment')
-					->withPivot('id', 'id_typeapartment', 'id_floor', 'status', 'delete_type')
-					->withTimestamps();
+		return $this->belongsTo(Apartment::class, 'id_building');
 	}
 
-	public function typeapartments()
+	public function typeapartment()
 	{
 		return $this->belongsToMany(Typeapartment::class, 'building_typeapartment', 'id_building', 'id_typeapartment')
-					->withPivot('id', 'id_apartment', 'id_floor', 'status', 'delete_type')
+					->withPivot('id', 'id_apartment', 'id_floor', 'status', '_delete')
 					->withTimestamps();
 	}
 
 	public function building_utilities()
 	{
-		return $this->hasMany(BuildingUtility::class, 'id_building');
+		return $this->hasMany(BuildingUtilities::class, 'id_building');
+	}
+	public function building_service()
+	{
+		return $this->hasMany(BuildingService::class, 'id_building');
+	}
+	public function building_typeapartment()
+	{
+		return $this->hasMany(BuildingTypeapartment::class, 'id_building');
 	}
 }

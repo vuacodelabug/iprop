@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TypeapartmentController;
+use App\Http\Controllers\ManagerApartmentControlller;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\UtilitiesController;
 use App\Http\Controllers\UnitController;
@@ -36,6 +37,17 @@ Route::controller(LoginController::class)->group(function () {
 Route::prefix('/admin')->middleware('auth')->group(function () {
     Route::controller(HomeController::class)->group(function () {
         Route::get('/home', 'getHome');
+    });
+
+    Route::prefix('/manager')->name('')->group(function () {
+        Route::prefix('/apartment')->name('')->group(function () {
+            Route::controller(ManagerApartmentControlller::class)->group(function () {
+
+                Route::get('/index', 'getIndex');
+                Route::get('/index-content', 'getIndexContent');
+
+            });
+        });
     });
 
     Route::controller(SearchController::class)->group(function () {
@@ -92,8 +104,10 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
             Route::get('/list', 'getList');
 
             Route::get('/create', 'getCreate');
+            Route::post('/create', 'postCreate');
+
             Route::get('/get_discription/{id}', 'getDiscription');
-            Route::post('/get_typeapartment', 'getTypeApartment');
+            Route::get('/get_typeapartment', 'getTypeApartment');
             // Route::post('/create', 'postCreutilities_discriptionate');
 
             Route::get('/show/{id}', 'getShow');
@@ -105,6 +119,7 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
            
             Route::get('/renderService', 'renderService');
             Route::get('/renderUtilities', 'renderUtilities');
+            Route::get('/rendertypeapartment', 'renderTypeApartment');
 
             
         });

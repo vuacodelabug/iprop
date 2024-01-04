@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $id_apartment
  * @property int $id_floor
  * @property int|null $status
- * @property int|null $delete_type
+ * @property int|null $_delete
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * 
@@ -38,7 +38,7 @@ class BuildingTypeapartment extends Model
 		'id_apartment' => 'int',
 		'id_floor' => 'int',
 		'status' => 'int',
-		'delete_type' => 'int'
+		'_delete' => 'int'
 	];
 
 	protected $fillable = [
@@ -47,7 +47,7 @@ class BuildingTypeapartment extends Model
 		'id_apartment',
 		'id_floor',
 		'status',
-		'delete_type'
+		'_delete'
 	];
 
 	public function building()
@@ -63,5 +63,18 @@ class BuildingTypeapartment extends Model
 	public function typeapartment()
 	{
 		return $this->belongsTo(Typeapartment::class, 'id_typeapartment');
+	}
+
+	// Lấy thông tin về các loại căn hộ của tầng có id là $id_floor
+	public function getBuildingTypeApartmentByIdFloor($id_floor)
+	{
+		$floors = BuildingTypeapartment::select('building_floor.name_floor as name', 'building_floor.code_floor', 'building_typeapartment.*')
+		->join('building_floor', 'building_floor.id', '=', 'building_typeapartment.id_floor')
+		->where('building_typeapartment.id_floor', $id_floor)
+		->where('building_typeapartment._delete', 1)
+		->orderBy('building_floor.code_floor')
+		->get();
+
+		return ($floors) ? $floors : array();
 	}
 }

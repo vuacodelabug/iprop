@@ -33,6 +33,11 @@
             </div>
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"></i> <span>CHỨC NĂNG</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/admin/manager/apartment/index">
+                        <i class="ri-shopping-cart-2-line"></i> <span data-key="t-cart">Quản lý phòng</span>
+                    </a>
+                </li>
                 <li class="nav-item ">
                     <a class="nav-link menu-link" href="#quanLyToChuc" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="quanLyToChuc">

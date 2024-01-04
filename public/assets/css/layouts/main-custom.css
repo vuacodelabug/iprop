@@ -1,0 +1,67 @@
+.--custom-bg-phongKhoa{
+    background-color: #212529 !important;
+}
+
+.--custom-bg-phongTrong{
+    background-color: #00BC68 !important;
+}
+
+.--custom-bg-phongBook{
+    background-color: #84429E !important;
+}
+
+.--custom-bg-phongCoc-CocDu{
+    /* background-color: #F32013 !important; */
+    background-color: #f18c12 !important;
+
+}
+
+.--custom-bg-phongThue{
+    background-color: #0080D0 !important;
+}
+
+.flex-center-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-between-center{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rotate-animate{
+    transition: .5s;
+}
+
+.table-small-gap td, .table-small-gap th{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.custom-border-none{
+    border-width: 0;
+}
+
+
+@media (max-width: 991.98px) {
+    .custom-border-none{
+        border-width: 3px;
+    }
+
+    .border-end-double{
+        border-right: none !important;
+    }
+}
+
+@media (max-width: 767.98px) {  
+    .border-mobile-none{
+        border: none !important;
+    }
+
+    .main-content .page-content{
+        padding-top: 23px;
+    }
+}

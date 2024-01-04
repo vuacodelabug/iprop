@@ -112,7 +112,8 @@
                                                                         <div class="row mb-3">
                                                                             <div class="col-md-4">
                                                                                 <div class="form-group">
-                                                                                    <label for="province_id">Thành phố/Tỉnh</label>
+                                                                                    <label for="province_id">Thành
+                                                                                        phố/Tỉnh</label>
                                                                                     <span class="text-danger">*</span>
                                                                                     <select required id="province"
                                                                                         name="province_id"
@@ -405,7 +406,7 @@
                                                                 </div>
                                                                 <div class="col-md-auto">
                                                                     <button type="submit"
-                                                                        value="{{$building->building_utilities->count()}}"
+                                                                        value="{{ $building->building_utilities->count() }}"
                                                                         id="btn-utilities_add"
                                                                         class="btn btn-success float">
                                                                         <i class="bx bx-plus"></i>
@@ -426,8 +427,8 @@
                                                 <div class="border-top-double"></div>
                                                 <br>
 
-                                                <form class="needs-validation validateForm" id="formBuildingUtilities"
-                                                    novalidate action="/admin/building/edit" method="POST"
+                                                <form class="needs-validation validateForm" novalidate
+                                                    action="/admin/building/edit" method="POST"
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     <input type="hidden" name="building_id"
@@ -445,7 +446,8 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <div class="controls">
-                                                                            <h6>{{ $building_utilities->utilities->name ?? '...' }}</h6>
+                                                                            <h6>{{ $building_utilities->utilities->name ?? '...' }}
+                                                                            </h6>
                                                                             <input type="hidden"
                                                                                 name="utilities_id[{{ $building_utilities->id }}]"
                                                                                 value="{{ $building_utilities->id_utilities }}"
@@ -456,7 +458,8 @@
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <div class="controls">
-                                                                            <select name="floor_id[{{ $building_utilities->id }}]"
+                                                                            <select
+                                                                                name="floor_id[{{ $building_utilities->id }}]"
                                                                                 required
                                                                                 class="form-select rounded-pill custom-select"
                                                                                 data-validation-required-message="Bạn chưa chọn tầng.">
@@ -529,9 +532,9 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-auto">
-                                                                   
+
                                                                     <button type="buttom"
-                                                                        value="{{count($building->building_service)}}"
+                                                                        value="{{ count($building->building_service) }}"
                                                                         id="btn-service_add"
                                                                         class="btn btn-success float">
                                                                         <i class="bx bx-plus"></i>
@@ -563,30 +566,38 @@
                                                     <div id="service_content" class="row"
                                                         style="max-height: 300px; overflow-x: hidden;">
                                                         @foreach ($building->building_service as $building_service)
-                                                        <div class="col-md-6" id="buildingservice{{$building_service->id}}">
-                                                            <input type="hidden" name="buildingservice_id[{{ $building_service->id ?? 'buildingserviceId' }}]"
-                                                                value="{{ $building_service->id ?? 'buildingserviceId' }}">
+                                                            <div class="col-md-6"
+                                                                id="buildingservice{{ $building_service->id }}">
+                                                                <input type="hidden"
+                                                                    name="buildingservice_id[{{ $building_service->id ?? 'buildingserviceId' }}]"
+                                                                    value="{{ $building_service->id ?? 'buildingserviceId' }}">
                                                                 <div class="row">
                                                                     <div class="col-md-10">
                                                                         <div class="form-group">
                                                                             <div class="controls">
-                                                                                <h6 style="line-height: 25px">{{ $building_service->service->name ?? 'serviceName' }}</h6>
-                                                                                    <input type="hidden" name="service_id[{{ $building_service->id ?? 'buildingserviceId' }}]"
-                                                                                        class="form-control" value="{{ $building_service->id_service ?? 'serviceId' }}" required>
+                                                                                <h6 style="line-height: 25px">
+                                                                                    {{ $building_service->service->name ?? 'serviceName' }}
+                                                                                </h6>
+                                                                                <input type="hidden"
+                                                                                    name="service_id[{{ $building_service->id ?? 'buildingserviceId' }}]"
+                                                                                    class="form-control"
+                                                                                    value="{{ $building_service->id_service ?? 'serviceId' }}"
+                                                                                    required>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-2 text-end">
                                                                         <div class="form-group">
                                                                             <div class="controls">
-                                                                                <button type="button" data-item="{{ $building_service->id ?? 'buildingserviceId' }}"
+                                                                                <button type="button"
+                                                                                    data-item="{{ $building_service->id ?? 'buildingserviceId' }}"
                                                                                     class="btn-service_delete waves-effect waves-light btn btn-danger mb-3 btn-sm "><i
                                                                                         class=" ri-close-line"></i></button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                        </div>
+                                                            </div>
                                                         @endforeach
                                                     </div>
                                                     <hr>
@@ -629,7 +640,7 @@
                                                     <section>
                                                         <div class="row row-cols-1 row-cols-md-3 g-3"
                                                             id="typeapartment-content">
-                                                            @foreach ($building->building_typeapartment->where('status', '1')->where('delete_type', '1')->groupBy('id_typeapartment') as $building_type)
+                                                            @foreach ($building->building_typeapartment->where('status', '1')->where('_delete', '1')->groupBy('id_typeapartment') as $building_type)
                                                                 <div class="col">
                                                                     <div class="card card-animate border border-3">
                                                                         <div
@@ -639,7 +650,7 @@
                                                                             </h5>
 
                                                                             <button type="button"
-                                                                                type-id="{{ $building_type->first()->id_typeapartment}}"
+                                                                                type-id="{{ $building_type->first()->id_typeapartment }}"
                                                                                 class="btn btn-secondary btn-sm btn-icon waves-effect waves-light btn-editModaltypeapartment">
                                                                                 <i class="ri-edit-box-line"></i>
                                                                             </button>
@@ -668,23 +679,25 @@
                                                                         </h6>
                                                                     </div>
                                                                     <div class="flex-grow-1 row row-cols-md-6 g-2">
-                                                                        @foreach ($blockfloor->getBuildingTypeApartmentByIdFloor($blockfloor->id_floor) as $floor)
-                                                                            <div class="col d-flex ">
-                                                                                <div
-                                                                                    class="sanpham{{$floor->status}} rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
+                                                                        @if (count($blockfloor->getBuildingTypeApartmentByIdFloor($blockfloor->id_floor)) > 0)
+                                                                            @foreach ($blockfloor->getBuildingTypeApartmentByIdFloor($blockfloor->id_floor) as $floor)
+                                                                                <div class="col d-flex ">
+                                                                                    <div
+                                                                                        class="sanpham{{ $floor->apartment->status }} rounded-3 d-flex flex-column justify-content-center align-items-center flex-grow-1 text-white ">
 
-                                                                                    <h5
-                                                                                        class="fw-semibold text-white mt-2">
-                                                                                        {{ $floor->name }}</h5>
-                                                                                    <h6
-                                                                                        class="fw-semibold text-white mb-2">
-                                                                                        {{ $floor->typeapartment->name }}
-                                                                                    </h6>
+                                                                                        <h5
+                                                                                            class="fw-semibold text-white mt-2">
+                                                                                            {{ $floor->apartment->name }}
+                                                                                        </h5>
+                                                                                        <h6
+                                                                                            class="fw-semibold text-white mb-2">
+                                                                                            {{ $floor->typeapartment->name }}
+                                                                                        </h6>
 
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        @endforeach
-                                                                       
+                                                                            @endforeach
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                             @endforeach
@@ -721,33 +734,14 @@
 @endsection
 
 @section('css')
-<style>
-    .sanpham0 {
-        background-color: #B5D33D;
-    }
 
-    .sanpham1 {
-        background-color: #706e6e ;
-    }
-
-    .sanpham2 {
-        background-color: #F6AE2D;
-    }
-
-    .sanpham3 {
-        background-color: #6CA2EA;
-    }
-
-    .sanpham4 {
-        background-color: #800080;
-    }
-</style>
 @endsection
 
 @section('script')
     <script>
-        //detail
+        //--detail
 
+        // Hiển thị thông tin về mã và tên tầng
         function renderFloor(floor_numb, floor_style) {
             var floor_code;
             var floor_name;
@@ -763,8 +757,11 @@
             data += '</div>';
             data += '</div>';
             data += '<div id="floor1-content" style="max-height: 174px; overflow-x: hidden;">';
+
+            // Tạo vòng lặp để hiển thị thông tin về từng tầng
             for (var i = 0; i < floor_numb; i++) {
                 switch (floor_style) {
+                    // Xác định tên tầng dựa trên kiểu và chỉ số
                     case 'floor1_style1':
                         floor_name = 'Tầng B' + (i + 1);
                         break;
@@ -812,6 +809,7 @@
             return data;
         }
 
+        // Kiểm tra và hiển thị thông tin tầng khi có sự kiện thay đổi hoặc mất focus
         function functionName(floor_numb, floor_style, floor) {
             var floor_numb = $(floor_numb).val();
             var floor_style = $(floor_style).val();
@@ -826,6 +824,7 @@
             }
         }
 
+        // Gắn sự kiện cho các input và select để tự động cập nhật thông tin tầng khi có sự kiện thay đổi hoặc mất focus
         $('#v-pills-detail').on('blur', '#numbfloor1', function() {
             functionName('#numbfloor1', 'input[name="floor1_style"]:checked', '#floor1');
         });
@@ -843,29 +842,35 @@
         });
 
 
-        //utilities
+    //--utilities
+
+        // Xử lý khi người dùng thay đổi lựa chọn utilities
         $('#v-pills-utilities').on('change', '#select-utilities', function() {
             var active_tab = "utilities";
             utilities_id = $(this).val();
+            // Kiểm tra xem giá trị có tồn tại hay không
             if (utilities_id) {
+                // Nếu có, thực hiện AJAX để load mô tả dịch vụ tương ứng
                 $('#utilities_discription').load('/admin/building/get_discription/' + utilities_id +
                     '?active_tab=' + active_tab);
             } else {
+                // Nếu không có giá trị, hiển thị dấu gạch ngang
                 $('#utilities_discription').text('---');
             }
         });
 
+        // Xử lý khi người dùng click nút thêm dịch vụ '#btn-utilities_add'
         $('#v-pills-utilities').on('click', '#btn-utilities_add', function() {
-            countId = Number($('#btn-utilities_add').val())+1;
+            countId = Number($('#btn-utilities_add').val()) + 1;
             var utilities_id = $('#select-utilities').val();
             var building_id = $("input[name='building_id']").val();
-            
+
             if (utilities_id) {
                 var url = '/admin/building/renderUtilities';
                 var requestData = {
                     utilities_id: utilities_id,
                     countId: countId,
-                    building_id: building_id, 
+                    building_id: building_id,
                 };
 
                 ajaxCustom(url, requestData, 'GET')
@@ -880,20 +885,24 @@
             }
         });
 
+        // Xử lý khi người dùng click nút xóa dịch vụ 
         $('#v-pills-utilities').on('click', '.btn-utilities_delete', function() {
             var buildingutilities_id = $(this).attr('data-item');
+            // Tạo input ẩn để đánh dấu dịch vụ này đã bị xóa
             var utilities_delete = '<input type="hidden" name="utilities_delete[' + buildingutilities_id +
                 ']" value="' + buildingutilities_id + '">';
-
+            // Thay đổi nội dung của phần hiển thị dịch vụ để chứa input ẩn
             $('#buildingutilities' + buildingutilities_id).html('').html(utilities_delete);
         });
-        //service
 
+    //--service
+        // Xử lý khi người dùng thay đổi lựa chọn trong service
         $('#v-pills-service').on('change', '#select-service', function() {
             var service_id = $(this).val();
             var active_tab = "service";
 
             if (service_id) {
+                // thực hiện AJAX để load mô tả dịch vụ tương ứng
                 $('#service_discription').load('/admin/building/get_discription/' + service_id + '?active_tab=' +
                     active_tab);
             } else {
@@ -901,17 +910,20 @@
             }
         });
 
+        // Xử lý khi người dùng click nút xóa dịch vụ
         $('#v-pills-service').on('click', '.btn-service_delete', function() {
             var buildingservice_id = $(this).attr('data-item');
 
+            // Tạo input ẩn để đánh dấu dịch vụ này đã bị xóa
             service_delete = '<input type="hidden" name="service_delete[' + buildingservice_id +
                 ']" value="' + buildingservice_id + '">';
+            // Thay đổi nội dung của phần hiển thị dịch vụ để chứa input ẩn
             $('#buildingservice' + buildingservice_id).html('').html(service_delete);
         });
 
-        
+        // Xử lý khi người dùng click nút thêm dịch vụ
         $('#v-pills-service').on('click', '#btn-service_add', function() {
-            var countId = Number($('#btn-service_add').val())+1;
+            var countId = Number($('#btn-service_add').val()) + 1;
             var service_id = $('#select-service').val();
             if (service_id) {
                 var url = '/admin/building/renderService';
@@ -932,13 +944,17 @@
             }
         });
 
-        //typeapartment
+    //--typeapartment
+
+        //Mở modal khi người dùng click nút tạo mới
         $('html').on('click', '.btn-createModaltypeapartment', function() {
-            $("#select-typeapartment").val('').prop("disabled",false);
+            $("#select-typeapartment").val('').prop("disabled", false);
             $("#typeapartment_discription").html("<span>---</span>");
             $('#typeapartment_content').html('');
             $('#create_typeapartmentModal').modal('show');
         });
+
+        // Xử lý khi người dùng click nút chỉnh sửa
         $('html').on('click', '.btn-editModaltypeapartment', function() {
             var typeapartment_id = $(this).attr('type-id');
             var building_id = $('input[name="building_id"]').val();
@@ -946,9 +962,10 @@
 
             var requestData = {
                 building_id: building_id,
-                typeapartment_id:typeapartment_id,
+                typeapartment_id: typeapartment_id,
             };
 
+            // Thực hiện AJAX để lấy thông tin typeapartment và hiển thị trong modal
             ajaxCustom(url, requestData)
                 .then(function(data) {
                     console.log(data);
@@ -959,9 +976,39 @@
                     console.error("Không nhận được dữ liệu trả về");
                     // console.error("Lỗi:", error);
                 });
-           
+
+        });
+        // Xử lý khi người dùng click nút +  trong modal
+        $('#v-pills-typeapartment').on('click', '.btn-typeapartment_add', function() {
+            countId = Number($('.btn-typeapartment_add').val()) + 1;
+            var typeapartment_id = $('#select-typeapartment').val();
+            var building_id = $("input[name='building_id']").val();
+            var typeapartment_numb = $("input[name='typeapartment_numb']").val();
+            var floor_id = $("select[name='floor']").val();
+            
+            if (typeapartment_id && typeapartment_numb) {
+                var url = '/admin/building/rendertypeapartment';
+                var requestData = {
+                    typeapartment_id: typeapartment_id,
+                    countId: countId,
+                    building_id: building_id,
+                    typeapartment_numb: typeapartment_numb,
+                    floor_id:floor_id
+                };
+
+                ajaxCustom(url, requestData, 'GET')
+                    .then(function(data) {
+                        $('.btn-typeapartment_add').val(countId);
+                        $('#typeapartment_content').append(data);
+                        $('.select2').select2();
+                    })
+                    .catch(function(error) {
+                        console.error("Lỗi:", error);
+                    });
+            }
         });
 
+        // Xử lý khi người dùng thay đổi lựa chọn typeapartment             
         $('#v-pills-typeapartment').on('change', '#select-typeapartment', function() {
             var typeapartment_id = $(this).val();
             var active_tab = "typeapartment";
@@ -974,79 +1021,7 @@
             }
         });
 
-        function renderTypeapartment(typeapartment_id, buildingtypeapartment_id, typeapartment_floor) {
-            data = '';
-            data += '             <div class="row" id="apartment_content' + buildingtypeapartment_id +'">';
-            data += '        <input type="hidden" name="typeapartment_id" value="' + typeapartment_id +
-                '" class="form-control rounded">';
-            data += '        <input type="hidden" name="buildingTypeApartment_id[' + buildingtypeapartment_id +
-                ']" value="0" class="form-control rounded">';
-            data += '                 <div class="col-md-5">';
-            data += '                     <div class="form-group">';
-            data += '                         <div class="controls">';
-            data += '                             <input type="number" required name="apartment[' +
-                buildingtypeapartment_id + ']" class="form-control rounded-pill"';
-            data += '                                 placeholder="Mã phòng...">';
-            data += '                             <div class="invalid-feedback"></div>';
-            data += '                         </div>';
-            data += '                     </div>';
-            data += '                 </div>';
-            data += '                 <div class="col-md-6">';
-            data += '                     <div class="form-group">';
-            data += '                         <div class="controls">';
-            data += '                             <select name="floor[' + buildingtypeapartment_id +']" required class="form-select rounded-pill custom-select"';
-            data += '                                 data-validation-required-message="Bạn chưa chọn tầng.">';
-            data += '                                 <optgroup label="Tầng hầm">';
-            data += '                                     @foreach ($building->building_floor->where('type', '1') as $building_floor)';
-            data +=
-                '                                     <option value="{{ $building_floor->id }}" @if ($building_floor->id == '+typeapartment_floor+') ';
-             data += '                                         selected @endif>';
-            data += '                                         {{ $building_floor->name_floor }}';
-            data += '                                     </option>';
-            data += '                                     @endforeach';
-            data += '                                 </optgroup>';
-            data += '                                 <optgroup label="Tầng nổi">';
-            data += '                                     @foreach ($building->building_floor->where('type', '2') as $building_floor)';
-            data +=
-                '                                     <option value="{{ $building_floor->id }}" @if ($building_floor->id == '+typeapartment_floor+') ';
-             data += '                                         selected @endif>';
-            data += '                                         {{ $building_floor->name_floor }}';
-            data += '                                     </option>';
-            data += '                                     @endforeach';
-            data += '                                 </optgroup>';
-            data += '                             </select>';
-            data += '                         </div>';
-            data += '                     </div>';
-            data += '                 </div>';
-            data += '                 <div class="col-md-1 text-end">';
-            data += '                     <div class="form-group">';
-            data += '                         <div class="controls">';
-            data += '                             <button type="button" data-item="' + buildingtypeapartment_id +'"';
-            data +=
-                                                    'class="btn-typeapartment_delete waves-effect waves-light btn btn-danger mb-3 btn-sm "><i class=" ri-close-line"></i></button>';
-            data += '                         </div>';
-            data += '                     </div>';
-            data += '                 </div>';
-            data += '             </div>';
-            return data;
-        }
-
-        var buildingtypeapartment_id = $('.btn-typeapartment_add').val();
-        $('#v-pills-typeapartment').on('click', '.btn-typeapartment_add', function() {
-
-            var typeapartment_id = $('#select-typeapartment').val();
-            var typeapartment_floor = $('select[name ="floor"]').val();
-            var typeapartment_numb = $('input[name ="typeapartment_numb"]').val();
-
-            if (typeapartment_floor && typeapartment_numb && typeapartment_id) {
-                for (var i = 0; i < typeapartment_numb; i++) {
-                    buildingtypeapartment_id = parseInt(buildingtypeapartment_id, 10) + 1;
-                    var dataRender = renderTypeapartment(typeapartment_id, buildingtypeapartment_id,
-                        typeapartment_floor);
-                    $('#typeapartment_content').append(dataRender);
-                }
-            }
-        });
+        // Xử lý khi người dùng click nút xóa
         $('#v-pills-typeapartment').on('click', '.btn-typeapartment_delete', function() {
             var buildingtypeapartment_id = $(this).attr('data-item');
             typeapartment_delete = '<input type="hidden" name="typeapartment_delete[' + buildingtypeapartment_id +

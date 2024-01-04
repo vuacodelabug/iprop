@@ -40,19 +40,17 @@ class Apartment extends Model
 		'status'
 	];
 
-	public function buildings()
+	public function building()
 	{
-		return $this->belongsToMany(Building::class, 'building_typeapartment', 'id_apartment', 'id_building')
-					->withPivot('id', 'id_typeapartment', 'id_floor', 'status', 'delete_type')
-					->withTimestamps();
+		return $this->hasMany(Building::class, 'id_apartment');
 	}
 
-	public function carts()
+	public function cart()
 	{
 		return $this->hasMany(Cart::class, 'id_apartment');
 	}
 
-	public function deals()
+	public function deal()
 	{
 		return $this->hasMany(Deal::class, 'id_apartment');
 	}

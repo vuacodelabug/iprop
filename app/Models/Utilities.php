@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Utility
+ * Class Utilities
  * 
  * @property int $id
  * @property string|null $name
@@ -20,11 +20,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * 
- * @property Collection|BuildingUtility[] $building_utilities
+ * @property Collection|BuildingUtilities[] $building_utilities
  *
  * @package App\Models
  */
-class Utility extends Model
+class Utilities extends Model
 {
 	protected $table = 'utilities';
 
@@ -40,6 +40,6 @@ class Utility extends Model
 
 	public function building_utilities()
 	{
-		return $this->hasMany(BuildingUtility::class, 'id_utilities');
+		return $this->hasMany(BuildingUtilities::class, 'id_utilities');
 	}
 }
